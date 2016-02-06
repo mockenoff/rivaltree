@@ -17,6 +17,12 @@ class Manager(models.Model):
 
 	"""
 
+	def __str__(self):
+		""" String representation
+
+		"""
+		return '%s (%s)' % (self.user.username, self.get_account_level_display())
+
 	ACCOUNT_ACTIVE = 1
 	ACCOUNT_DISABLED = 2
 	ACCOUNT_LEVELS = (
