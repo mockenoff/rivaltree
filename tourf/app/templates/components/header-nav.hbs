@@ -1,0 +1,28 @@
+<figure>
+	{{#link-to 'index'}}<img src="@@imagesURL/logo.png" />{{/link-to}}
+	<figcaption>Elite Dodgeball</figcaption>
+</figure>
+
+{{#if (equal pageState.routeName 'index')}}
+<h2>Tourf Manager</h2>
+{{else}}
+{{#drop-down items=events isFiltered=true currentID=pageState.params.id stringFunction=eventString keyID="bracket_id" filterKeys=filterKeys as |event|}}
+	{{#if event.bracket_id}}
+		{{#if (equal event.bracket_id pageState.params.id)}}
+		{{#link-to 'brackets' event.bracket_id tagName="li" class="current"}}
+			{{event.title}} ({{event.event_name}})
+		{{/link-to}}
+		{{else}}
+		{{#link-to 'brackets' event.bracket_id tagName="li"}}
+			{{event.title}} ({{event.event_name}})
+		{{/link-to}}
+		{{/if}}
+	{{else}}
+	{{#link-to 'events' event.id tagName="li"}}
+		{{event.title}} ({{event.event_name}})
+	{{/link-to}}
+	{{/if}}
+{{/drop-down}}
+{{/if}}
+
+{{yield}}

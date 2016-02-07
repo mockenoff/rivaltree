@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+	<title>Tourf</title>
+
+	{{content-for 'head'}}
+
+	<link rel="stylesheet" href="@@assetsURL/vendor.css" />
+	<link rel="stylesheet" href="@@assetsURL/tourf.css" />
+
+	{{content-for 'head-footer'}}
+</head>
+<body>
+	{{content-for 'body'}}
+
+	<script src="@@assetsURL/vendor.js"></script>
+	<script src="@@assetsURL/tourf.js"></script>
+
+	{{content-for 'body-footer'}}
+</body>
+</html>

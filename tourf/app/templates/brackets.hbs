@@ -1,0 +1,168 @@
+{{#if (is-not-empty model.round_robin)}}
+<h2 class="view-header">Round Robin</h2>
+<div class="flex-container">
+	{{#each model.round_robin as |round index|}}
+	<div class="round-robin">
+		<h3>Round {{index}}</h3>
+		<table>
+			<tbody class="details">
+				{{#each round as |game|}}
+				<tr {{action "openForm" game}}>
+					<td class="header">{{get (get model.teams game.team1.id) "name"}}</td>
+					<td class="header">{{get (get model.teams game.team2.id) "name"}}</td>
+				</tr>
+				<tr {{action "openForm" game}}>
+					<td class="deet">{{game.team1.wins}}</td>
+					<td class="deet">{{game.team2.wins}}</td>
+				</tr>
+				{{/each}}
+			</tbody>
+		</table>
+	</div>
+	{{/each}}
+</div>
+{{/if}}
+
+<h2 class="view-header">Winners Bracket</h2>
+<div class="bracket">
+	{{#each model.winners as |round index|}}
+	<ul class="round round-{{index}}">
+		<li class="spacer">&nbsp;</li>
+		{{#each round as |game|}}
+			{{#if (is-empty game)}}
+			<li class="game game-top empty">&nbsp;</li>
+			<li class="game game-spacer empty">&nbsp;</li>
+			<li class="game game-bottom empty">&nbsp;</li>
+			<li class="spacer">&nbsp;</li>
+			{{else}}
+				{{#if (is-empty game.team1.id)}}
+				<li class="game game-top">#{{game.team1.seed}}</li>
+				{{else}}
+				<li class="game game-top {{if (gt game.team1.wins game.team2.wins) "winner"}}">
+					{{game.team1.seed}} {{get (get model.teams game.team1.id) "name"}} <span>{{game.team1.wins}}</span>
+				</li>
+				{{/if}}
+				<li class="game game-spacer">&nbsp;</li>
+				{{#if (is-empty game.team2.id)}}
+				<li class="game game-bottom">#{{game.team2.seed}}</li>
+				{{else}}
+				<li class="game game-bottom {{if (gt game.team2.wins game.team1.wins) "winner"}}">
+					{{game.team2.seed}} {{get (get model.teams game.team2.id) "name"}} <span>{{game.team2.wins}}</span>
+				</li>
+				{{/if}}
+				<li class="spacer">&nbsp;</li>
+			{{/if}}
+		{{/each}}
+	</ul>
+	{{/each}}
+	<ul class="round round-{{model.winners.length}}">
+		<li class="spacer">&nbsp;</li>
+		{{#if model.is_double_elimination}}
+		<li class="game game-top winner">To Championship <span>{{fa-icon "chevron-circle-right"}}</span></li>
+		{{else}}
+		<li class="game game-top winner">Champion <span>{{fa-icon "trophy"}}</span></li>
+		{{/if}}
+		<li class="spacer">&nbsp;</li>
+	</ul>
+</div>
+
+{{#if model.is_double_elimination}}
+<h2 class="view-header">Losers Bracket</h2>
+<div class="bracket">
+	{{#each model.losers as |round index|}}
+	<ul class="round round-{{index}}">
+		<li class="spacer">&nbsp;</li>
+		{{#each round as |game|}}
+			{{#if (is-empty game)}}
+			<li class="game game-top empty">&nbsp;</li>
+			<li class="game game-spacer empty">&nbsp;</li>
+			<li class="game game-bottom empty">&nbsp;</li>
+			<li class="spacer">&nbsp;</li>
+			{{else}}
+				{{#if (is-empty game.team1.id)}}
+				<li class="game game-top">#{{game.team1.seed}}</li>
+				{{else}}
+				<li class="game game-top {{if (gt game.team1.wins game.team2.wins) "winner"}}">
+					{{game.team1.seed}} {{get (get model.teams game.team1.id) "name"}} <span>{{game.team1.wins}}</span>
+				</li>
+				{{/if}}
+				<li class="game game-spacer">&nbsp;</li>
+				{{#if (is-empty game.team2.id)}}
+				<li class="game game-bottom">#{{game.team2.seed}}</li>
+				{{else}}
+				<li class="game game-bottom {{if (gt game.team2.wins game.team1.wins) "winner"}}">
+					{{game.team2.seed}} {{get (get model.teams game.team2.id) "name"}} <span>{{game.team2.wins}}</span>
+				</li>
+				{{/if}}
+				<li class="spacer">&nbsp;</li>
+			{{/if}}
+		{{/each}}
+	</ul>
+	{{/each}}
+	<ul class="round round-{{model.losers.length}}">
+		<li class="spacer">&nbsp;</li>
+		<li class="game game-top winner">To Championship <span>{{fa-icon "chevron-circle-right"}}</span></li>
+		<li class="spacer">&nbsp;</li>
+	</ul>
+</div>
+
+<h2 class="view-header">Championship Round</h2>
+<div class="bracket">
+	{{#each model.winner_loser as |round index|}}
+	<ul class="round round-{{index}}">
+		<li class="spacer">&nbsp;</li>
+		{{#each round as |game|}}
+			{{#if (is-empty game)}}
+			<li class="game game-top empty">&nbsp;</li>
+			<li class="game game-spacer empty">&nbsp;</li>
+			<li class="game game-bottom empty">&nbsp;</li>
+			<li class="spacer">&nbsp;</li>
+			{{else}}
+				{{#if (is-empty game.team1.id)}}
+				<li class="game game-top">#{{game.team1.seed}}</li>
+				{{else}}
+				<li class="game game-top {{if (gt game.team1.wins game.team2.wins) "winner"}}">
+					{{game.team1.seed}} {{get (get model.teams game.team1.id) "name"}} <span>{{game.team1.wins}}</span>
+				</li>
+				{{/if}}
+				<li class="game game-spacer">&nbsp;</li>
+				{{#if (is-empty game.team2.id)}}
+				<li class="game game-bottom">#{{game.team2.seed}}</li>
+				{{else}}
+				<li class="game game-bottom {{if (gt game.team2.wins game.team1.wins) "winner"}}">
+					{{game.team2.seed}} {{get (get model.teams game.team2.id) "name"}} <span>{{game.team2.wins}}</span>
+				</li>
+				{{/if}}
+				<li class="spacer">&nbsp;</li>
+			{{/if}}
+		{{/each}}
+	</ul>
+	{{/each}}
+	<ul class="round round-{{model.winner_loser.length}}">
+		<li class="spacer">&nbsp;</li>
+		<li class="game game-top winner">Champion <span>{{fa-icon "trophy"}}</span></li>
+		<li class="spacer">&nbsp;</li>
+	</ul>
+</div>
+{{/if}}
+
+{{outlet}}
+
+{{#modal-fade isShowing=isShowing}}
+	<h2>Edit Game</h2>
+	<form class="game-form" {{action "saveForm" currentGame on="submit"}}>
+		<label for="bracket-wins1">{{get (get model.teams currentGame.team1.id) "name"}} Wins</label>
+		{{input type="text" id="bracket-wins1" value=team1Wins disabled=isSubmitting}}
+		<span class="error">{{if team1WinsError team1WinsError}}</span>
+
+		<label for="bracket-wins2">{{get (get model.teams currentGame.team2.id) "name"}} Wins</label>
+		{{input type="text" id="bracket-wins2" value=team2Wins disabled=isSubmitting}}
+		<span class="error">{{if team2WinsError team2WinsError}}</span>
+
+		<div class="submit">
+			{{input type="submit" value="Save" disabled=(or-check isSubmitting team1WinsError team2WinsError)}}
+			{{#if isSubmitting}}{{fa-icon "spinner"}}{{/if}}
+			<span class="error">{{if formError formError}}</span>
+		</div>
+	</form>
+{{/modal-fade}}

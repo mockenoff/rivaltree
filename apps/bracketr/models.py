@@ -688,3 +688,19 @@ class Game(models.Model):
 	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
 	unique_together = (('bracket', 'group', 'round_number', 'number',),)
+
+class Serializer(object):
+	@staticmethod
+	def bracket(bracket):
+		try:
+			data = json.loads(bracket.as_json)
+		except json.JSONDecodeError:
+			data = bracket.to_dict()
+		data.update({
+			'id': bracket.pk.hex,
+			'title': bracket.title,
+			'is_finished': bracket.is_finished,
+			'has_third_place': bracket.has_third_place,
+			'is_double_elimination': bracket.is_double_elimination,
+		})
+		return data

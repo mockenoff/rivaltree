@@ -1,0 +1,12 @@
+<li class="selected" {{action "toggleDropdown"}}>{{currentItem}} {{fa-icon "caret-down"}}</li>
+<div class="menu">
+	{{#if isFiltered}}
+	{{input type="text" placeholder="Filter" escape-press="escInput" value=inputValue}}
+	{{/if}}
+	<div class="items">
+		{{#each filteredItems as |item|}}
+		{{yield item}}
+		{{/each}}
+	</div>
+</div>
+

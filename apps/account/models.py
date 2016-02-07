@@ -17,17 +17,31 @@ class Manager(models.Model):
 
 	"""
 
+	def to_dict(self):
+		""" dict representation
+
+		"""
+		return {
+			'id': self.id.hex,
+			'email': self.user.email,
+			'username': self.user.username,
+			'name': ('%s %s' % (self.user.first_name, self.user.last_name)).strip(),
+			'account_level': (self.account_level, self.get_account_level_display()),
+		}
+
 	def __str__(self):
 		""" String representation
 
 		"""
 		return '%s (%s)' % (self.user.username, self.get_account_level_display())
 
-	ACCOUNT_ACTIVE = 1
-	ACCOUNT_DISABLED = 2
+	ACCOUNT_DISABLED = 1
+	ACCOUNT_BASIC = 2
+	ACCOUNT_ADMIN = 3
 	ACCOUNT_LEVELS = (
-		(ACCOUNT_ACTIVE, 'Active'),
 		(ACCOUNT_DISABLED, 'Disabled'),
+		(ACCOUNT_BASIC, 'Basic'),
+		(ACCOUNT_ADMIN, 'Admin'),
 	)
 
 	# Tie back into the Django Users
