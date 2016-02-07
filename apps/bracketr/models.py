@@ -113,7 +113,7 @@ class Bracket(models.Model):
 		return seeds
 
 	def make_games(self, clear=False):
-		""" Create all the related Game objects
+		""" Create all the related Game objects (should happen first and only once per teams alteration)
 
 		:param clear: Empty out all the currently existing Game objects
 		:type clear: bool
@@ -130,10 +130,36 @@ class Bracket(models.Model):
 
 		if self.is_double_elimination:
 			games['losers'], saves = self.make_losers_bracket(games['winners'], save=True)
+			games['winner_loser'], saves = self.make_winlose_bracket(save=True)
 		elif self.has_third_place:
 			games['third'], saves = self.make_bracket(2, group=Game.GROUP_THIRD, save=False)
 
 		return games
+
+	def make_winlose_bracket(self, save=False):
+		""" Generate the rounds for the winner/loser clash
+
+		:param save: Whether to save the created Game objects
+		:type save: bool
+		:returns: dict
+
+		"""
+		games = [
+			Game(bracket=self, group=Game.GROUP_WINLOSE, round_number=0, number=0, team1_seed=1, team2_seed=2),
+			Game(bracket=self, group=Game.GROUP_WINLOSE, round_number=1, number=0, team1_seed=1, team2_seed=2),
+		]
+
+		bracket = list()
+		for game in games:
+			bracket.append([{
+				'team1': Game.make_bracket_object(game.team1_seed),
+				'team2': Game.make_bracket_object(game.team2_seed),
+			}])
+
+		if save:
+			Game.objects.bulk_create(games)
+
+		return bracket, games
 
 	def make_bracket(self, teams, group, save=False):
 		""" Generate a bracket object
@@ -185,13 +211,13 @@ class Bracket(models.Model):
 					if teams1 not in seeded:
 						game.team1 = teams[seed1-1]
 						game.team1_seed = seed1
-						bracket[rnum][gnum]['team1']['id'] = game.team1.id
+						bracket[rnum][gnum]['team1']['id'] = game.team1.id.hex
 						seeded.add(game.team1)
 
 					if teams2 not in seeded:
 						game.team2 = teams[seed2-1]
 						game.team2_seed = seed2
-						bracket[rnum][gnum]['team2']['id'] = teams[seed2-1].id
+						bracket[rnum][gnum]['team2']['id'] = teams[seed2-1].id.hex
 						seeded.add(game.team2)
 
 				games.append(game)
@@ -376,9 +402,9 @@ class Bracket(models.Model):
 
 		bracket = {
 			'seeds': {(i + 1): None for i in range(len(teams))},
-			'teams': {team.id: {
+			'teams': {team.id.hex: {
 				'name': team.name,
-				'header_path': team.header_path,
+				'header_path': team.header_path.name,
 				'seed': None,
 			} for team in teams},
 			'winners': [],
@@ -395,15 +421,15 @@ class Bracket(models.Model):
 
 		if self.is_double_elimination:
 			bracket['losers'] = []
-			bracket['winner_loser'], saves = self.make_bracket(2, group=Game.GROUP_WINLOSE)
+			bracket['winner_loser'] = []
 		elif self.has_third_place:
 			bracket['third'] = []
 
 		results = defaultdict(int)
 		for game in self.games:
 			if game.group == Game.GROUP_ROBIN:
-				results[game.team1_id] += game.team1_wins
-				results[game.team2_id] += game.team2_wins
+				results[game.team1_id.hex] += game.team1_wins
+				results[game.team2_id.hex] += game.team2_wins
 
 			group_key = group_keys[game.group]
 			while len(bracket[group_key]) <= game.round_number:
@@ -480,7 +506,7 @@ class Game(models.Model):
 	def make_bracket_object(team=None):
 		obj = {'id': None, 'wins': 0, 'seed': None,}
 		if isinstance(team, Team):
-			obj['id'] = team.id
+			obj['id'] = team.id.hex
 		elif isinstance(team, int):
 			obj['seed'] = team
 		return obj
@@ -511,7 +537,19 @@ class Game(models.Model):
 		:returns: Game
 
 		"""
+		if self.group == Game.GROUP_WINLOSE:
+			# The win-lose rounds are very simple: either the loser wins and it goes to winlose round 0 or stops
+			if self.round_number == 1:
+				next_game = Game.objects.filter(bracket=self.bracket, group=Game.GROUP_WINLOSE, round_number=0)[0]
+				return (next_game, next_game)
+			else:
+				return (None, None)
+
 		if self.group == Game.GROUP_LOSER:
+			# Special optimization for the championship loser game
+			if self.round_number == 0:
+				return (Game.objects.filter(bracket=self.bracket, group=Game.GROUP_WINLOSE, round_number=1)[0], None)
+
 			# Find the matching team1 seed game in the next round
 			match = None
 			for game in reversed(self.bracket.games):
@@ -523,6 +561,15 @@ class Game(models.Model):
 			return (match, None)
 
 		elif self.group == Game.GROUP_WINNER:
+			# Special optimization for the championship game
+			if self.round_number == 0:
+				if self.bracket.is_double_elimination:
+					return (Game.objects.filter(bracket=self.bracket, group=Game.GROUP_WINLOSE, round_number=1)[0],
+							Game.objects.filter(bracket=self.bracket, group=Game.GROUP_LOSER, round_number=0)[0])
+				else:
+					# Nothing happens for single elimination tournaments
+					return (None, None)
+
 			match1, match2 = None, None
 			games = list(reversed(self.bracket.games))
 
@@ -569,10 +616,12 @@ class Game(models.Model):
 					break
 
 			return (match1, match2)
+		else:
+			return (None, None)
 
 	def for_bracket(self):
 		obj = {
-			'id': self.pk,
+			'id': self.pk.hex,
 			'team1': Game.make_bracket_object(self.team1),
 			'team2': Game.make_bracket_object(self.team2),
 		}
@@ -580,6 +629,11 @@ class Game(models.Model):
 		obj['team1']['wins'] = self.team1_wins
 		obj['team2']['seed'] = self.team2_seed
 		obj['team2']['wins'] = self.team2_wins
+
+		next_games = self.next
+		obj['winner_to'] = next_games[0].id.hex if next_games[0] else None
+		obj['loser_to'] = next_games[1].id.hex if next_games[1] else None
+
 		return obj
 
 	def save(self, *args, **kwargs):
@@ -592,9 +646,14 @@ class Game(models.Model):
 		""" String representation
 
 		"""
-		return '%s - %s - %s - %s (%s:%s v %s:%s)' % (
-			self.bracket.title, self.get_group_display(), self.round_number, self.number,
-			self.team1.name, self.team1_wins, self.team2.name, self.team2_wins)
+		try:
+			return '%s - %s - %s - %s (%s:%s v %s:%s)' % (
+				self.bracket.title, self.get_group_display(), self.round_number, self.number,
+				self.team1.name, self.team1_wins, self.team2.name, self.team2_wins)
+		except AttributeError:
+			return '%s - %s - %s - %s (S%s v S%s)' % (
+				self.bracket.title, self.get_group_display(), self.round_number, self.number,
+				self.team1_seed, self.team2_seed)
 
 	GROUP_WINNER = 1
 	GROUP_LOSER = 2
