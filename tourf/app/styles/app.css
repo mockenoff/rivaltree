@@ -88,17 +88,23 @@ input {
 	box-sizing: border-box;
 	font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
 }
-	input[type="text"] {
+	input[type="text"],
+	input[type="email"],
+	input[type="password"] {
 		font-size: 1.2em;
 		padding: 6px 12px;
 		border-radius: 4px;
 		font-weight: lighter;
 		border: 1px solid #DDD;
 	}
-		input[type="text"]:focus {
+		input[type="text"]:focus,
+		input[type="email"]:focus,
+		input[type="password"]:focus {
 			border-color: #AAA;
 		}
-		input[type="text"][disabled] {
+		input[type="text"][disabled],
+		input[type="email"][disabled],
+		input[type="password"][disabled] {
 			background: #EFEFEF;
 		}
 	input[type="submit"] {

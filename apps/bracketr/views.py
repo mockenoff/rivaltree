@@ -8,16 +8,19 @@
 """
 
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 
 from apps.bracketr import models
 from lib import utils
 
+@csrf_exempt
 def games(request, game_id):
 	""" API endpoint for games
 
 	"""
 	return utils.json_response({'game': True})
 
+@csrf_exempt
 def brackets(request, bracket_id):
 	""" API endpoint for brackets
 

@@ -1,0 +1,10 @@
+<form class="login-form" {{action "tryLogin" formData on="submit"}}>
+	{{input type="text" placeholder="Username" value=formData.username disabled=isSubmitting}}
+	{{input type="password" placeholder="Password" value=formData.password disabled=isSubmitting}}
+
+	<span class="error">{{if formError formError}}</span>
+	{{input type="submit" value="Login" disabled=(or-check isSubmitting)}}
+	{{#if isSubmitting}}{{fa-icon "spinner"}}{{/if}}
+</form>
+
+{{outlet}}

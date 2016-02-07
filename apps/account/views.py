@@ -8,6 +8,8 @@
 """
 
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import authenticate, login, logout
 
 from lib import utils
 from apps.account import models
@@ -18,16 +20,29 @@ def index(request):
 	"""
 	return render(request, 'main.html')
 
-def users(request, user_id):
+@csrf_exempt
+def users(request, action=None):
 	""" Serve up the users API endpoint
 
 	"""
-	if request.user.is_authenticated():
+	if request.user and request.user.is_authenticated():
 		try:
 			return utils.json_response({'user': models.Manager.objects.filter(user=request.user)[0].to_dict()})
 		except IndexError:
 			return utils.json_response({'logged_in': True, 'error': 'No associated manager'}, status_code=500)
+
 	else:
+		if action == 'login' and request.method == 'POST':
+			user = authenticate(username=request.POST.get('username'), password=request.POST.get('password'))
+			if user:
+				login(request, user)
+				request.user = user
+				return users(request)
+
+		elif action == 'logout':
+			logout(request)
+			return utils.json_response({'logged_in': False})
+
 		return utils.json_response({'logged_in': False}, status_code=401)
 
 def dash(request):

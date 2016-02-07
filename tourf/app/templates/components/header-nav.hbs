@@ -3,8 +3,8 @@
 	<figcaption>Elite Dodgeball</figcaption>
 </figure>
 
-{{#if (equal pageState.routeName 'index')}}
-<h2>Tourf Manager</h2>
+{{#if (or-check (is-empty events) (equal pageState.routeName 'index'))}}
+<h2>Rivaltree</h2>
 {{else}}
 {{#drop-down items=events isFiltered=true currentID=pageState.params.id stringFunction=eventString keyID="bracket_id" filterKeys=filterKeys as |event|}}
 	{{#if event.bracket_id}}
