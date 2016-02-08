@@ -2,12 +2,14 @@ import DS from 'ember-data';
 
 export default DS.RESTSerializer.extend(DS.EmbeddedRecordsMixin, {
 	isNewSerializerAPI: true,
+
 	attrs: {
 		teams: {
 			deserialize: 'records',
 			serialize: 'records',
 		},
 	},
+
 	findMatchingGame(haystack, needle) {
 		if ($.isEmptyObject(needle) === false) {
 			for (var i = 0, l = haystack.length; i < l; i++) {
@@ -18,6 +20,7 @@ export default DS.RESTSerializer.extend(DS.EmbeddedRecordsMixin, {
 		}
 		return null;
 	},
+
 	normalizeBracket(bracket) {
 		var self = this;
 
@@ -54,6 +57,7 @@ export default DS.RESTSerializer.extend(DS.EmbeddedRecordsMixin, {
 
 		return bracket;
 	},
+
 	normalizeResponse(store, primaryModelClass, payload, id, requestType) {
 		var self = this;
 
@@ -62,6 +66,7 @@ export default DS.RESTSerializer.extend(DS.EmbeddedRecordsMixin, {
 				payload.brackets[idx] = self.normalizeBracket(bracket);
 			});
 		}
+
 		if ('bracket' in payload) {
 			payload.bracket = this.normalizeBracket(payload.bracket);
 		}

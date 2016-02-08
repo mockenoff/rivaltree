@@ -31,9 +31,10 @@ Router.map(function() {
     this.route('logout', {path: '/logout/'});
     this.route('settings', {path: '/settings/:page_id'});
 
-    this.route('brackets', function() {
-    	this.route('index', {path: '/:id'});
-    	this.route('page', {path: '/:id/:page_id'});
+    this.resource('brackets', {path: '/brackets/'}, function() {
+        this.route('index', {path: '/'});
+        this.route('view', {path: '/:id'});
+        this.route('page', {path: '/:id/:page_id'});
     });
 });
 

@@ -202,13 +202,16 @@ header {
 .side-nav {
 	width: 0;
 	height: 0;
+	top: 45px;
+	position: fixed;
 	overflow: hidden;
-	vertical-align: top;
-	display: inline-block;
+	background: #5B5E65;
+	box-sizing: border-box;
 }
 	.side-nav.is-showing {
 		width: 170px;
 		height: 100%;
+		padding: 10px;
 	}
 
 /*
@@ -216,10 +219,10 @@ header {
 */
 .outlet {
 	width: 100%;
-	display: inline-block;
+	box-sizing: border-box;
 }
 	.outlet.narrow {
-		width: calc(100% - 180px);
+		padding-left: 180px;
 	}
 
 /*

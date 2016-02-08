@@ -8,11 +8,11 @@
 {{else}}
 	{{#drop-down items=brackets isFiltered=true currentID=pageState.params.id stringFunction=bracketString keyID="id" filterKeys=filterKeys as |bracket|}}
 		{{#if (equal bracket.id pageState.params.id)}}
-			{{#link-to 'brackets' bracket.id tagName="li" class="current"}}
+			{{#link-to 'brackets.view' bracket.id tagName="li" class="current"}}
 				{{bracket.title}}
 			{{/link-to}}
 		{{else}}
-			{{#link-to 'brackets' bracket.id tagName="li"}}
+			{{#link-to 'brackets.view' bracket.id tagName="li"}}
 				{{bracket.title}}
 			{{/link-to}}
 		{{/if}}

@@ -4,7 +4,7 @@
 
 <div class="flex-container">
 	{{#each filteredBrackets as |bracket|}}
-		{{#link-to 'brackets' bracket.id class="bracket-block"}}
+		{{#link-to 'brackets.view' bracket.id class="bracket-block"}}
 			<h2>{{bracket.title}} ({{#if bracket.is_finished}}Finished{{else}}Ongoing{{/if}})</h2>
 			<span class="sub-header">Updated {{format-date bracket.date_updated}} at {{format-time bracket.date_updated}}</span>
 			<div class="details">
