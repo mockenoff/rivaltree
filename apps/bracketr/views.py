@@ -39,7 +39,7 @@ def brackets(request, bracket_id):
 	else:
 		try:
 			bracket = models.Bracket.objects.get(pk=bracket_id)
-		except models.DoesNotExist:
+		except models.Bracket.DoesNotExist:
 			return utils.json_response({'error': 'No bracket with that ID'}, status_code=404)
 		# return utils.json_response({'bracket': bracket.to_dict()})
 		return utils.json_response({'bracket': models.Serializer.bracket(bracket)})
@@ -47,5 +47,5 @@ def brackets(request, bracket_id):
 def test(request):
 	bracket = models.Bracket.objects.get(pk='3998518876c5489bb982dbee79e4ab74')
 	print(bracket.to_dict())
-	# return utils.json_response({'bracket': True})
+	return utils.json_response({'bracket': True})
 	return utils.json_response({'bracket': bracket.to_dict()})

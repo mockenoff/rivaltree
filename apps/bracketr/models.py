@@ -10,12 +10,14 @@
 import re
 import math
 import uuid
+import random
 import datetime
 import itertools
 import simplejson as json
 from collections import defaultdict
 
 from django.db import models
+from bulk_update.helper import bulk_update
 
 from apps.account import models as account_models
 
@@ -125,7 +127,21 @@ class Bracket(models.Model):
 		games = dict()
 		teams = self.teams
 
-		games['round_robin'], saves = self.make_round_robin(teams=teams, save=True)
+		if self.has_round_robin:
+			# Creating round robin games and remove any previous starting_seed values
+			games['round_robin'], saves = self.make_round_robin(teams=teams, save=True)
+			for team in teams:
+				team.starting_seed = None
+			bulk_update(teams, update_fields=['starting_seed'])
+
+		elif self.is_randomized:
+			# Randomize starting_seed values
+			seeds = list(range(0, len(teams)))
+			for team in teams:
+				team.starting_seed = random.choice(seeds)
+				seeds.remove(team.starting_seed)
+			bulk_update(teams, update_fields=['starting_seed'])
+
 		games['winners'], saves = self.make_bracket(teams=len(teams), group=Game.GROUP_WINNER, save=True)
 
 		if self.is_double_elimination:
@@ -408,7 +424,6 @@ class Bracket(models.Model):
 				'seed': None,
 			} for team in teams},
 			'winners': [],
-			'round_robin': [],
 		}
 
 		group_keys = {
@@ -425,21 +440,28 @@ class Bracket(models.Model):
 		elif self.has_third_place:
 			bracket['third'] = []
 
-		results = defaultdict(int)
-		for game in self.games:
-			if game.group == Game.GROUP_ROBIN:
-				results[game.team1_id.hex] += game.team1_wins
-				results[game.team2_id.hex] += game.team2_wins
+		if self.has_round_robin:
+			# With round robin, you have to build up from every round robin game
+			bracket['round_robin'] = []
+			results = defaultdict(int)
+			for game in self.games:
+				if game.group == Game.GROUP_ROBIN:
+					results[game.team1_id.hex] += game.team1_wins
+					results[game.team2_id.hex] += game.team2_wins
 
-			group_key = group_keys[game.group]
-			while len(bracket[group_key]) <= game.round_number:
-				bracket[group_key].append(list())
-			bracket[group_key][game.round_number].append(game.for_bracket())
+				group_key = group_keys[game.group]
+				while len(bracket[group_key]) <= game.round_number:
+					bracket[group_key].append(list())
+				bracket[group_key][game.round_number].append(game.for_bracket())
 
-		# Sort up total team wins from round-robin
-		results = [{'id': key, 'wins': value} for key, value in results.items()]
-		results.sort(key=lambda x: x['wins'], reverse=True)
-		bracket['seeds'].update({(i + 1): res['id'] for i, res in enumerate(results)})
+			# Sort up total team wins from round-robin
+			results = [{'id': key, 'wins': value} for key, value in results.items()]
+			results.sort(key=lambda x: x['wins'], reverse=True)
+			bracket['seeds'].update({(i + 1): res['id'] for i, res in enumerate(results)})
+
+		else:
+			# Otherwise, we can just take the saved starting_seed attribute of each team
+			bracket['seeds'].update({(team.starting_seed + 1) : team.id.hex for team in teams})
 
 		# Keep calling seed_from_round() with each round to build up the seeding
 		for group in ['winners', 'losers', 'third', 'winner_loser']:
@@ -457,9 +479,11 @@ class Bracket(models.Model):
 
 	# Structuring metas
 	as_json = models.TextField(blank=True)
+	has_round_robin = models.BooleanField(default=True)
 	has_third_place = models.BooleanField(default=False)
 	is_double_elimination = models.BooleanField(default=True)
 	is_finished = models.BooleanField(default=False)
+	is_randomized = models.BooleanField(default=False)
 
 	# Display metas
 	title = models.CharField(max_length=255, db_index=True)
@@ -490,6 +514,7 @@ class Team(models.Model):
 	loss = models.PositiveSmallIntegerField(default=0)
 	header_path = models.ImageField(upload_to=make_path, blank=True)
 	bracket = models.ForeignKey(Bracket, db_index=True)
+	starting_seed = models.PositiveSmallIntegerField(null=True)
 
 	# Object metas
 	date_created = models.DateTimeField(auto_now_add=True)
