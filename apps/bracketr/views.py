@@ -44,6 +44,22 @@ def brackets(request, bracket_id):
 		# return utils.json_response({'bracket': bracket.to_dict()})
 		return utils.json_response({'bracket': models.Serializer.bracket(bracket)})
 
+def crown(request):
+	""" Randomize color of SVG crown
+
+	"""
+	import random
+
+	choices = []
+	colors = ['#2696A5', '#42464E', '#FFA000', '#5BA500']
+
+	for i in range(3):
+		choice = random.choice(colors)
+		colors.remove(choice)
+		choices.append(choice)
+
+	return render(request, 'crown.svg', {'colors': choices}, content_type='image/svg+xml')
+
 def test(request):
 	bracket = models.Bracket.objects.get(pk='3998518876c5489bb982dbee79e4ab74')
 	print(bracket.to_dict())

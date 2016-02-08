@@ -29,12 +29,16 @@ const Router = Ember.Router.extend({
 Router.map(function() {
     this.route('login', {path: '/login/'});
     this.route('logout', {path: '/logout/'});
-    this.route('settings', {path: '/settings/:page_id'});
+
+    this.resource('settings', {path: '/settings/'}, function() {
+        this.route('index', {path: '/'});
+    });
 
     this.resource('brackets', {path: '/brackets/'}, function() {
         this.route('index', {path: '/'});
-        this.route('view', {path: '/:id'});
-        this.route('page', {path: '/:id/:page_id'});
+        this.route('view', {path: '/:id'}, function() {
+            this.route('page', {path: '/:page_id'});
+        });
     });
 });
 

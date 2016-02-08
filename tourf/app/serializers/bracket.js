@@ -56,6 +56,17 @@ export default DS.RESTSerializer.extend(DS.EmbeddedRecordsMixin, {
 			}
 		});
 
+		var teams = [];
+		for (var team_id in bracket.teams) {
+			teams.push({
+				id: team_id,
+				name: bracket.teams[team_id].name,
+				header_path: bracket.teams[team_id].header_path,
+				seed: bracket.teams[team_id].seed,
+			});
+		}
+		bracket.teams = teams;
+
 		return bracket;
 	},
 

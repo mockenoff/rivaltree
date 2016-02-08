@@ -1,7 +1,13 @@
 <ul>
-	<li>{{#link-to 'brackets.page' pageState.params.id 'teams'}}Teams/Players{{/link-to}}</li>
-	<li>{{#link-to 'brackets.page' pageState.params.id 'games'}}Games{{/link-to}}</li>
-	<li>{{#link-to 'brackets.page' pageState.params.id 'settings'}}Settings{{/link-to}}</li>
+	<li class="{{if (equal pageState.params.page_id 'teams') 'current' ''}}">
+		{{#link-to 'brackets.view.page' pageState.params.id 'teams'}}Teams{{/link-to}}
+	</li>
+	<li class="{{if (equal pageState.params.page_id 'games') 'current' ''}}">
+		{{#link-to 'brackets.view.page' pageState.params.id 'games'}}Games{{/link-to}}
+	</li>
+	<li class="{{if (equal pageState.params.page_id 'settings') 'current' ''}}">
+		{{#link-to 'brackets.view.page' pageState.params.id 'settings'}}Settings{{/link-to}}
+	</li>
 </ul>
 
 {{#if (equal pageState.params.page 'teams')}}

@@ -9,6 +9,8 @@ export default Ember.Controller.extend({
 	team2Wins: 0,
 	currentGame: null,
 
+	pageState: Ember.inject.service('page-state'),
+
 	team1WinsError: function() {
 		var team1Wins = this.get('team1Wins'),
 			parsedWins = parseInt(team1Wins, 10);

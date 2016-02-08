@@ -1,0 +1,9 @@
+{{#if (equal pageState.params.page_id 'teams')}}
+	<ul>
+		{{#each model.teams as |team|}}
+		<li>{{team.name}}</li>
+		{{/each}}
+	</ul>
+{{/if}}
+
+{{outlet}}
