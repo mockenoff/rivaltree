@@ -17,7 +17,7 @@ export default Ember.Controller.extend({
 		var status = null,
 			statusCounts = {};
 		this.get('model').forEach(function(br){
-			status = br.get('is_finished') === true ? 'finished' : 'ongoing';
+			status = br.get('phase').length > 0 ? br.get('phase')[0] : 0;
 			if (statusCounts[status] === undefined) {
 				statusCounts[status] = 0;
 			}

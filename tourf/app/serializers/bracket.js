@@ -1,3 +1,4 @@
+import Ember from 'ember';
 import DS from 'ember-data';
 
 export default DS.RESTSerializer.extend(DS.EmbeddedRecordsMixin, {
@@ -11,7 +12,7 @@ export default DS.RESTSerializer.extend(DS.EmbeddedRecordsMixin, {
 	},
 
 	findMatchingGame(haystack, needle) {
-		if ($.isEmptyObject(needle) === false) {
+		if (Ember.$.isEmptyObject(needle) === false) {
 			for (var i = 0, l = haystack.length; i < l; i++) {
 				if (haystack[i].team1.seed === needle.seed || haystack[i].team2.seed === needle.seed) {
 					return haystack[i];
@@ -50,7 +51,7 @@ export default DS.RESTSerializer.extend(DS.EmbeddedRecordsMixin, {
 		});
 
 		['winners', 'losers', 'winner_loser', 'round_robin'].forEach(function(key) {
-			if ($.isArray(bracket[key]) === true) {
+			if (Ember.$.isArray(bracket[key]) === true) {
 				bracket[key] = bracket[key].reverse();
 			}
 		});

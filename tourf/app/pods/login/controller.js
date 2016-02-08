@@ -32,4 +32,11 @@ export default Ember.Controller.extend({
 			}
 		},
 	},
+
+	init() {
+		this._super(...arguments);
+		Ember.run.schedule('afterRender', this, function() {
+			Ember.$('input[type="text"]').focus();
+		});
+	},
 });

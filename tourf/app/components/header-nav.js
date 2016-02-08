@@ -16,7 +16,7 @@ export default Ember.Component.extend({
 	],
 
 	bracketString: function(br) {
-		return br.get('title') +' (' + (br.get('is_finished') === true ? 'finished' : 'ongoing') + ')';
+		return br.get('title') +' (' + (br.get('phase').length > 0 ? br.get('phase')[0] : 0) + ')';
 	},
 
 	refreshBrackets() {

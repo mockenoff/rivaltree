@@ -3,9 +3,9 @@ import DS from 'ember-data';
 export default DS.Model.extend({
 	title: DS.attr('string'),
 	views: DS.attr('number', {defaultValue: 0}),
-	is_finished: DS.attr('boolean', {defaultValue: false}),
 	has_third_place: DS.attr('boolean', {defaultValue: false}),
 	is_double_elimination: DS.attr('boolean', {defaultValue: true}),
+	phase: DS.attr({defaultValue: []}),
 	teams: DS.attr({defaultValue: {}}),
 	seeds: DS.attr({defaultValue: {}}),
 	losers: DS.attr({defaultValue: []}),

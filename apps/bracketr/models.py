@@ -477,13 +477,24 @@ class Bracket(models.Model):
 		"""
 		return '%s (%s) - %s' % (self.title, 'Finished' if self.is_finished else 'Ongoing', self.datetime)
 
+	PHASE_NEW = 1
+	PHASE_ROBIN = 2
+	PHASE_BRACKET = 3
+	PHASE_FINISHED = 4
+	PHASE_CHOICES = (
+		(PHASE_NEW, 'New',),
+		(PHASE_ROBIN, 'Round-robin',),
+		(PHASE_BRACKET, 'Bracket',),
+		(PHASE_FINISHED, 'Finished'),
+	)
+
 	# Structuring metas
 	as_json = models.TextField(blank=True)
 	has_round_robin = models.BooleanField(default=True)
 	has_third_place = models.BooleanField(default=False)
 	is_double_elimination = models.BooleanField(default=True)
-	is_finished = models.BooleanField(default=False)
 	is_randomized = models.BooleanField(default=False)
+	phase = models.PositiveSmallIntegerField(choices=PHASE_CHOICES, default=PHASE_NEW)
 
 	# Display metas
 	title = models.CharField(max_length=255, db_index=True)
@@ -726,7 +737,7 @@ class Serializer(object):
 			'id': bracket.pk.hex,
 			'title': bracket.title,
 			'views': 0,
-			'is_finished': bracket.is_finished,
+			'phase': (bracket.phase, bracket.get_phase_display()),
 			'has_third_place': bracket.has_third_place,
 			'is_double_elimination': bracket.is_double_elimination,
 			'datetime': bracket.datetime,

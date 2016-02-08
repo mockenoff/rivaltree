@@ -16,7 +16,6 @@ export default Ember.Controller.extend({
 		} else {
 			this.set('showSide', false);
 		}
-		console.log('CHANGED', routeName, this.get('showSide'));
 	},
 
 	pageChanged: Ember.on('init', Ember.observer('pageState.routeName', function() {
