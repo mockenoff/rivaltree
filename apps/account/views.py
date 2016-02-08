@@ -26,6 +26,10 @@ def users(request, action=None):
 
 	"""
 	if request.user and request.user.is_authenticated():
+		if action == 'logout' and request.method == 'POST':
+			logout(request)
+			return utils.json_response({'logged_in': False})
+
 		try:
 			return utils.json_response({'user': models.Manager.objects.filter(user=request.user)[0].to_dict()})
 		except IndexError:
@@ -38,10 +42,6 @@ def users(request, action=None):
 				login(request, user)
 				request.user = user
 				return users(request)
-
-		elif action == 'logout':
-			logout(request)
-			return utils.json_response({'logged_in': False})
 
 		return utils.json_response({'logged_in': False}, status_code=401)
 

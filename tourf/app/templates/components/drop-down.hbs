@@ -1,11 +1,11 @@
-<li class="selected" {{action "toggleDropdown"}}>{{currentItem}} {{fa-icon "caret-down"}}</li>
+<li class="selected" {{action "toggleDropdown"}}>{{if defaultItem (if (is-empty currentItem) defaultItem currentItem) currentItem}} {{fa-icon "caret-down"}}</li>
 <div class="menu">
 	{{#if isFiltered}}
-	{{input type="text" placeholder="Filter" escape-press="escInput" value=inputValue}}
+		{{input type="text" placeholder="Filter" escape-press="escInput" value=inputValue}}
 	{{/if}}
 	<div class="items">
 		{{#each filteredItems as |item|}}
-		{{yield item}}
+			{{yield item}}
 		{{/each}}
 	</div>
 </div>

@@ -3,21 +3,21 @@ import Ember from 'ember';
 export default Ember.Controller.extend({
 	filterInput: '',
 
-	filteredEvents: function(){
-		var events = this.get('model'),
+	filteredBrackets: function(){
+		var brackets = this.get('model'),
 			filterInput = this.get('filterInput'),
 			regex = new RegExp(filterInput, 'gi');
 
-		return events.filter(function(ev){
-			return regex.test(ev.get('title')) || regex.test(ev.get('event_name'));
+		return brackets.filter(function(br){
+			return regex.test(br.get('title'));
 		});
 	}.property('filterInput'),
 
 	statusCounts: function(){
 		var status = null,
 			statusCounts = {};
-		this.get('model').forEach(function(ev){
-			status = ev.get('status');
+		this.get('model').forEach(function(br){
+			status = br.get('is_finished') === true ? 'finished' : 'ongoing';
 			if (statusCounts[status] === undefined) {
 				statusCounts[status] = 0;
 			}

@@ -1,3 +1,22 @@
-hello
+<div class="controls">
+	{{input type="text" placeholder="Filter..." value=filterInput}}
+</div>
+
+<div class="flex-container">
+	{{#each filteredBrackets as |bracket|}}
+		{{#link-to 'brackets' bracket.id class="bracket-block"}}
+			<h2>{{bracket.title}} ({{#if bracket.is_finished}}Finished{{else}}Ongoing{{/if}})</h2>
+			<span class="sub-header">Updated {{format-date bracket.date_updated}} at {{format-time bracket.date_updated}}</span>
+			<div class="details">
+				<h3 class="header">Teams</h3>
+				<span class="deet">{{obj-count bracket.teams}}</span>
+			</div>
+			<div class="details">
+				<h3 class="header">Views</h3>
+				<span class="deet">{{bracket.views}}</span>
+			</div>
+		{{/link-to}}
+	{{/each}}
+</div>
 
 {{outlet}}

@@ -4,6 +4,7 @@ export default Ember.Component.extend({
 	tagName: 'ul',
 	classNames: ['dropdown'],
 	classNameBindings: ['isShowing'],
+	dropdownService: Ember.inject.service('dropdownService'),
 
 	items: null,
 	inputValue: '',
@@ -11,15 +12,41 @@ export default Ember.Component.extend({
 	filterInput: null,
 	isFiltered: false,
 	filterKeys: null,
+	defaultItem: null,
 	currentID: null,
 	keyID: 'id',
 
+	init() {
+		this._super(...arguments);
+
+		var classNames = this.get('class');
+		if (typeof classNames === 'string') {
+			this.get('classNames').pushObjects(classNames.split(' '));
+		}
+
+		this.get('dropdownService').register(this);
+	},
+
+	willDestroyElement() {
+		this._super(...arguments);
+		this.get('dropdownService').unregister(this);
+	},
+
 	currentItem: Ember.computed('currentID', 'items.[]', function() {
 		var items = this.get('items'),
+			keyID = this.get('keyID'),
 			currentID = this.get('currentID');
+
 		for (var i = 0, l = items.get('length'); i < l; i++) {
-			if (items.objectAt(i).get(this.get('keyID')) == currentID) {
-				return this.get('stringFunction')(items.objectAt(i));
+			var item = items.objectAt(i);
+			if (Ember.$.isArray(item) === true) {
+				if (item[0] === currentID) {
+					return item[1];
+				}
+			} else {
+				if (item.get(keyID) === currentID) {
+					return this.get('stringFunction')(item);
+				}
 			}
 		}
 		return null;
@@ -36,7 +63,7 @@ export default Ember.Component.extend({
 			regex = new RegExp(inputValue, 'gi'),
 			filterKeys = this.get('filterKeys');
 
-		return items.filter(function(item) {
+		return this.get('isFiltered') === false ? items : items.filter(function(item) {
 			for (var i = 0, l = filterKeys.length; i < l; i++) {
 				if (regex.test(item.get(filterKeys[i])) === true) {
 					return true;
@@ -48,8 +75,7 @@ export default Ember.Component.extend({
 
 	actions: {
 		toggleDropdown() {
-			this.toggleProperty('isShowing');
-			this.get('filterInput').focus();
+			this.get('dropdownService').toggleDropdown(this);
 		},
 		escInput() {
 			if (this.get('inputValue') === '') {

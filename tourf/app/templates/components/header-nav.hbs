@@ -3,26 +3,28 @@
 	<figcaption>Elite Dodgeball</figcaption>
 </figure>
 
-{{#if (or-check (is-empty events) (equal pageState.routeName 'index'))}}
-<h2>Rivaltree</h2>
+{{#if (or-check (is-empty brackets) (equal pageState.routeName 'index'))}}
+	<h2>Rivaltree</h2>
 {{else}}
-{{#drop-down items=events isFiltered=true currentID=pageState.params.id stringFunction=eventString keyID="bracket_id" filterKeys=filterKeys as |event|}}
-	{{#if event.bracket_id}}
-		{{#if (equal event.bracket_id pageState.params.id)}}
-		{{#link-to 'brackets' event.bracket_id tagName="li" class="current"}}
-			{{event.title}} ({{event.event_name}})
-		{{/link-to}}
+	{{#drop-down items=brackets isFiltered=true currentID=pageState.params.id stringFunction=eventString keyID="id" filterKeys=filterKeys as |bracket|}}
+		{{#if (equal bracket.id pageState.params.id)}}
+			{{#link-to 'brackets' bracket.id tagName="li" class="current"}}
+				{{bracket.title}}
+			{{/link-to}}
 		{{else}}
-		{{#link-to 'brackets' event.bracket_id tagName="li"}}
-			{{event.title}} ({{event.event_name}})
-		{{/link-to}}
+			{{#link-to 'brackets' bracket.id tagName="li"}}
+				{{bracket.title}}
+			{{/link-to}}
 		{{/if}}
-	{{else}}
-	{{#link-to 'events' event.id tagName="li"}}
-		{{event.title}} ({{event.event_name}})
-	{{/link-to}}
-	{{/if}}
-{{/drop-down}}
+	{{/drop-down}}
+{{/if}}
+
+{{#if (is-not-empty userInfo.user)}}
+	{{#drop-down items=menuOptions isFiltered=false currentID=pageState.params.id defaultItem="Settings" class="settings-dropdown" as |option|}}
+		{{#link-to (array-at option 0) tagName="li"}}
+			{{array-at option 1}}
+		{{/link-to}}
+	{{/drop-down}}
 {{/if}}
 
 {{yield}}

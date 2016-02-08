@@ -18,7 +18,7 @@ export default DS.RESTSerializer.extend(DS.EmbeddedRecordsMixin, {
 		}
 		return null;
 	},
-	normalizeResponse(store, primaryModelClass, payload, id, requestType) {
+	normalizeBracket(bracket) {
 		var self = this;
 
 		['winners', 'losers'].forEach(function(key) {
@@ -26,31 +26,45 @@ export default DS.RESTSerializer.extend(DS.EmbeddedRecordsMixin, {
 				nextRound = null,
 				newGames = null;
 
-			for (var i = 0, l = payload.bracket[key].length; i < l; i++) {
+			for (var i = 0, l = bracket[key].length; i < l; i++) {
 				if (i > 0) {
 					newGames = [];
 					gameTotal = Math.pow(2, i - 1);
-					nextRound = payload.bracket[key][i - 1];
+					nextRound = bracket[key][i - 1];
 
 					for (var j = 0; j < gameTotal; j++) {
 						if (nextRound[j]) {
-							newGames.push(self.findMatchingGame(payload.bracket[key][i], nextRound[j].team1));
-							newGames.push(self.findMatchingGame(payload.bracket[key][i], nextRound[j].team2));
+							newGames.push(self.findMatchingGame(bracket[key][i], nextRound[j].team1));
+							newGames.push(self.findMatchingGame(bracket[key][i], nextRound[j].team2));
 						} else {
 							newGames.push(null, null);
 						}
 					}
 
-					payload.bracket[key][i] = newGames;
+					bracket[key][i] = newGames;
 				}
 			}
 		});
 
 		['winners', 'losers', 'winner_loser', 'round_robin'].forEach(function(key) {
-			if ($.isArray(payload.bracket[key]) === true) {
-				payload.bracket[key] = payload.bracket[key].reverse();
+			if ($.isArray(bracket[key]) === true) {
+				bracket[key] = bracket[key].reverse();
 			}
 		});
+
+		return bracket;
+	},
+	normalizeResponse(store, primaryModelClass, payload, id, requestType) {
+		var self = this;
+
+		if ('brackets' in payload) {
+			payload.brackets.forEach(function(bracket, idx) {
+				payload.brackets[idx] = self.normalizeBracket(bracket);
+			});
+		}
+		if ('bracket' in payload) {
+			payload.bracket = this.normalizeBracket(payload.bracket);
+		}
 
 		return this._super(...arguments);
 	},

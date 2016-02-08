@@ -696,11 +696,17 @@ class Serializer(object):
 			data = json.loads(bracket.as_json)
 		except json.JSONDecodeError:
 			data = bracket.to_dict()
+
 		data.update({
 			'id': bracket.pk.hex,
 			'title': bracket.title,
+			'views': 0,
 			'is_finished': bracket.is_finished,
 			'has_third_place': bracket.has_third_place,
 			'is_double_elimination': bracket.is_double_elimination,
+			'datetime': bracket.datetime,
+			'date_created': bracket.date_created,
+			'date_updated': bracket.date_updated,
 		})
+
 		return data

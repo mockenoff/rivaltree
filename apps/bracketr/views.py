@@ -25,8 +25,17 @@ def brackets(request, bracket_id):
 	""" API endpoint for brackets
 
 	"""
-	if not bracket_id:
-		pass
+	if not request.user.is_authenticated():
+		return utils.json_response({'logged_in': False}, status_code=401)
+
+	elif not bracket_id:
+		return utils.json_response({
+			'brackets': [
+				models.Serializer.bracket(bracket) for bracket in
+				models.Bracket.objects.filter(manager__user=request.user).order_by('date_updated')
+			],
+		})
+
 	else:
 		try:
 			bracket = models.Bracket.objects.get(pk=bracket_id)
