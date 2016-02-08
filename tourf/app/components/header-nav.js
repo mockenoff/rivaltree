@@ -15,17 +15,15 @@ export default Ember.Component.extend({
 		['logout', 'Logout'],
 	],
 
-	init: function() {
-		this._super(...arguments);
+	bracketString: function(br) {
+		return br.get('title') +' (' + (br.get('is_finished') === true ? 'finished' : 'ongoing') + ')';
+	},
 
+	userChanged: Ember.observer('userInfo.user', function() {
 		if (this.get('userInfo').user !== null) {
 			this.set('brackets', this.get('store').findAll('bracket'));
 		} else {
 			this.set('brackets', null);
 		}
-	},
-
-	eventString: function(ev) {
-		return ev.get('title') +' (' + ev.get('event_name') + ')';
-	},
+	}),
 });

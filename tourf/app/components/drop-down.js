@@ -53,7 +53,9 @@ export default Ember.Component.extend({
 	}),
 
 	didInsertElement() {
-		this.set('filterInput', this.$('input'));
+		if (this.get('isFiltered') === true) {
+			this.set('filterInput', this.$('input'));
+		}
 		this._super(...arguments);
 	},
 
@@ -76,6 +78,9 @@ export default Ember.Component.extend({
 	actions: {
 		toggleDropdown() {
 			this.get('dropdownService').toggleDropdown(this);
+			if (this.get('isShowing') === true && this.get('isFiltered') === true) {
+				this.get('filterInput').focus();
+			}
 		},
 		escInput() {
 			if (this.get('inputValue') === '') {

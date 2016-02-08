@@ -6,7 +6,7 @@
 {{#if (or-check (is-empty brackets) (equal pageState.routeName 'index'))}}
 	<h2>Rivaltree</h2>
 {{else}}
-	{{#drop-down items=brackets isFiltered=true currentID=pageState.params.id stringFunction=eventString keyID="id" filterKeys=filterKeys as |bracket|}}
+	{{#drop-down items=brackets isFiltered=true currentID=pageState.params.id stringFunction=bracketString keyID="id" filterKeys=filterKeys as |bracket|}}
 		{{#if (equal bracket.id pageState.params.id)}}
 			{{#link-to 'brackets' bracket.id tagName="li" class="current"}}
 				{{bracket.title}}
