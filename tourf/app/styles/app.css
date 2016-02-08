@@ -31,6 +31,10 @@ table, thead, tbody, tr, th, td, figure, figcaption {
 /*
 	GENERAL
 */
+html {
+	height: 100%;
+}
+
 body {
 	color: #111;
 	height: 100%;
@@ -191,6 +195,32 @@ header {
 			header .dropdown.is-showing .menu {
 				border-top-width: 4px;
 			}
+
+/*
+	SIDE NAV
+*/
+.side-nav {
+	width: 0;
+	height: 0;
+	overflow: hidden;
+	vertical-align: top;
+	display: inline-block;
+}
+	.side-nav.is-showing {
+		width: 170px;
+		height: 100%;
+	}
+
+/*
+	OUTLET
+*/
+.outlet {
+	width: 100%;
+	display: inline-block;
+}
+	.outlet.narrow {
+		width: calc(100% - 180px);
+	}
 
 /*
 	DROPDOWN

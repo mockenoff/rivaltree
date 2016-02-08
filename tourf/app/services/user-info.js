@@ -5,7 +5,7 @@ export default Ember.Service.extend({
 	store: Ember.inject.service('store'),
 	pingUser() {
 		var self = this;
-		return this.get('store').findRecord('user', 'self').then(function(user) {
+		return this.get('store').findAll('user').then(function(user) {
 			self.set('user', user);
 		});
 	}

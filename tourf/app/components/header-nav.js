@@ -19,11 +19,15 @@ export default Ember.Component.extend({
 		return br.get('title') +' (' + (br.get('is_finished') === true ? 'finished' : 'ongoing') + ')';
 	},
 
-	userChanged: Ember.observer('userInfo.user', function() {
+	refreshBrackets() {
 		if (this.get('userInfo').user !== null) {
 			this.set('brackets', this.get('store').findAll('bracket'));
 		} else {
 			this.set('brackets', null);
 		}
+	},
+
+	userChanged: Ember.observer('userInfo.user', function() {
+		Ember.run.once(this, 'refreshBrackets');
 	}),
 });

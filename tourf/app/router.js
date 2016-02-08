@@ -10,12 +10,13 @@ const Router = Ember.Router.extend({
 
     updateState: function() {
         var self = this;
-        this.get('userInfo').pingUser().then(function(user) {
+
+        this.get('userInfo').pingUser().then(function() {
             if (self.currentRouteName === 'login') {
                 self.transitionTo('index');
             }
         }).catch(function(err) {
-            if (err.errors[0].status == 401) {
+            if (parseInt(err.errors[0].status, 10) === 401) {
                 self.get('userInfo').set('user', null);
                 self.transitionTo('login');
             }
@@ -28,9 +29,12 @@ const Router = Ember.Router.extend({
 Router.map(function() {
     this.route('login', {path: '/login/'});
     this.route('logout', {path: '/logout/'});
-    this.route('settings', {path: '/settings/:id'});
-    this.route('events', {path: '/events/:id'});
-    this.route('brackets', {path: '/brackets/:id'});
+    this.route('settings', {path: '/settings/:page_id'});
+
+    this.route('brackets', function() {
+    	this.route('index', {path: '/:id'});
+    	this.route('page', {path: '/:id/:page_id'});
+    });
 });
 
 export default Router;

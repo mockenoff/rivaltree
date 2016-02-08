@@ -1,3 +1,7 @@
 {{header-nav}}
 
-{{outlet}}
+{{side-nav}}
+
+<div class="{{if showSide 'outlet narrow' 'outlet'}}">
+	{{outlet}}
+</div>

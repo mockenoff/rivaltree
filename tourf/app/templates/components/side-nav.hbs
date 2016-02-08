@@ -1,0 +1,12 @@
+<ul>
+	<li>{{#link-to 'brackets.page' pageState.params.id 'teams'}}Teams/Players{{/link-to}}</li>
+	<li>{{#link-to 'brackets.page' pageState.params.id 'games'}}Games{{/link-to}}</li>
+	<li>{{#link-to 'brackets.page' pageState.params.id 'settings'}}Settings{{/link-to}}</li>
+</ul>
+{{#if (equal pageState.params.page 'teams')}}
+	<ul>
+		<li>teams</li>
+	</ul>
+{{/if}}
+
+{{yield}}
