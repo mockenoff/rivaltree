@@ -1,29 +1,30 @@
 import Ember from 'ember';
 
 export default Ember.Component.extend({
-	tagName: 'input',
+	tagName: 'div',
+	inputElement: null,
 	classNames: ['instant-input'],
-
-	type: 'text',
-	value: null,
-	attributeBindings: ['type', 'value'],
 
 	model: null,
 	alwaysSave: true,
+	isSubmitting: false,
 	cleanProperty: null,
 
 	didInsertElement() {
 		this._super(...arguments);
 
-		this.element.addEventListener('focus', Ember.run.bind(this, this.get('focusEvent')));
-		this.element.addEventListener('blur', Ember.run.bind(this, this.get('blurEvent')));
+		var inputElement = this.element.querySelector('input[type="text"]');
+		inputElement.addEventListener('focus', Ember.run.bind(this, this.get('focusEvent')));
+		inputElement.addEventListener('blur', Ember.run.bind(this, this.get('blurEvent')));
+		this.set('inputElement', inputElement);
 	},
 
 	willDestroyElement() {
 		this._super(...arguments);
 
-		this.element.removeEventListener('focus', this.get('focusEvent'));
-		this.element.removeEventListener('blur', this.get('blurEvent'));
+		var inputElement = this.get('inputElement');
+		inputElement.removeEventListener('focus', this.get('focusEvent'));
+		inputElement.removeEventListener('blur', this.get('blurEvent'));
 	},
 
 	focusEvent() {
@@ -31,15 +32,34 @@ export default Ember.Component.extend({
 	},
 
 	blurEvent() {
-		var value = this.element.value,
+		var inputElement = this.get('inputElement'),
+			value = (inputElement.value || '').trim(),
 			cleanProperty = this.get('cleanProperty');
 
-		if (value !== cleanProperty) {
+		if (value === '') {
+			inputElement.value = cleanProperty;
+		} else if (value !== cleanProperty) {
 			this.set('value', value);
 
 			if (this.get('alwaysSave') === true) {
-				this.get('model').save();
+				this.set('isSubmitting', true);
+				this.get('model').save().then(Ember.run.bind(this, function() {
+					this.set('isSubmitting', false);
+				})).catch(Ember.run.bind(this, function(err) {
+					this.set('isSubmitting', false); // BUG: show error feedback
+				}));
 			}
 		}
+	},
+
+	actions: {
+		escInput() {
+			var inputElement = this.get('inputElement');
+			inputElement.value = this.get('cleanProperty');
+			inputElement.blur();
+		},
+		enterInput() {
+			this.get('inputElement').blur();
+		},
 	},
 });

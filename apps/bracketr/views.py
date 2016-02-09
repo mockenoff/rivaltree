@@ -7,7 +7,10 @@
 
 """
 
+import simplejson as json
+
 from django.shortcuts import render
+from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import csrf_exempt
 
 from apps.bracketr import models
@@ -33,6 +36,18 @@ def teams(request, team_id=None):
 			team = models.Team.objects.get(pk=team_id)
 		except models.Team.DoesNotExist:
 			return utils.json_response({'error': 'No team with that ID'}, status_code=404)
+
+		if request.method == 'PUT':
+			form_data = json.loads(request.readline())
+			team.name = form_data['team']['name']
+			team.header_path = form_data['team']['header_path'] # ENHANCEMENT: Only for premium users?
+			team.starting_seed = form_data['team']['starting_seed']
+
+			try:
+				team.save()
+			except ValidationError: # BUG: header_path validation
+				return utils.json_response({'error': 'Could not save team'}, status_code=400)
+
 		return utils.json_response({'team': models.Serializer.team(team)})
 
 	else:

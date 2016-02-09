@@ -259,6 +259,21 @@ header {
 	}
 
 /*
+	INSTANT INPUT
+*/
+.instant-input {
+	position: relative;
+}
+	.instant-input input[type="text"] {
+		width: 100%;
+	}
+	.instant-input .fa-spinner {
+		top: 15%;
+		right: 10px;
+		position: absolute;
+	}
+
+/*
 	DROPDOWN
 */
 .dropdown {
