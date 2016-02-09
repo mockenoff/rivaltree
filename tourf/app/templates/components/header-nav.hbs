@@ -21,8 +21,8 @@
 
 {{#if (is-not-empty userInfo.user)}}
 	{{#drop-down items=menuOptions isFiltered=false currentID=pageState.params.id defaultItem="Settings" class="settings-dropdown" as |option|}}
-		{{#link-to (array-at option 0) tagName="li"}}
-			{{array-at option 1}}
+		{{#link-to (get option 0) tagName="li"}}
+			{{get option 1}}
 		{{/link-to}}
 	{{/drop-down}}
 {{/if}}

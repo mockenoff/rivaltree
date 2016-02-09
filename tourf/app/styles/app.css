@@ -212,7 +212,6 @@ header {
 }
 	.side-nav.is-showing {
 		width: 170px;
-		padding: 10px 0;
 	}
 	.side-nav a {
 		width: 100%;
@@ -220,6 +219,9 @@ header {
 		padding: 8px 12px;
 		display: inline-block;
 		box-sizing: border-box;
+	}
+	.side-nav li.current {
+		background: #525458;
 	}
 
 /*

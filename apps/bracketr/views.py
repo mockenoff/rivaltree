@@ -14,14 +14,43 @@ from apps.bracketr import models
 from lib import utils
 
 @csrf_exempt
-def games(request, game_id):
+def games(request, game_id=None):
 	""" API endpoint for games
 
 	"""
 	return utils.json_response({'game': True})
 
 @csrf_exempt
-def brackets(request, bracket_id):
+def teams(request, team_id=None):
+	""" API endpoint for teams
+
+	"""
+	if not request.user.is_authenticated():
+		return utils.json_response({'logged_in': False}, status_code=401)
+
+	if team_id:
+		try:
+			team = models.Team.objects.get(pk=team_id)
+		except models.Team.DoesNotExist:
+			return utils.json_response({'error': 'No team with that ID'}, status_code=404)
+		return utils.json_response({'team': models.Serializer.team(team)})
+
+	else:
+		bracket_id = request.GET.get('bracket_id')
+		if bracket_id:
+			try:
+				bracket = models.Bracket.objects.get(pk=bracket_id)
+			except models.Bracket.DoesNotExist:
+				return utils.json_response({'error': 'No bracket with that ID'}, status_code=404)
+
+			teams = models.Team.objects.filter(bracket=bracket_id).order_by('starting_seed', 'date_updated')
+			return utils.json_response({'teams': [models.Serializer.team(team) for team in teams]})
+
+		else:
+			return utils.json_response({'error': 'Can\'t return all teams'}, status_code=500)
+
+@csrf_exempt
+def brackets(request, bracket_id=None):
 	""" API endpoint for brackets
 
 	"""

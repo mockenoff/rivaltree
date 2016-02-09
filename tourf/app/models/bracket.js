@@ -7,6 +7,7 @@ export default DS.Model.extend({
 	is_double_elimination: DS.attr('boolean', {defaultValue: true}),
 	phase: DS.attr({defaultValue: []}),
 	teams: DS.attr({defaultValue: {}}),
+	team_ids: DS.attr({defaultValue: []}),
 	seeds: DS.attr({defaultValue: {}}),
 	losers: DS.attr({defaultValue: []}),
 	winners: DS.attr({defaultValue: []}),

@@ -746,3 +746,14 @@ class Serializer(object):
 		})
 
 		return data
+
+	@staticmethod
+	def team(team):
+		return {
+			'id': team.pk.hex,
+			'name': team.name,
+			'win': team.win,
+			'loss': team.loss,
+			'starting_seed': team.starting_seed,
+			'header_path': team.header_path.name,
+		}
