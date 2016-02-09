@@ -264,13 +264,33 @@ header {
 .instant-input {
 	position: relative;
 }
-	.instant-input input[type="text"] {
+	.instant-input input {
 		width: 100%;
+		color: inherit;
+		cursor: pointer;
+		border-radius: 0;
+		box-sizing: border-box;
+		background: transparent;
+		border: 1px solid transparent;
 	}
-	.instant-input .fa-spinner {
-		top: 15%;
-		right: 10px;
+		.instant-input input:hover {
+			border-radius: 3px;
+			background: rgba(255, 255, 255, 0.05);
+			border: 1px solid rgba(255, 255, 255, 0.1);
+		}
+		.instant-input input:focus {
+			color: #FFF;
+			cursor: text;
+			border-radius: 3px;
+			background: rgba(255, 255, 255, 0.5);
+			border: 1px solid rgba(255, 255, 255, 0.8);
+		}
+	.instant-input i.fa {
+		top: 25%;
+		right: 5px;
+		font-size: 1em;
 		position: absolute;
+		pointer-events: none;
 	}
 
 /*
