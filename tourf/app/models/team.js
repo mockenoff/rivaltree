@@ -6,4 +6,5 @@ export default DS.Model.extend({
 	header_path: DS.attr('string'),
 	win: DS.attr('number'),
 	loss: DS.attr('number'),
+	bracket_id: DS.attr('string'),
 });

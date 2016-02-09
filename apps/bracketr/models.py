@@ -756,4 +756,5 @@ class Serializer(object):
 			'loss': team.loss,
 			'starting_seed': team.starting_seed,
 			'header_path': team.header_path.name,
+			'bracket_id': team.bracket_id.hex,
 		}
