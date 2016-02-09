@@ -1,7 +1,12 @@
 {{#if (equal pageState.params.page_id 'teams')}}
 	<ul>
 		{{#each model as |team|}}
-		<li>{{instant-input model=team value=(mut team.name)}}</li>
+		<li>
+			{{instant-input model=team value=(mut team.name) class="team-name"}}
+			{{#if team.starting_seed}}
+			{{instant-input model=team value=(mut team.starting_seed) class="team-seed"}}
+			{{/if}}
+		</li>
 		{{/each}}
 	</ul>
 {{/if}}

@@ -78,6 +78,13 @@ h1, h2, h3, h4, h5, h6 {
 	transform: translateY(-50%);
 }
 
+ol.numbered {
+	padding-left: 30px;
+}
+	ol.numbered li {
+		list-style: decimal;
+	}
+
 /*
 	FORMS
 */
@@ -241,6 +248,18 @@ header {
 		width: 250px;
 		padding: 10px 0;
 	}
+	.inner-nav li {
+		display: flex;
+		color: #FAFAFA;
+	}
+	.inner-nav .instant-input {
+		width: 90%;
+		margin: 0 auto;
+		font-size: 0.9em;
+	}
+		.inner-nav .team-seed {
+			flex-shrink: 4.5;
+		}
 
 /*
 	OUTLET
@@ -263,6 +282,7 @@ header {
 */
 .instant-input {
 	position: relative;
+	display: inline-block;
 }
 	.instant-input input {
 		width: 100%;
@@ -282,15 +302,36 @@ header {
 			color: #FFF;
 			cursor: text;
 			border-radius: 3px;
-			background: rgba(255, 255, 255, 0.5);
+			background: rgba(255, 255, 255, 0.4);
 			border: 1px solid rgba(255, 255, 255, 0.8);
 		}
+			.instant-input input:focus + i.fa {
+				opacity: 0;
+			}
 	.instant-input i.fa {
-		top: 25%;
-		right: 5px;
+		top: 30%;
+		right: 8px;
+		opacity: 0.5;
 		font-size: 1em;
 		position: absolute;
 		pointer-events: none;
+		transition: opacity 0.25s ease-out;
+	}
+
+/*
+	INSTANT CHECK
+*/
+.instant-check {
+	display: inline-block;
+}
+	.instant-check input {
+		width: auto;
+	}
+	.instant-check label {
+		display: inline-block;
+	}
+	.instant-check i.fa {
+		font-size: 0.9em;
 	}
 
 /*

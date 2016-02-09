@@ -7,8 +7,6 @@
 
 """
 
-import simplejson as json
-
 from django.shortcuts import render
 from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import csrf_exempt
@@ -38,10 +36,10 @@ def teams(request, team_id=None):
 			return utils.json_response({'error': 'No team with that ID'}, status_code=404)
 
 		if request.method == 'PUT':
-			form_data = json.loads(request.readline())
-			team.name = form_data['team']['name']
-			team.header_path = form_data['team']['header_path'] # ENHANCEMENT: Only for premium users?
-			team.starting_seed = form_data['team']['starting_seed']
+			form_data = utils.get_form_data(request)['team']
+			team.name = form_data['name']
+			team.header_path = form_data['header_path'] # ENHANCEMENT: Only for premium users?
+			team.starting_seed = form_data['starting_seed']
 
 			try:
 				team.save()
@@ -58,7 +56,7 @@ def teams(request, team_id=None):
 			except models.Bracket.DoesNotExist:
 				return utils.json_response({'error': 'No bracket with that ID'}, status_code=404)
 
-			teams = models.Team.objects.filter(bracket=bracket_id).order_by('starting_seed', 'date_updated')
+			teams = models.Team.objects.filter(bracket=bracket_id).order_by('starting_seed', '-date_updated')
 			return utils.json_response({'teams': [models.Serializer.team(team) for team in teams]})
 
 		else:
@@ -72,21 +70,33 @@ def brackets(request, bracket_id=None):
 	if not request.user.is_authenticated():
 		return utils.json_response({'logged_in': False}, status_code=401)
 
-	elif not bracket_id:
-		return utils.json_response({
-			'brackets': [
-				models.Serializer.bracket(bracket) for bracket in
-				models.Bracket.objects.filter(manager__user=request.user).order_by('date_updated')
-			],
-		})
-
-	else:
+	elif bracket_id:
 		try:
 			bracket = models.Bracket.objects.get(pk=bracket_id)
 		except models.Bracket.DoesNotExist:
 			return utils.json_response({'error': 'No bracket with that ID'}, status_code=404)
-		# return utils.json_response({'bracket': bracket.to_dict()})
+
+		if request.method == 'PUT':
+			form_data = utils.get_form_data(request)['bracket']
+			bracket = utils.update_model(bracket, form_data, [
+				'title', 'has_third_place', 'is_double_elimination', 'is_randomized', 'datetime',
+			])
+			bracket.phase = form_data['phase'][0]
+
+			try:
+				bracket.save()
+			except ValidationError:
+				return utils.json_response({'error': 'Could not save bracket'}, status_code=400)
+
 		return utils.json_response({'bracket': models.Serializer.bracket(bracket)})
+
+	else:
+		return utils.json_response({
+			'brackets': [
+				models.Serializer.bracket(bracket) for bracket in
+				models.Bracket.objects.filter(manager__user=request.user).order_by('-date_updated')
+			],
+		})
 
 def crown(request):
 	""" Randomize color of SVG crown

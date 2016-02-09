@@ -738,6 +738,7 @@ class Serializer(object):
 			'title': bracket.title,
 			'views': 0,
 			'phase': (bracket.phase, bracket.get_phase_display()),
+			'is_randomized': bracket.is_randomized,
 			'has_third_place': bracket.has_third_place,
 			'is_double_elimination': bracket.is_double_elimination,
 			'datetime': bracket.datetime,

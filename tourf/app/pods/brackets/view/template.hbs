@@ -3,12 +3,30 @@
 </nav>
 
 <div class="{{if pageState.params.page_id 'outlet narrower' 'outlet'}}">
-	{{#if (gt 3 (array-at model.phase 0))}}
+	{{#if (equal (array-at model.phase 0) 1)}}
+	<h2 class="view-header">Let's get started!</h2>
+	<ol class="numbered">
+		<li>
+			Start by deciding what your bracket is going to look like
+			<form>
+				{{instant-check model=model value=model.is_randomized label="Randomize seeds"}}
+			</form>
+		</li>
+		<li>
+			Then fill out your roster of teams/players
+		</li>
+		<li>
+			Finally share your bracket so fans can keep updated with the scores!
+		</li>
+	</ol>
+	{{/if}}
+
+	{{#if (equal (array-at model.phase 0) 2)}}
 	<h2 class="view-header">Round Robin</h2>
 	<div class="flex-container">
 		{{#each model.round_robin as |round index|}}
 		<div class="round-robin">
-			<h3>Round {{index}}</h3>
+			<h3>Round {{plus index 1}}</h3>
 			<table>
 				<tbody class="details">
 					{{#each round as |game|}}
