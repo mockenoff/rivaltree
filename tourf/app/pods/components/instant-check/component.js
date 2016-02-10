@@ -16,7 +16,8 @@ export default Ember.Component.extend({
 		this.set('inputElement', inputElement);
 		this.element.querySelector('label').setAttribute('for', inputElement.id);
 
-		inputElement.addEventListener('change', Ember.run.bind(this, this.get('changeEvent')));
+		this.set('changeEvent', Ember.run.bind(this, this.get('changeEvent')));
+		inputElement.addEventListener('change', this.get('changeEvent'));
 	},
 
 	willDestroyElement() {

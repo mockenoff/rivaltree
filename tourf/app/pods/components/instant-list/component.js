@@ -11,7 +11,9 @@ export default Ember.Component.extend({
 	isMoving: false,
 
 	inputValue: '',
+	mousePosition: [0, 0],
 	placeholder: 'Add item',
+	currentTarget: null,
 
 	didInsertElement() {
 		this._super(...arguments);
@@ -38,24 +40,49 @@ export default Ember.Component.extend({
 	},
 
 	downEvent(ev) {
-		console.log('DOWN', ev);
+		if (ev.target.nodeName !== 'LI') {
+			return;
+		}
+
+		Ember.$(document.body).addClass('no-select');
+
 		this.set('isMoving', true);
+		this.set('currentTarget', ev.target);
+		this.set('mousePosition', [ev.clientX, ev.clientY]);
 		document.addEventListener('mousemove', this.get('moveEvent'));
 	},
 
 	upEvent(ev) {
-		console.log('UP', ev);
+		if (this.get('isMoving') === false) {
+			return;
+		}
+
+		Ember.$(document.body).removeClass('no-select');
+
+		var currentTarget = this.get('currentTarget');
+		currentTarget.style.top = 0;
+		currentTarget.style.left = 0;
+
 		this.set('isMoving', false);
 		document.removeEventListener('mousemove', this.get('moveEvent'));
 	},
 
 	moveEvent(ev) {
-		console.log('MOVE', ev);
+		if (this.get('isMoving') === false) {
+			return;
+		}
+
+		var mousePosition = this.get('mousePosition'),
+			currentTarget = this.get('currentTarget');
+
+		currentTarget.style.left = (ev.clientX - mousePosition[0])+'px';
+		currentTarget.style.top = (ev.clientY - mousePosition[1])+'px';
 	},
 
 	actions: {
 		escInput(ev) {
 			this.get('inputElement').value = '';
+			this.get('inputElement').blur();
 		},
 		enterInput(ev) {
 			var inputElement = this.get('inputElement'),
@@ -63,7 +90,13 @@ export default Ember.Component.extend({
 
 			if (value !== '') {
 				var list = this.get('value');
-				console.log('PUSH', value, list);
+				for (var i = 0, l = list.length; i < l; i++) {
+					if (value === list[i]) {
+						inputElement.value = '';
+						return; // BUG: feedback on duplicates?
+					}
+				}
+
 				list.pushObject(value);
 				this.set('value', list);
 

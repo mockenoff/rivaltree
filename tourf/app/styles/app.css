@@ -77,6 +77,14 @@ h1, h2, h3, h4, h5, h6 {
 	-o-transform: translateY(-50%);
 	transform: translateY(-50%);
 }
+.no-select {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
 
 ol.numbered {
 	padding-left: 30px;
@@ -353,6 +361,23 @@ header {
 	.instant-check i.fa {
 		font-size: 0.9em;
 	}
+
+/*
+	INSTANT LIST
+*/
+.instant-list {
+	display: inline-block;
+}
+	.instant-list .draggable {
+		position: relative;
+	}
+		.instant-list .draggable li {
+			cursor: pointer;
+			position: relative;
+		}
+		.instant-list .draggable.moving li {
+			cursor: move;
+		}
 
 /*
 	DROPDOWN

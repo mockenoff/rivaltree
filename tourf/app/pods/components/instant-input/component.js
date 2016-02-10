@@ -13,9 +13,12 @@ export default Ember.Component.extend({
 	didInsertElement() {
 		this._super(...arguments);
 
+		this.set('focusEvent', Ember.run.bind(this, this.get('focusEvent')));
+		this.set('blurEvent', Ember.run.bind(this, this.get('blurEvent')));
+
 		var inputElement = this.element.querySelector('input[type="text"]');
-		inputElement.addEventListener('focus', Ember.run.bind(this, this.get('focusEvent')));
-		inputElement.addEventListener('blur', Ember.run.bind(this, this.get('blurEvent')));
+		inputElement.addEventListener('focus', this.get('focusEvent'));
+		inputElement.addEventListener('blur', this.get('blurEvent'));
 		this.set('inputElement', inputElement);
 	},
 
