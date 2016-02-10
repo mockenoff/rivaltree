@@ -36,6 +36,7 @@ Router.map(function() {
 
     this.resource('brackets', {path: '/brackets/'}, function() {
         this.route('index', {path: '/'});
+        this.route('fresh', {path: '/new/'});
         this.route('view', {path: '/:id'}, function() {
             this.route('page', {path: '/:page_id'});
         });

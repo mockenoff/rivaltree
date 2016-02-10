@@ -740,6 +740,7 @@ class Serializer(object):
 			'phase': (bracket.phase, bracket.get_phase_display()),
 			'is_randomized': bracket.is_randomized,
 			'has_third_place': bracket.has_third_place,
+			'has_round_robin': bracket.has_round_robin,
 			'is_double_elimination': bracket.is_double_elimination,
 			'datetime': bracket.datetime,
 			'date_created': bracket.date_created,

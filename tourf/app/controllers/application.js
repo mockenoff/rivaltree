@@ -11,7 +11,7 @@ export default Ember.Controller.extend({
 
 	setShow() {
 		var routeName = this.get('pageState').get('routeName');
-		if (typeof routeName === 'string' && routeName.startsWith('brackets') === true) {
+		if (typeof routeName === 'string' && routeName !== 'brackets.fresh' && routeName.startsWith('brackets') === true) {
 			this.set('showSide', true);
 		} else {
 			this.set('showSide', false);

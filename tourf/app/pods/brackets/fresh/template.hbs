@@ -1,0 +1,34 @@
+<h2 class="view-header">Let's get started!</h2>
+
+<form class="fresh-bracket">
+	<ol class="numbered">
+		<li>
+			<p>What are we going to call this tournament?</p>
+			{{input type="text" value=model.title placeholder="Title"}}
+		</li>
+		<li>
+			<p>Do you want round-robin matches for seeding?</p>
+			{{instant-check model=model value=model.has_round_robin label="Round-robin matches" alwaysSave=false}}
+		</li>
+		{{#if (equal model.has_round_robin false)}}
+		<li>
+			<p>Do you want to randomize seeds or enter them manually?</p>
+			{{instant-check model=model value=model.is_randomized label="Randomize seeds" alwaysSave=false}}
+		</li>
+		{{/if}}
+		<li>
+			<p>Do you want to make a double elimination tournament?</p>
+			{{instant-check model=model value=model.is_double_elimination label="Double elimination" alwaysSave=false}}
+		</li>
+		{{#if (equal model.is_double_elimination false)}}
+		<li>
+			<p>Do you want a separate match for third place?</p>
+			{{instant-check model=model value=model.has_third_place label="Third place match" alwaysSave=false}}
+		</li>
+		{{/if}}
+	</ol>
+
+	{{instant-list model=model value=model.teams alwaysSave=false placeholder="Add team"}}
+</form>
+
+{{outlet}}

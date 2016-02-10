@@ -1,0 +1,10 @@
+<ol class="{{if isMoving 'moving numbered draggable' 'numbered draggable'}}">
+	{{#each value as |item|}}
+	<li>{{item}}</li>
+	{{/each}}
+</ol>
+
+{{input type="text" value=inputValue placeholder=placeholder disabled=isSubmitting escape-press="escInput" enter="enterInput"}}
+{{#if isSubmitting}}{{fa-icon "spinner"}}{{/if}}
+
+{{yield}}

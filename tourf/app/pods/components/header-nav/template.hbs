@@ -3,7 +3,7 @@
 	<figcaption>Elite Dodgeball</figcaption>
 </figure>
 
-{{#if (or-check (is-empty brackets) (equal pageState.routeName 'index'))}}
+{{#if (or-check (is-empty brackets) (equal pageState.routeName 'index') (equal pageState.routeName 'brackets.fresh'))}}
 	<h2>Rivaltree</h2>
 {{else}}
 	{{#drop-down items=brackets isFiltered=true currentID=pageState.params.id stringFunction=bracketString keyID="id" filterKeys=filterKeys as |bracket|}}

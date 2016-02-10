@@ -143,6 +143,26 @@ input {
 			background: #DDD;
 		}
 
+input[type="checkbox"].fancy {
+	opacity: 0;
+	position: absolute;
+	pointer-events: none;
+}
+	input[type="checkbox"].fancy + label:before {
+		content: '';
+		width: 20px;
+		height: 20px;
+		background: #FFF;
+		margin-right: 10px;
+		display: inline-block;
+		vertical-align: middle;
+		border: 2px solid #DDD;
+	}
+	input[type="checkbox"]:checked.fancy + label:before {
+		background: #639;
+		box-shadow: inset 0px 0px 0px 4px #FFF;
+	}
+
 /*
 	HEADER
 */
@@ -649,6 +669,20 @@ header {
 		.modal.is-showing .content {
 			top: 50%;
 		}
+
+/*
+	NEW BRACKET
+*/
+.fresh-bracket {
+	width: 70%;
+	display: flex;
+	margin: 0 auto;
+	justify-content: center;
+}
+	.fresh-bracket ol,
+	.fresh-bracket .instant-list {
+		flex-grow: 1;
+	}
 
 /*
 	LOADERS

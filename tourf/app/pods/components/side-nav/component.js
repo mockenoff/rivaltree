@@ -14,7 +14,8 @@ export default Ember.Component.extend({
 	},
 
 	toggleShowing() {
-		if (this.get('pageState').get('routeName').startsWith('brackets') === true) {
+		var routeName = this.get('pageState').get('routeName');
+		if (routeName !== 'brackets.fresh' && routeName.startsWith('brackets') === true) {
 			this.set('isShowing', true);
 		} else {
 			this.set('isShowing', false);

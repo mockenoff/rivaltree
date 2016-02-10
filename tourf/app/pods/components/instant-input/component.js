@@ -37,7 +37,7 @@ export default Ember.Component.extend({
 			cleanProperty = this.get('cleanProperty');
 
 		if (value === '') {
-			inputElement.value = cleanProperty;
+			inputElement.value = cleanProperty !== null && cleanProperty !== undefined ? cleanProperty : '';
 		} else if (value !== cleanProperty) {
 			this.set('value', value);
 
