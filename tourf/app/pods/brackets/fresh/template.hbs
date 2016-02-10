@@ -28,7 +28,7 @@
 		{{/if}}
 	</ol>
 
-	{{instant-list model=model value=model.teams alwaysSave=false placeholder="Add team"}}
+	{{instant-list model=model value=model.teams alwaysSave=false isSortable=(if (equal model.has_round_robin model.is_randomized false) true false) placeholder="Add team"}}
 </form>
 
 {{outlet}}

@@ -1,6 +1,6 @@
-<ol class="{{if isMoving 'moving numbered draggable' 'numbered draggable'}}">
-	{{#each value as |item|}}
-	<li>{{item}}</li>
+<ol class="numbered">
+	{{#each value as |item index|}}
+	<li data-item={{item}} data-index={{index}}>{{item}} {{fa-icon "times"}}</li>
 	{{/each}}
 </ol>
 

@@ -368,16 +368,39 @@ header {
 .instant-list {
 	display: inline-block;
 }
-	.instant-list .draggable {
+	.instant-list .numbered {
 		position: relative;
 	}
-		.instant-list .draggable li {
-			cursor: pointer;
-			position: relative;
-		}
-		.instant-list .draggable.moving li {
+		.instant-list.sortable .numbered li {
 			cursor: move;
 		}
+		.instant-list .numbered li {
+			font-size: 1.1em;
+			position: relative;
+			padding-bottom: 10px;
+			transition: all 0.2s ease-out;
+		}
+	.instant-list li i.fa {
+		top: 25%;
+		right: 10px;
+		opacity: 0;
+		cursor: pointer;
+		position: absolute;
+		transition: opacity 0.1s ease-out;
+	}
+		.instant-list li:hover i.fa,
+		.instant-list li.current i.fa {
+			opacity: 1;
+		}
+	.instant-list .numbered li.current {
+		opacity: 0.5;
+		font-size: 1.4em;
+		transition: inherit;
+	}
+	.instant-list input {
+		width: 100%;
+		margin-top: 10px;
+	}
 
 /*
 	DROPDOWN
