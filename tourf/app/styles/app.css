@@ -43,7 +43,7 @@ body {
 	font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
 }
 	body .container {
-		height: 100%;
+		min-height: calc(100% - 90px);
 		margin: 60px 0 30px 0;
 	}
 
@@ -88,6 +88,7 @@ h1, h2, h3, h4, h5, h6 {
 
 ol.numbered {
 	padding-left: 30px;
+	box-sizing: border-box;
 }
 	ol.numbered li {
 		list-style: decimal;
@@ -165,6 +166,7 @@ input[type="checkbox"].fancy {
 		display: inline-block;
 		vertical-align: middle;
 		border: 2px solid #DDD;
+		transition: all 0.2s ease-out;
 	}
 	input[type="checkbox"]:checked.fancy + label:before {
 		background: #639;
@@ -369,11 +371,18 @@ header {
 	display: inline-block;
 }
 	.instant-list .numbered {
+		width: 100%;
 		position: relative;
 	}
+		.instant-list li.error {
+			animation: shake 0.6s linear;
+		}
 		.instant-list.sortable .numbered li {
 			cursor: move;
 		}
+			.instant-list.sortable .numbered li.empty {
+				cursor: text;
+			}
 		.instant-list .numbered li {
 			font-size: 1.1em;
 			position: relative;
@@ -381,7 +390,7 @@ header {
 			transition: all 0.2s ease-out;
 		}
 	.instant-list li i.fa {
-		top: 25%;
+		top: 15%;
 		right: 10px;
 		opacity: 0;
 		cursor: pointer;
@@ -399,7 +408,6 @@ header {
 	}
 	.instant-list input {
 		width: 100%;
-		margin-top: 10px;
 	}
 
 /*
@@ -723,13 +731,24 @@ header {
 */
 .fresh-bracket {
 	width: 70%;
-	display: flex;
 	margin: 0 auto;
-	justify-content: center;
+	white-space: nowrap;
 }
-	.fresh-bracket ol,
-	.fresh-bracket .instant-list {
-		flex-grow: 1;
+	.fresh-bracket > .numbered,
+	.fresh-bracket .team-input {
+		width: 50%;
+		white-space: normal;
+		vertical-align: top;
+		display: inline-block;
+	}
+		.fresh-bracket .instant-list {
+			width: 100%;
+			margin-top: 6px;
+		}
+	.fresh-bracket .notice {
+		color: #999;
+		font-size: 0.8em;
+		padding-top: 8px;
 	}
 
 /*
@@ -746,5 +765,42 @@ header {
 	}
 	to {
 		transform: rotate(360deg);
+	}
+}
+
+@keyframes shake {
+	from {
+		left: 0;
+		color: inherit;
+	}
+	11% {
+		left: 8px;
+		color: #D81212;
+	}
+	22% {
+		left: -8px;
+	}
+	33% {
+		left: 0;
+	}
+	44% {
+		left: 6px;
+	}
+	55% {
+		left: -6px;
+	}
+	66% {
+		left: 0;
+	}
+	77% {
+		left: 4px;
+	}
+	88% {
+		left: -4px;
+		color: #D81212;
+	}
+	to {
+		left: 0;
+		color: inherit;
 	}
 }

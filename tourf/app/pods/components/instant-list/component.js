@@ -134,6 +134,12 @@ export default Ember.Component.extend({
 	},
 
 	actions: {
+		keyInput(ev) {
+			var itemElements = this.element.querySelectorAll('li.error');
+			for (var i = 0, l = itemElements.length; i < l; i++) {
+				itemElements[i].classList.remove('error');
+			}
+		},
 		escInput(ev) {
 			this.get('inputElement').value = '';
 			this.get('inputElement').blur();
@@ -145,8 +151,8 @@ export default Ember.Component.extend({
 			if (value !== '') {
 				var list = this.get('value');
 				if (list.contains(value) === true) {
-					inputElement.value = '';
-					return; // BUG: feedback on duplicates?
+					this.element.querySelector('li[data-item="'+Ember.$('<div/>').text(value).html()+'"]').classList.add('error');
+					return;
 				}
 
 				list.pushObject(value);

@@ -4,7 +4,7 @@
 	{{/each}}
 </ol>
 
-{{input type="text" value=inputValue placeholder=placeholder disabled=isSubmitting escape-press="escInput" enter="enterInput"}}
+{{input type="text" value=inputValue placeholder=placeholder disabled=isSubmitting escape-press="escInput" enter="enterInput" key-press="keyInput"}}
 {{#if isSubmitting}}{{fa-icon "spinner"}}{{/if}}
 
 {{yield}}

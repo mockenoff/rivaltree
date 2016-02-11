@@ -4,7 +4,7 @@
 	<ol class="numbered">
 		<li>
 			<p>What are we going to call this tournament?</p>
-			{{input type="text" value=model.title placeholder="Title"}}
+			{{input type="text" value=model.title placeholder="Bracket title"}}
 		</li>
 		<li>
 			<p>Do you want round-robin matches for seeding?</p>
@@ -28,7 +28,13 @@
 		{{/if}}
 	</ol>
 
-	{{instant-list model=model value=model.teams alwaysSave=false isSortable=(if (equal model.has_round_robin model.is_randomized false) true false) placeholder="Add team"}}
+	<div class="team-input">
+		<p>What about your teams?</p>
+		{{instant-list model=model value=model.teams alwaysSave=false isSortable=(if (equal model.has_round_robin model.is_randomized false) true false) placeholder="Add team"}}
+		{{#if (equal model.has_round_robin model.is_randomized false)}}
+		<p class="notice">Drag around your teams to arrange their seedings.</p>
+		{{/if}}
+	</div>
 </form>
 
 {{outlet}}
