@@ -1,6 +1,6 @@
 <h2 class="view-header">Let's get started!</h2>
 
-<form class="fresh-bracket">
+<form class="fresh-bracket" {{action "saveBracket" on="submit"}}>
 	<ol class="numbered">
 		<li>
 			<p>What are we going to call this tournament?</p>
@@ -35,6 +35,9 @@
 		<p class="notice">Drag around your teams to arrange their seedings.</p>
 		{{/if}}
 	</div>
+
+	{{input type="submit" value="Make my bracket!" disabled=(if canSubmit false true)}}
+	{{#if isSubmitting}}{{fa-icon "spinner"}}{{/if}}
 </form>
 
 {{outlet}}

@@ -732,12 +732,16 @@ header {
 .fresh-bracket {
 	width: 70%;
 	margin: 0 auto;
-	white-space: nowrap;
 }
+	.fresh-bracket > .numbered li {
+		padding-bottom: 10px;
+	}
+		.fresh-bracket > .numbered p {
+			padding-bottom: 6px;
+		}
 	.fresh-bracket > .numbered,
 	.fresh-bracket .team-input {
-		width: 50%;
-		white-space: normal;
+		width: 49%;
 		vertical-align: top;
 		display: inline-block;
 	}
@@ -749,6 +753,14 @@ header {
 		color: #999;
 		font-size: 0.8em;
 		padding-top: 8px;
+	}
+	.fresh-bracket input[type="submit"] {
+		float: right;
+		margin: 30px 20px 20px 30px;
+	}
+	.fresh-bracket > .fa-spinner {
+		float: right;
+		margin-top: 35px;
 	}
 
 /*
