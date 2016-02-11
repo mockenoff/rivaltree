@@ -12,6 +12,7 @@ from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import csrf_exempt
 
 from apps.bracketr import models
+from apps.account import models as account_models
 from lib import utils
 
 @csrf_exempt
@@ -91,6 +92,36 @@ def brackets(request, bracket_id=None):
 		return utils.json_response({'bracket': models.Serializer.bracket(bracket)})
 
 	else:
+		if request.method == 'POST':
+			bracket = models.Bracket()
+			form_data = utils.get_form_data(request)['bracket']
+
+			bracket.manager = account_models.Manager.objects.filter(user=request.user)[0]
+			bracket = utils.update_model(bracket, form_data, [
+				'title', 'has_third_place', 'is_double_elimination', 'is_randomized', 'datetime',
+			])
+
+			if not bracket.manager:
+				return utils.json_response({'error': 'No manager attached to user'}, status_code=500)
+
+			try:
+				bracket.save()
+			except ValidationError:
+				return utils.json_response({'error': 'Could not save bracket'}, status_code=400)
+
+			try:
+				models.Team.objects.bulk_create([
+					models.Team(name=name, bracket=bracket, starting_seed=starting_seed)
+					for starting_seed, name in enumerate(form_data['teams']) if name.strip()
+				])
+			except ValidationError:
+				return utils.json_response({'error': 'Could not save teams'}, status_code=400)
+
+			bracket.make_games()
+			bracket.save()
+
+			return utils.json_response({'bracket': models.Serializer.bracket(bracket)})
+
 		return utils.json_response({
 			'brackets': [
 				models.Serializer.bracket(bracket) for bracket in

@@ -168,6 +168,8 @@ export default Ember.Component.extend({
 			}
 
 			inputElement.value = '';
+
+			return false;
 		},
 	},
 });

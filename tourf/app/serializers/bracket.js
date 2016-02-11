@@ -26,6 +26,10 @@ export default DS.RESTSerializer.extend(DS.EmbeddedRecordsMixin, {
 		var self = this;
 
 		['winners', 'losers'].forEach(function(key) {
+			if (key in bracket === false) {
+				return;
+			}
+
 			var gameTotal = 0,
 				nextRound = null,
 				newGames = null;

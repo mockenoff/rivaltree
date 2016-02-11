@@ -172,6 +172,9 @@ input[type="checkbox"].fancy {
 		background: #639;
 		box-shadow: inset 0px 0px 0px 4px #FFF;
 	}
+	input[type="checkbox"]:focus.fancy + label:before {
+		border: 2px solid #A57DCE;
+	}
 
 /*
 	HEADER

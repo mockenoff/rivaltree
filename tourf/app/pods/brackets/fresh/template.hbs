@@ -1,6 +1,6 @@
 <h2 class="view-header">Let's get started!</h2>
 
-<form class="fresh-bracket" {{action "saveBracket" on="submit"}}>
+<div class="fresh-bracket">
 	<ol class="numbered">
 		<li>
 			<p>What are we going to call this tournament?</p>
@@ -36,8 +36,8 @@
 		{{/if}}
 	</div>
 
-	{{input type="submit" value="Make my bracket!" disabled=(if canSubmit false true)}}
+	{{input type="submit" value="Make my bracket!" disabled=(if canSubmit false true) click=(action "saveBracket")}}
 	{{#if isSubmitting}}{{fa-icon "spinner"}}{{/if}}
-</form>
+</div>
 
 {{outlet}}

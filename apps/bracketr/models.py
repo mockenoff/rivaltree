@@ -475,7 +475,7 @@ class Bracket(models.Model):
 		""" String representation
 
 		"""
-		return '%s (%s) - %s' % (self.title, 'Finished' if self.is_finished else 'Ongoing', self.datetime)
+		return '%s (%s) - %s' % (self.title, self.get_phase_display(), self.datetime)
 
 	PHASE_NEW = 1
 	PHASE_ROBIN = 2
@@ -525,7 +525,7 @@ class Team(models.Model):
 	loss = models.PositiveSmallIntegerField(default=0)
 	header_path = models.ImageField(upload_to=make_path, blank=True)
 	bracket = models.ForeignKey(Bracket, db_index=True)
-	starting_seed = models.PositiveSmallIntegerField(null=True)
+	starting_seed = models.PositiveSmallIntegerField(blank=True, null=True)
 
 	# Object metas
 	date_created = models.DateTimeField(auto_now_add=True)
