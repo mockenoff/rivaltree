@@ -1,5 +1,5 @@
-{{input type="checkbox" checked=value disabled=isSubmitting class="fancy"}}
-<label>{{label}}</label>
+{{input type="checkbox" checked=value disabled=isSubmitting change=(action "changeEvent") class="fancy"}}
+<label for={{inputElement.id}}>{{label}}</label>
 {{#if isSubmitting}}{{fa-icon "spinner"}}{{/if}}
 
 {{yield}}
