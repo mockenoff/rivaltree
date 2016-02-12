@@ -20,7 +20,7 @@
 {{/if}}
 
 {{#if (is-not-empty userInfo.user)}}
-	{{#drop-down items=menuOptions isFiltered=false currentID=pageState.params.id defaultItem="Settings" class="settings-dropdown" as |option|}}
+	{{#drop-down items=menuOptions isFiltered=false currentID=pageState.params.id defaultItem=userInfo.user.username class="settings-dropdown" as |option|}}
 		{{#link-to (get option 0) tagName="li"}}
 			{{get option 1}}
 		{{/link-to}}
