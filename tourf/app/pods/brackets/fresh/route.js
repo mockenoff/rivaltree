@@ -11,4 +11,6 @@ export default Ember.Route.extend({
 			model.deleteRecord();
 		}
 	}.on('deactivate'),
+
+	titleToken: 'Create a bracket',
 });

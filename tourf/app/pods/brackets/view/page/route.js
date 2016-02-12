@@ -8,5 +8,9 @@ export default Ember.Route.extend({
 		} else if (params.page_id === 'teams') {
 			return this.store.query('team', {bracket_id: bracket.id});
 		}
-	}
+	},
+
+	titleToken: function(model) {
+		return this.paramsFor('brackets.view.page').page_id.capitalize();
+	},
 });

@@ -8,4 +8,6 @@ export default Ember.Route.extend({
 			self.transitionTo('login');
 		});
 	},
+
+	titleToken: 'Login',
 });
