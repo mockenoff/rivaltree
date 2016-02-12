@@ -4,15 +4,13 @@ export default Ember.Component.extend({
 	classNames: ['modal'],
 	classNameBindings: ['isShowing'],
 
+	tabindex: 0,
+	attributeBindings: ['tabindex'],
+
 	isShowing: true,
 
-	didInsertElement() {
-		this.get('element').setAttribute('tabindex', '0');
-		this._super(...arguments);
-	},
-
 	click(ev) {
-		if (ev.target === this.get('element')) {
+		if (ev.target === this.element) {
 			this._actions['toggleShow'].apply(this);
 		}
 	},
@@ -21,16 +19,19 @@ export default Ember.Component.extend({
 		var keyCode = ev.keyCode || ev.which;
 		if (ev.target.tagName.toLowerCase() !== 'input' && keyCode === 27) {
 			this._actions['toggleShow'].apply(this);
-			this.get('element').blur();
+			this.element.blur();
 		}
 	},
+
+	toggleShow: Ember.observer('isShowing', function() {
+		if (this.get('isShowing') === true) {
+			this.element.focus();
+		}
+	}),
 
 	actions: {
 		toggleShow() {
 			this.toggleProperty('isShowing');
-			if (this.get('isShowing') === true) {
-				this.get('element').focus();
-			}
 		},
 	},
 });
