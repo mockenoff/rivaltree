@@ -1,4 +1,4 @@
-{{input type="text" value=value disabled=isSubmitting escape-press="escInput" enter="enterInput"}}
+{{input type="text" value=value disabled=isSubmitting escape-press="escInput" enter="enterInput" focus-in="focusEvent" focus-out="blurEvent"}}
 {{#if isSubmitting}}{{fa-icon "spinner"}}{{else}}{{fa-icon "pencil-square-o"}}{{/if}}
 
 {{yield}}

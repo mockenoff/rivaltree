@@ -12,50 +12,33 @@ export default Ember.Component.extend({
 
 	didInsertElement() {
 		this._super(...arguments);
-
-		this.set('focusEvent', Ember.run.bind(this, this.get('focusEvent')));
-		this.set('blurEvent', Ember.run.bind(this, this.get('blurEvent')));
-
-		var inputElement = this.element.querySelector('input[type="text"]');
-		inputElement.addEventListener('focus', this.get('focusEvent'));
-		inputElement.addEventListener('blur', this.get('blurEvent'));
-		this.set('inputElement', inputElement);
-	},
-
-	willDestroyElement() {
-		this._super(...arguments);
-
-		var inputElement = this.get('inputElement');
-		inputElement.removeEventListener('focus', this.get('focusEvent'));
-		inputElement.removeEventListener('blur', this.get('blurEvent'));
-	},
-
-	focusEvent() {
-		this.set('cleanProperty', this.get('value'));
-	},
-
-	blurEvent() {
-		var inputElement = this.get('inputElement'),
-			value = (inputElement.value || '').trim(),
-			cleanProperty = this.get('cleanProperty');
-
-		if (value === '') {
-			inputElement.value = cleanProperty !== null && cleanProperty !== undefined ? cleanProperty : '';
-		} else if (value !== cleanProperty) {
-			this.set('value', value);
-
-			if (this.get('alwaysSave') === true) {
-				this.set('isSubmitting', true);
-				this.get('model').save().then(Ember.run.bind(this, function() {
-					this.set('isSubmitting', false);
-				})).catch(Ember.run.bind(this, function(err) {
-					this.set('isSubmitting', false); // BUG: show error feedback
-				}));
-			}
-		}
+		this.set('inputElement', this.element.querySelector('input[type="text"]'));
 	},
 
 	actions: {
+		focusEvent() {
+			this.set('cleanProperty', this.get('value'));
+		},
+		blurEvent() {
+			var inputElement = this.get('inputElement'),
+				value = (inputElement.value || '').trim(),
+				cleanProperty = this.get('cleanProperty');
+
+			if (value === '') {
+				inputElement.value = cleanProperty !== null && cleanProperty !== undefined ? cleanProperty : '';
+			} else if (value !== cleanProperty) {
+				this.set('value', value);
+
+				if (this.get('alwaysSave') === true) {
+					this.set('isSubmitting', true);
+					this.get('model').save().then(Ember.run.bind(this, function() {
+						this.set('isSubmitting', false);
+					})).catch(Ember.run.bind(this, function(err) {
+						this.set('isSubmitting', false); // BUG: show error feedback
+					}));
+				}
+			}
+		},
 		escInput() {
 			var inputElement = this.get('inputElement');
 			inputElement.value = this.get('cleanProperty');
