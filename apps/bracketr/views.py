@@ -20,6 +20,39 @@ def games(request, game_id=None):
 	""" API endpoint for games
 
 	"""
+	if not request.user.is_authenticated():
+		return utils.json_response({'logged_in': False}, status_code=401)
+
+	if game_id:
+		try:
+			game = models.Game.objects.get(pk=game_id)
+		except models.Game.DoesNotExist:
+			return utils.json_response({'error': 'No game with that ID'}, status_code=404)
+
+		if request.method == 'PUT':
+			form_data = utils.get_form_data(request)['game']
+			game = utils.update_model(game, form_data, ['team1_wins', 'team2_wins',])
+
+			try:
+				game.save()
+			except ValidationError: # BUG: header_path validation
+				return utils.json_response({'error': 'Could not save game'}, status_code=400)
+
+		return utils.json_response({'game': models.Serializer.game(game)})
+
+	else:
+		bracket_id = request.GET.get('bracket_id')
+		if bracket_id:
+			try:
+				bracket = models.Bracket.objects.get(pk=bracket_id)
+			except models.Bracket.DoesNotExist:
+				return utils.json_response({'error': 'No bracket with that ID'}, status_code=404)
+
+			games = models.Game.objects.filter(bracket=bracket_id).order_by('group', 'round_number', 'number')
+			return utils.json_response({'games': [models.Serializer.game(game) for game in games]})
+		else:
+			return utils.json_response({'error': 'Can\'t return all teams'}, status_code=500)
+
 	return utils.json_response({'game': True})
 
 @csrf_exempt

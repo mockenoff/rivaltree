@@ -1,7 +1,7 @@
 import DS from 'ember-data';
 
 export default DS.Model.extend({
-	type: DS.attr('number'),
+	group: DS.attr({defaultValue: [1, 'Winner',]}),
 	round: DS.attr('number'),
 	number: DS.attr('number'),
 	bracket_id: DS.attr('number'),

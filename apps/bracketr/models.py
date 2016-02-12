@@ -760,3 +760,21 @@ class Serializer(object):
 			'header_path': team.header_path.name,
 			'bracket_id': team.bracket_id.hex,
 		}
+
+	@staticmethod
+	def game(game):
+		return {
+			'id': game.pk.hex,
+			'bracket_id': game.bracket_id.hex,
+			'group': [game.group, game.get_group_display()],
+			'round': game.round_number,
+			'number': game.number,
+			'team1_id': game.team1_id.hex if game.team1 else None,
+			'team1_wins': game.team1_wins,
+			'team1_seed': game.team1_seed,
+			'team2_id': game.team2_id.hex if game.team2 else None,
+			'team2_wins': game.team2_wins,
+			'team2_seed': game.team2_seed,
+			'date_created': game.date_created,
+			'date_updated': game.date_updated,
+		}
