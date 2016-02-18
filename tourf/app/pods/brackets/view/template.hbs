@@ -4,7 +4,13 @@
 
 <div class="{{if pageState.params.page_id 'outlet narrower' 'outlet'}}">
 	{{#if (equal (array-at model.phase 0) 1)}}
-	<h2 class="view-header">Something went wrong!</h2>
+	<h2 class="view-header">Yay!</h2>
+	<p>Now for step two!</p>
+	<ol class="numbered">
+		<li>Customize your bracket! Add a description, change some colors, love your life.</li>
+		<li>Get your teams going! Update names, set their seeds, be a buddy.</li>
+		<li>Post the scores! Go as deep as you want before you publish.</li>
+	</ol>
 	{{/if}}
 
 	{{#if (equal (array-at model.phase 0) 2)}}

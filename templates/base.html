@@ -1,0 +1,74 @@
+<!DOCTYPE HTML>{% load staticfiles %}
+<html lang="en-us">
+<head>
+	<!-- Site stuff -->
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+	<!-- Page stuff -->
+	<title>{% block title %}{% endblock %}rivaltree - {{ DEFAULT_TITLE|safe }}</title>
+	<meta name="description" content="rivaltree - {% block meta_description %}{{ DEFAULT_DESCRIPTION|safe }}{% endblock %}" />
+	{% with uri=request.build_absolute_uri %}<link rel="canonical" href="{{ uri }}{% if uri|slice:"-1:" != "/" %}/{% endif %}" />{% endwith %}
+
+	<!-- Style stuff -->
+	<link rel="shortcut icon" href="{% static "favicon.ico" %}" />
+	<link href="{% static "assets/vendor.css" %}" rel="stylesheet" type="text/css">
+	<link href="{% static "css/main.css" %}" rel="stylesheet" type="text/css">
+	{% block styles %}{% endblock %}
+</head>
+<body>
+	<div class="content-wrapper">
+		<header id="header" role="navigation">
+			<div class="cap-wrapper">
+				<a href="/" id="logo">rivaltree</a>
+
+				<nav id="nav">
+					<ul>
+						<li><a href="/generator/">Generator</a></li>
+						<li><a href="/gallery/">Gallery</a></li>
+						{% if manager %}
+						<li><a href="/dash/">Dashboard</a></li>
+						{% else %}
+						<li><a href="/signup/">Sign Up</a></li>
+						<li><a href="/login/">Log In</a></li>
+						{% endif %}
+					</ul>
+				</nav>
+			</div>
+		</header>
+
+		<div id="container" class="{% block container_class %}index{% endblock %}">
+			{% block container %}{% endblock %}
+		</div>
+	</div>
+
+	<footer id="footer">
+		<div class="cap-wrapper">
+			<div class="footer-row">
+				<nav class="site-links">
+					<ul>
+						<li><a href="/about/">About Us</a></li>
+						<li><a href="/contact/">Contact Us</a></li>
+						<li><a href="/terms/">Terms of Service</a></li>
+						<li><a href="/privacy/">Privacy Policy</a></li>
+					</ul>
+				</nav>
+
+				<nav class="social-links">
+					<ul>
+						<li><a href="https://twitter.com/mockenoff" class="social twitter">Twitter <i class="fa fa-twitter"></i></a></li>
+						<li><a href="https://instagram.com/mockenoff/" class="social instagram">Instagram <i class="fa fa-instagram"></i></a></li>
+						<li><a href="https://linkedin.com/" class="social">LinkedIn <i class="fa fa-linkedin"></i></a></li>
+						<li><a href="https://plus.google.com/" class="social">Google+ <i class="fa fa-google-plus"></i></a></li>
+					</ul>
+				</nav>
+			</div>
+			<div class="footer-row text-center">
+				<img src="/static/images/logo.png" />
+				<p>© 2016 Rivaltree, LLC</p>
+			</div>
+		</div>
+	</footer>
+</body>
+</html>
