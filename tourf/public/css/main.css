@@ -334,14 +334,31 @@ input[type="checkbox"].fancy {
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center center;
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 }
 	.splash .cap-wrapper {
 		z-index: 1;
 		position: relative;
 	}
+	.splash img {
+		float: left;
+		margin: 120px 0 0 40px;
+	}
 	.splash h2 {
 		color: #FFF;
+		float: right;
+		font-size: 50px;
+		line-height: 100%;
+		margin: 180px 120px 0 0;
 		font-family: 'Roboto Condensed';
+	}
+	.splash p {
+		width: 45%;
+		color: #FFF;
+		float: right;
+		font-size: 30px;
+		line-height: 120%;
+		margin: 30px 40px 0 0;
 	}
 	.splash:before {
 		content: '';
