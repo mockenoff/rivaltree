@@ -325,5 +325,60 @@ input[type="checkbox"].fancy {
 	}
 
 /*
-	CONTAINER
+	INDEX
 */
+.splash {
+	width: 100%;
+	height: 600px;
+	position: relative;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+	.splash .cap-wrapper {
+		z-index: 1;
+		position: relative;
+	}
+	.splash h2 {
+		color: #FFF;
+		font-family: 'Roboto Condensed';
+	}
+	.splash:before {
+		content: '';
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		display: block;
+		position: absolute;
+		background: rgba(0, 0, 0, 0.65);
+	}
+	.splash.bowling {
+		background-image: url(/static/images/hero/bowling.jpg);
+	}
+	.splash.futbol {
+		background-position: center bottom;
+		background-image: url(/static/images/hero/futbol.jpg);
+	}
+	.splash.grass {
+		background-image: url(/static/images/hero/grass.jpg);
+	}
+	.splash.haze {
+		background-image: url(/static/images/hero/haze.jpg);
+	}
+	.splash.soccer {
+		background-image: url(/static/images/hero/soccer.jpg);
+	}
+	.splash.sundown {
+		background-position: center bottom;
+		background-image: url(/static/images/hero/sundown.jpg);
+	}
+	.splash.tennis {
+		background-image: url(/static/images/hero/tennis.jpg);
+	}
+	.splash.cod {
+		background-image: url(/static/images/hero/cod.jpg);
+	}
+	.splash.dota {
+		background-image: url(/static/images/hero/dota.jpg);
+	}

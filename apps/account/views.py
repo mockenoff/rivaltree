@@ -7,6 +7,8 @@
 
 """
 
+import random
+
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, logout
@@ -18,7 +20,8 @@ def index(request):
 	""" Serve up the index page
 
 	"""
-	return render(request, 'main.html')
+	heroes = ('bowling', 'futbol', 'grass', 'haze', 'soccer', 'sundown', 'tennis', 'dota', 'cod',)
+	return render(request, 'main.html', {'hero': random.choice(heroes)})
 
 @csrf_exempt
 def users(request, action=None):
