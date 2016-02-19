@@ -333,6 +333,11 @@ input[type="checkbox"].fancy {
 	height: 100%;
 	margin: 0 auto;
 }
+	.cap-wrapper p {
+		font-size: 17px;
+		line-height: 160%;
+		margin: 15px 0 0 0;
+	}
 
 /*
 	FOOTER
@@ -345,6 +350,7 @@ input[type="checkbox"].fancy {
 	background: #44474F;
 }
 	#footer p {
+		margin: 0;
 		font-size: 12px;
 	}
 	#footer img {
@@ -483,6 +489,9 @@ input[type="checkbox"].fancy {
 	.splash.dota {
 		background-image: url(/static/images/hero/dota.jpg);
 	}
+	.splash.meeting {
+		background-image: url(/static/images/hero/meeting.jpg);
+	}
 
 .features li {
 	width: 49%;
@@ -505,4 +514,46 @@ input[type="checkbox"].fancy {
 .features img {
 	float: left;
 	margin: 0 20px 0 0;
+}
+
+/*
+	ABOUT
+*/
+.about .splash {
+	height: 300px;
+}
+.about section {
+	overflow: hidden;
+	vertical-align: top;
+	margin: 80px auto 90px auto;
+}
+	.about section > p,
+	.about section > h1 {
+		width: 60%;
+	}
+	.about h1 {
+		font-size: 45px;
+		margin: 0 0 15px 0;
+	}
+.about-body {
+	width: 50%;
+	vertical-align: top;
+	display: inline-block;
+}
+.about-side {
+	width: 37%;
+	float: right;
+	padding: 40px 60px;
+	vertical-align: top;
+	background: #FEFEFE;
+	box-sizing: border-box;
+	border-top: 1px solid #AAA;
+	border-bottom: 1px solid #AAA;
+}
+	.about-side h2 {
+		font-size: 30px;
+		margin: 0 0 22px 0;
+	}
+.about li {
+	margin: 10px 0 0 0;
 }
