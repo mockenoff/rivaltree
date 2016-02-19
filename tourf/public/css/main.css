@@ -22,10 +22,18 @@ table, thead, tbody, tr, th, td, figure, figcaption {
 	src: local('Source Sans Pro'), local('SourceSansPro-Regular'), url(https://fonts.gstatic.com/s/sourcesanspro/v9/ODelI1aHBYDBqgeIAH2zlJbPFduIYtoLzwST68uhz_Y.woff2) format('woff2');
 }
 @font-face {
-	font-family: 'Roboto Condensed';
+	font-family: 'Crete Round';
 	font-style: normal;
 	font-weight: 400;
-	src: local('Roboto Condensed'), local('RobotoCondensed-Regular'), url(https://fonts.gstatic.com/s/robotocondensed/v13/Zd2E9abXLFGSr9G3YK2MsH4vxAoi6d67T_UKWi0EoHQ.woff2) format('woff2');
+	src: local('Crete Round'), local('CreteRound-Regular'), url(https://fonts.gstatic.com/s/creteround/v5/ZCcPJiCGOzh84o2siPk48aE8kM4xWR1_1bYURRojRGc.woff2) format('woff2');
+	unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+	font-family: 'Crete Round';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Crete Round'), local('CreteRound-Regular'), url(https://fonts.gstatic.com/s/creteround/v5/ZCcPJiCGOzh84o2siPk48Ygp9Q8gbYrhqGlRav_IXfk.woff2) format('woff2');
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
 }
 
 /*
@@ -57,7 +65,7 @@ a {
 
 h1, h2, h3, h4, h5, h6 {
 	font-weight: normal;
-	font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
+	font-family: 'Crete Round', serif;
 }
 
 .float-left {
@@ -116,6 +124,37 @@ nav li {
 		left: 0 !important;
 		width: 100% !important;
 		height: 100% !important;
+	}
+
+/*
+	BUTTONS
+*/
+.btn {
+	color: #FFF;
+	line-height: 40px;
+	padding: 10px 20px;
+	border-radius: 4px;
+	background: #5BA500;
+	display: inline-block;
+	border: 2px solid #82B347;
+	transition: all 0.1s ease-out;
+	text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.4);
+}
+	.btn:hover, .btn:focus {
+		color: #FFF;
+		text-decoration: none;
+		border: 2px solid #D6E4C5;
+	}
+	.btn:active {
+		text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.8);
+	}
+
+.btn.btn-action {
+	background: #2696A5;
+	border: 2px solid #58AFBB;
+}
+	.btn.btn-action:hover, .btn.btn-action:focus {
+		border: 2px solid #BCD4D8;
 	}
 
 /*
@@ -203,7 +242,7 @@ input[type="checkbox"].fancy {
 		display: inline-block;
 		vertical-align: middle;
 		border: 2px solid #DDD;
-		transition: all 0.2s ease-out;
+		transition: all 0.15s ease-out;
 	}
 	input[type="checkbox"]:checked.fancy + label:before {
 		background: #639;
@@ -219,7 +258,7 @@ input[type="checkbox"].fancy {
 #header {
 	width: 100%;
 	height: 80px;
-	background: #FFF;
+	background: #FEFEFE;
 }
 
 #logo {
@@ -237,20 +276,58 @@ input[type="checkbox"].fancy {
 }
 
 #nav {
-	height: 90%;
+	height: 100%;
 	float: right;
-	margin: 4px 0;
+	font-size: 0;
 }
 	#nav a {
+		z-index: 1;
+		color: #666;
 		width: 100%;
 		height: 100%;
 		display: block;
-		padding: 0 10px;
+		padding: 0 20px;
+		font-size: 17px;
+		position: relative;
+		transition: all 0.15s ease-out;
 	}
+		#nav a:hover, #nav a:focus {
+			color: #FFF;
+			text-decoration: none;
+		}
 	#nav li {
-		margin: 0 10px;
-		line-height: 72px;
+		overflow: hidden;
+		line-height: 80px;
+		position: relative;
 	}
+		#nav li:before {
+			top: 67%;
+			left: 10%;
+			width: 80%;
+			height: 5%;
+			content: '';
+			display: block;
+			position: absolute;
+			transition: all 0.15s ease-out;
+		}
+			#nav li:hover:before {
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+			}
+		#nav li:nth-child(1):before {
+			background: #FFA000;
+		}
+		#nav li:nth-child(2):before {
+			background: #2696A5;
+		}
+		#nav li:nth-child(3):before {
+			background: #5BA500;
+		}
+		#nav li:nth-child(4):before {
+			background: #AAAAAA;
+		}
 
 .cap-wrapper {
 	width: calc(100% - 110px);
@@ -264,9 +341,9 @@ input[type="checkbox"].fancy {
 #footer {
 	width: 100%;
 	height: 130px;
-	color: #b3b3b3;
+	color: #B3B3b3;
 	padding-top: 10px;
-	background: #44474f;
+	background: #44474F;
 }
 	#footer p {
 		font-size: 12px;
@@ -288,7 +365,7 @@ input[type="checkbox"].fancy {
 			background: #E4E4E4;
 		}
 	#footer .fa {
-		color: #44474f;
+		color: #44474F;
 		font-size: 17px;
 		line-height: 30px;
 	}
@@ -342,23 +419,27 @@ input[type="checkbox"].fancy {
 	}
 	.splash img {
 		float: left;
-		margin: 120px 0 0 40px;
+		margin: 120px 40px 0 40px;
 	}
 	.splash h2 {
+		width: 45%;
 		color: #FFF;
-		float: right;
+		float: left;
 		font-size: 50px;
 		line-height: 100%;
-		margin: 180px 120px 0 0;
-		font-family: 'Roboto Condensed';
+		margin: 144px 0 0 0;
 	}
 	.splash p {
 		width: 45%;
 		color: #FFF;
-		float: right;
+		float: left;
 		font-size: 30px;
 		line-height: 120%;
-		margin: 30px 40px 0 0;
+		margin: 30px 0 0 0;
+	}
+	.splash .btn {
+		margin-right: 25px;
+		box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.8);
 	}
 	.splash:before {
 		content: '';
