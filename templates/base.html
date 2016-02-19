@@ -7,8 +7,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 	<!-- Page stuff -->
-	<title>{% block title %}{% endblock %}rivaltree - {{ DEFAULT_TITLE|safe }}</title>
-	<meta name="description" content="rivaltree - {% block meta_description %}{{ DEFAULT_DESCRIPTION|safe }}{% endblock %}" />
+	<title>{% block title %}{% endblock %}Rivaltree - {{ DEFAULT_TITLE|safe }}</title>
+	<meta name="description" content="Rivaltree - {% block meta_description %}{{ DEFAULT_DESCRIPTION|safe }}{% endblock %}" />
 	{% with uri=request.build_absolute_uri %}<link rel="canonical" href="{{ uri }}{% if uri|slice:"-1:" != "/" %}/{% endif %}" />{% endwith %}
 
 	<!-- Style stuff -->
@@ -21,7 +21,7 @@
 	<div class="content-wrapper">
 		<header id="header" role="navigation">
 			<div class="cap-wrapper">
-				<a href="/" id="logo">rivaltree</a>
+				<a href="/" id="logo">Rivaltree</a>
 
 				<nav id="nav">
 					<ul>
@@ -38,7 +38,7 @@
 			</div>
 		</header>
 
-		<div id="container" class="{% block container_class %}index{% endblock %}">
+		<div id="container" class="{% block container_class %}cap-wrapper{% endblock %}">
 			{% block container %}{% endblock %}
 		</div>
 	</div>

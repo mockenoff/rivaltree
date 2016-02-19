@@ -2,7 +2,7 @@ import Ember from 'ember';
 
 export default Ember.Route.extend({
 	title(tokens) {
-		var title = 'rivaltree';
+		var title = 'Rivaltree';
 		if (Ember.$.isArray(tokens) === false) {
 			tokens = [title];
 		} else {

@@ -23,6 +23,12 @@ def index(request):
 	heroes = ('bowling', 'futbol', 'grass', 'haze', 'soccer', 'sundown', 'tennis', 'dota', 'cod',)
 	return render(request, 'main.html', {'hero': random.choice(heroes)})
 
+def about(request):
+	""" Serve up the about page
+
+	"""
+	return render(request, 'about.html')
+
 @csrf_exempt
 def users(request, action=None):
 	""" Serve up the users API endpoint

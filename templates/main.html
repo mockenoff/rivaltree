@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 
+{% block container_class %}index{% endblock %}
+
 {% block container %}
-<div class="splash {{hero}}">
+<section class="splash {{hero}}">
 	<div class="cap-wrapper">
 		<img src="/static/images/bracket.svg" />
 		<h2>Plant those rival seeds</h2>
@@ -12,5 +14,32 @@
 			<a href="/signup/" class="btn btn-action">Sign up</a>
 		</p>
 	</div>
-</div>
+</section>
+
+<section class="features cap-wrapper">
+	<h2>Everything You Need</h2>
+
+	<ul>
+		<li>
+			<img src="https://placehold.it/175x175" />
+			<h3>Modern dashboard and editor</h3>
+			<p>Powerful and intuitive dashboard for managing multiple tournaments at once and creating new customizable brackets.</p>
+		</li>
+		<li>
+			<img src="https://placehold.it/175x175" />
+			<h3>Real-time embeddable widget</h3>
+			<p>Help fans keep up with your scores with a real-time updating widget that you can embed anywhere you want.</p>
+		</li>
+		<li>
+			<img src="https://placehold.it/175x175" />
+			<h3>Round-robin seeding</h3>
+			<p>Choose to seed your tournaments either from predetermined rankings, randomized placement, or round-robin matches.</p>
+		</li>
+		<li>
+			<img src="https://placehold.it/175x175" />
+			<h3>Double or single-elimination</h3>
+			<p>Run a single-elimination tournament or a double-elimination tournament with a full losers bracket.</p>
+		</li>
+	</ul>
+</section>
 {% endblock %}
