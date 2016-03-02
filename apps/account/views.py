@@ -29,6 +29,12 @@ def about(request):
 	"""
 	return render(request, 'about.html')
 
+def contact(request):
+	""" Serve up the contact page
+
+	"""
+	return render(request, 'contact.html')
+
 @csrf_exempt
 def users(request, action=None):
 	""" Serve up the users API endpoint

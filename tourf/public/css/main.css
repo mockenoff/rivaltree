@@ -2,7 +2,7 @@
 	RESET
 */
 html, body, img, form, input, header, nav, div,
-ol, ul, li, h1, h2, h3, h4, span, p, a,
+ol, ul, li, h1, h2, h3, h4, span, p, a, textarea,
 table, thead, tbody, tr, th, td, figure, figcaption {
 	border: 0;
 	padding: 0;
@@ -173,11 +173,34 @@ nav li {
 	FORMS
 */
 label {
-	color: #2696A5;
+	color: #5A5A5A;
 	display: block;
 	font-size: 0.9em;
 	text-transform: uppercase;
 }
+textarea {
+	width: 14em;
+	padding: 8px;
+	font-size: 1.2em;
+	border-radius: 4px;
+	font-weight: lighter;
+	border: 1px solid #DDD;
+	box-sizing: border-box;
+	font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	resize: none;
+}
+	textarea:focus,
+	textarea:focus,
+	textarea:focus {
+		border-color: #AAA;
+	}
+	textarea[disabled],
+	textarea[disabled],
+	textarea[disabled] {
+		background: #EFEFEF;
+	}
 input {
 	width: 14em;
 	box-sizing: border-box;
@@ -186,8 +209,8 @@ input {
 	input[type="text"],
 	input[type="email"],
 	input[type="password"] {
+		padding: 8px;
 		font-size: 1.2em;
-		padding: 6px 12px;
 		border-radius: 4px;
 		font-weight: lighter;
 		border: 1px solid #DDD;
@@ -366,7 +389,8 @@ input[type="checkbox"].fancy {
 		background: #C3C3C3;
 		border-radius: 15px;
 	}
-		#footer .social:hover, #footer .social:focus {
+		#footer .social:hover,
+		#footer .social:focus {
 			background: #E4E4E4;
 		}
 	#footer .fa {
@@ -422,9 +446,17 @@ input[type="checkbox"].fancy {
 	background-position: center center;
 	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 }
-	.splash .cap-wrapper {
+	.splash > h1,
+	.splash > .cap-wrapper {
 		z-index: 1;
 		position: relative;
+	}
+	.splash > h1 {
+		top: 50%;
+		color: #FAFAFA;
+		font-size: 3em;
+		text-align: center;
+		transform: translateY(-50%);
 	}
 	.splash img {
 		float: left;
@@ -492,6 +524,9 @@ input[type="checkbox"].fancy {
 	.splash.meeting {
 		background-image: url(/static/images/hero/meeting.jpg);
 	}
+	.splash.phone {
+		background-image: url(/static/images/hero/phone.jpg);
+	}
 
 .features li {
 	width: 49%;
@@ -517,24 +552,28 @@ input[type="checkbox"].fancy {
 }
 
 /*
-	ABOUT
+	CONTENT
 */
-.about .splash {
-	height: 300px;
-}
-.about section {
+section.cap-wrapper {
 	overflow: hidden;
 	vertical-align: top;
 	margin: 80px auto 90px auto;
 }
-	.about section > p,
-	.about section > h1 {
+	section.cap-wrapper > p,
+	section.cap-wrapper > h1 {
 		width: 60%;
 	}
-	.about h1 {
+	section.cap-wrapper > h1 {
 		font-size: 45px;
 		margin: 0 0 15px 0;
 	}
+
+/*
+	ABOUT
+*/
+.about .splash {
+	max-height: 300px;
+}
 .about-body {
 	width: 50%;
 	vertical-align: top;
@@ -556,4 +595,41 @@ input[type="checkbox"].fancy {
 	}
 .about li {
 	margin: 10px 0 0 0;
+}
+
+/*
+	CONTACT
+*/
+.contact .splash {
+	max-height: 300px;
+}
+.contact-form {
+	width: 50%;
+	float: right;
+}
+	.contact-form input,
+	.contact-form textarea {
+		width: 100%;
+		margin: 4px 0 10px 0;
+	}
+.contact-side {
+	width: 37%;
+	vertical-align: top;
+	display: inline-block;
+}
+	.contact-side ul {
+		margin-top: 20px;
+	}
+	.contact-side h3 {
+		padding: 10px 0 6px 0;
+	}
+
+/*
+	MEDIA QUERIES
+*/
+@media (max-width: 768px) {
+	.about .splash,
+	.contact .splash {
+		max-height: 200px;
+	}
 }

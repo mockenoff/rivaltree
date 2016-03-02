@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us - {% endblock %}
+{% block meta_description %}Contact us over at Rivaltree{% endblock %}
+
+{% block container_class %}contact{% endblock %}
+
+{% block container %}
+<div class="splash phone"></div>
+
+<section class="cap-wrapper">
+	<h1>Contact Us</h1>
+
+	<div class="contact-side">
+		<p>Put your message in a bottle and we'll get back to you as soon as possible.</p>
+		<p>Or feel free to try one of these other methods. Follow your heart, kid.</p>
+
+		<ul>
+			<li>
+				<h3>General Contact</h3>
+				<a href="contact@rivaltree.com">contact@rivaltree.com</a>
+			</li>
+			<li>
+				<h3>Customer Support</h3>
+				<a href="support@rivaltree.com">support@rivaltree.com</a>
+			</li>
+			<li>
+				<h3>Twitter</h3>
+				<a href="https://twitter.com/rivaltree">@rivaltree</a>
+			</li>
+		</ul>
+	</div>
+
+	<form class="contact-form">
+		<label for="form-name">Your name</label>
+		<input type="text" id="form-name" name="name" />
+		<label for="form-email">Your email</label>
+		<input type="email" id="form-email" name="email" />
+		<label for="form-message">Your message</label>
+		<textarea id="form-message" name="message"></textarea>
+		<input type="submit" value="Ship it" class="btn btn-action" />
+	</form>
+</section>
+{% endblock %}
