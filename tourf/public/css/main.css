@@ -178,6 +178,7 @@ label {
 	font-size: 0.9em;
 	text-transform: uppercase;
 }
+
 textarea {
 	width: 14em;
 	padding: 8px;
@@ -201,6 +202,7 @@ textarea {
 	textarea[disabled] {
 		background: #EFEFEF;
 	}
+
 input {
 	width: 14em;
 	box-sizing: border-box;
@@ -230,7 +232,7 @@ input {
 		cursor: pointer;
 		font-size: 1.2em;
 		padding: 6px 15px;
-		border-radius: 2px;
+		border-radius: 4px;
 		letter-spacing: 1px;
 		white-space: nowrap;
 		background: #2696A5;
@@ -249,6 +251,16 @@ input {
 			cursor: default;
 			background: #DDD;
 		}
+
+textarea.error,
+input[type="text"].error,
+input[type="email"].error,
+input[type="password"].error {
+	position: relative;
+	animation-name: shake;
+	animation-duration: 0.3s;
+	border-color: rgba(255, 100, 100, 0.7);
+}
 
 input[type="checkbox"].fancy {
 	opacity: 0;
@@ -273,6 +285,12 @@ input[type="checkbox"].fancy {
 	input[type="checkbox"]:focus.fancy + label:before {
 		border: 2px solid #A57DCE;
 	}
+
+form .errorlist {
+	margin: 4px 0;
+	color: #FF6464;
+	font-weight: bold;
+}
 
 /*
 	HEADER
@@ -557,7 +575,7 @@ input[type="checkbox"].fancy {
 section.cap-wrapper {
 	overflow: hidden;
 	vertical-align: top;
-	margin: 80px auto 90px auto;
+	margin: 54px auto 70px auto;
 }
 	section.cap-wrapper > p,
 	section.cap-wrapper > h1 {
@@ -623,6 +641,37 @@ section.cap-wrapper {
 	.contact-side h3 {
 		padding: 10px 0 6px 0;
 	}
+.contact .success {
+	font-weight: bold;
+	margin-bottom: 12px;
+}
+
+/*
+	ANIMATIONS
+*/
+@keyframes shake {
+	0% {
+		left: 0;
+	}
+	50% {
+		left: 10px;
+	}
+	75% {
+		left: -5px;
+	}
+	88% {
+		left: 3px;
+	}
+	94% {
+		left: -2px;
+	}
+	97% {
+		left: 1px;
+	}
+	100% {
+		left: 0;
+	}
+}
 
 /*
 	MEDIA QUERIES

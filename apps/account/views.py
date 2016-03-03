@@ -8,12 +8,18 @@
 """
 
 import random
+import datetime
+from xml.etree import ElementTree
 
+from django.conf import settings
 from django.shortcuts import render
+from django.core.mail import send_mail
+from django.template.loader import get_template
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, logout
 
 from lib import utils
+from apps.account import forms
 from apps.account import models
 
 def index(request):
@@ -33,7 +39,32 @@ def contact(request):
 	""" Serve up the contact page
 
 	"""
-	return render(request, 'contact.html')
+	form = None
+	did_send = False
+
+	if request.method == 'POST':
+		form = forms.ContactForm(request.POST)
+		if form.is_valid():
+			template_string = get_template('emails/contact.html').render({
+				'name': form.cleaned_data['name'],
+				'email': form.cleaned_data['email'],
+				'message': form.cleaned_data['message'],
+			})
+			message_string = ''.join(ElementTree.fromstring(template_string).itertext())
+			send_mail(
+				subject='Rivaltree Contact Form - %s' % datetime.datetime.now().strftime('%B %d, %Y at %I:%M:%S %p'),
+				message=message_string,
+				html_message=template_string,
+				from_email=form.cleaned_data['email'],
+				recipient_list=[settings.DEFAULT_CONTACT_EMAIL],
+				fail_silently=False
+			)
+			did_send = True
+			form = forms.ContactForm()
+	else:
+		form = forms.ContactForm()
+
+	return render(request, 'contact.html', {'form': form, 'did_send': did_send})
 
 @csrf_exempt
 def users(request, action=None):

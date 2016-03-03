@@ -5,6 +5,8 @@
 
 {% block container_class %}contact{% endblock %}
 
+{% block scripts %}<script src="/static/js/contact.js"></script>{% endblock %}
+
 {% block container %}
 <div class="splash phone"></div>
 
@@ -31,13 +33,21 @@
 		</ul>
 	</div>
 
-	<form class="contact-form">
-		<label for="form-name">Your name</label>
-		<input type="text" id="form-name" name="name" />
-		<label for="form-email">Your email</label>
-		<input type="email" id="form-email" name="email" />
-		<label for="form-message">Your message</label>
-		<textarea id="form-message" name="message"></textarea>
+	<form class="contact-form" action="/contact/" method="POST">
+		{% if did_send %}
+		<p class="success">Great! We'll read it, frame it, bop it, and shoot something back on over to you.</p>
+		{% endif %}
+
+		{% csrf_token %}
+		<label for="{{ form.name.id_for_label }}">{{ form.name.label_tag }}</label>
+		{{ form.name.errors }}
+		{{ form.name }}
+		<label for="{{ form.email.id_for_label }}">{{ form.email.label_tag }}</label>
+		{{ form.email.errors }}
+		{{ form.email }}
+		<label for="{{ form.message.id_for_label }}">{{ form.message.label_tag }}</label>
+		{{ form.message.errors }}
+		{{ form.message }}
 		<input type="submit" value="Ship it" class="btn btn-action" />
 	</form>
 </section>

@@ -129,3 +129,11 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
 	os.path.join(BASE_DIR, 'static'),
 )
+
+# Email settings
+# https://help.mailgun.com/hc/en-us/articles/202464990-How-do-I-start-sending-email-
+
+MAILGUN_SERVER_NAME = 'mg.elite-dodgeball.com'
+MAILGUN_ACCESS_KEY = 'key-dummy'
+EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
+DEFAULT_CONTACT_EMAIL = 'contact@rivaltree.com'
