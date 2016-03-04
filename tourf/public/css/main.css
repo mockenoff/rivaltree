@@ -545,6 +545,9 @@ form .errorlist {
 	.splash.phone {
 		background-image: url(/static/images/hero/phone.jpg);
 	}
+	.splash.book {
+		background-image: url(/static/images/hero/book.jpg);
+	}
 
 .features li {
 	width: 49%;
@@ -577,6 +580,20 @@ section.cap-wrapper {
 	vertical-align: top;
 	margin: 54px auto 70px auto;
 }
+	section.cap-wrapper > ul {
+		width: 60%;
+		padding: 0 0 0 20px;
+	}
+		section.cap-wrapper li {
+			color: #444444;
+			margin: 15px 0;
+			font-size: 17px;
+			list-style: disc;
+		}
+	section.cap-wrapper > p {
+		color: #444444;
+		line-height: 150%;
+	}
 	section.cap-wrapper > p,
 	section.cap-wrapper > h1 {
 		width: 60%;
@@ -584,6 +601,15 @@ section.cap-wrapper {
 	section.cap-wrapper > h1 {
 		font-size: 45px;
 		margin: 0 0 15px 0;
+	}
+	section.cap-wrapper > h2,
+	section.cap-wrapper > h3 {
+		margin: 45px 0 15px 0;
+	}
+	section.cap-wrapper .subheader {
+		color: #888888;
+		display: block;
+		margin: 0 0 45px 0;
 	}
 
 /*
@@ -644,6 +670,34 @@ section.cap-wrapper {
 .contact .success {
 	font-weight: bold;
 	margin-bottom: 12px;
+}
+
+/*
+	TERMS
+*/
+.terms .splash {
+	max-height: 300px;
+}
+.terms section.cap-wrapper p,
+.terms section.cap-wrapper h1,
+.terms section.cap-wrapper h2,
+.terms section.cap-wrapper h3,
+.terms section.cap-wrapper ul {
+	width: 100%;
+}
+
+/*
+	PRIVACY
+*/
+.privacy .splash {
+	max-height: 300px;
+}
+.privacy section.cap-wrapper p,
+.privacy section.cap-wrapper h1,
+.privacy section.cap-wrapper h2,
+.privacy section.cap-wrapper h3,
+.privacy section.cap-wrapper ul {
+	width: 100%;
 }
 
 /*

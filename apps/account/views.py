@@ -66,6 +66,18 @@ def contact(request):
 
 	return render(request, 'contact.html', {'form': form, 'did_send': did_send})
 
+def terms(request):
+	""" Serve up the terms page
+
+	"""
+	return render(request, 'terms.html')
+
+def privacy(request):
+	""" Serve up the privacy page
+
+	"""
+	return render(request, 'privacy.html')
+
 @csrf_exempt
 def users(request, action=None):
 	""" Serve up the users API endpoint
