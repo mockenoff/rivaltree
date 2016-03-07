@@ -26,6 +26,19 @@ class ErrorForm(forms.Form):
 				classes.append('error')
 				self.fields[field].widget.attrs['class'] = ' '.join(classes)
 
+class ResetForm(ErrorForm):
+	password = forms.CharField(label='Your new password', widget=forms.PasswordInput, min_length=6, help_text='At least 6 characters long')
+	ERROR_FIELDS = ('password')
+
+class ForgotForm(ErrorForm):
+	email = forms.EmailField(label='Your email')
+	ERROR_FIELDS = ('email')
+
+class LoginForm(ErrorForm):
+	username = forms.CharField(label='Your username')
+	password = forms.CharField(label='Your password', widget=forms.PasswordInput)
+	ERROR_FIELDS = ('username', 'password')
+
 class SignupForm(ErrorForm):
 	username = forms.CharField(label='Your username')
 	email = forms.EmailField(label='Your email')

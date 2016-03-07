@@ -12,6 +12,9 @@ urlpatterns = [
 	url(r'^terms/$', views.terms, name='terms'),
 	url(r'^privacy/$', views.privacy, name='privacy'),
 	url(r'^api/users/(?P<action>[^/]+)?', views.users, name='users'),
+	url(r'^logout/$', views.logout_view, name='logout'),
+	url(r'^login/$', views.login_view, name='login'),
+	url(r'^forgot/(?P<token>[^/]+)?', views.forgot, name='forgot'),
 	url(r'^dash/', views.dash, name='dash'),
 ]
 

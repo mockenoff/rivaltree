@@ -11,7 +11,11 @@
 		<p>Create brackets, manage tournaments, and gain fans.</p>
 		<p>
 			<a href="/generator/" class="btn">Give it a try</a>
+			{% if manager %}
+			<a href="/dash/" class="btn btn-action">To the dash</a>
+			{% else %}
 			<a href="/signup/" class="btn btn-action">Sign up</a>
+			{% endif %}
 		</p>
 	</div>
 </section>

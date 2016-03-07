@@ -75,6 +75,27 @@ class Confirmation(models.Model):
 	date_created = models.DateTimeField(auto_now_add=True)
 
 
+class Reset(models.Model):
+	""" Reset model
+
+	"""
+
+	def reset(self, password):
+		""" Reset a user password
+
+		:param password: New user password
+		:type password: str
+
+		"""
+		self.manager.user.set_password(password)
+		self.manager.user.save()
+		self.delete()
+
+	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+	manager = models.ForeignKey(Manager, db_index=True)
+	date_created = models.DateTimeField(auto_now_add=True)
+
+
 def create_manager(username, email, password):
 	""" All the steps to creating a fresh Manager object
 

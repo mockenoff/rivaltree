@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Reset Password - {% endblock %}
+{% block meta_description %}Reset your Rivaltree account password{% endblock %}
+
+{% block container_class %}signup{% endblock %}
+
+{% block scripts %}<script src="/static/js/forms.js"></script>{% endblock %}
+
+{% block container %}
+<section class="cap-wrapper">
+	{% if token %}
+	<h1>Reset Password</h1>
+	<form class="signup-form" action="{{ request.get_full_path }}" method="POST">
+		{% if error == 1 %}
+		<p>We couldn't find a corresponding reset token. If you continue to encounter problems trying to reset your password, please <a href="/contact/">contact us</a>.</p>
+		{% elif complete %}
+		<span class="success">You successfully changed your password. Head over to the <a href="/login/">login page</a> to get going.</span>
+		{% else %}
+		{% if error == 2 %}
+		<span class="error">That password won't work, buddy.</span>
+		{% endif %}
+
+		{% csrf_token %}
+		<fieldset>
+			<label for="{{ form.password.id_for_label }}">{{ form.password.label_tag }}</label>
+			{{ form.password }}
+			<span class="help">{{ form.password.help_text }}</span>
+		</fieldset>
+		<input type="submit" value="Reset Password" class="btn btn-action" />
+		{% endif %}
+	</form>
+	{% else %}
+	<h1>Forgot Password</h1>
+	<form class="signup-form" action="{{ request.get_full_path }}" method="POST">
+		{% if error %}
+		<span class="error">No account with that email address.</span>
+		{% endif %}
+
+		{% if complete %}
+		<span class="success">We sent you a link to reset your password. Check your email to finish up!</span>
+		{% else %}
+
+		{% csrf_token %}
+		<label for="{{ form.email.id_for_label }}">{{ form.email.label_tag }}</label>
+		{{ form.email }}
+		<input type="submit" value="Send Email" class="btn btn-action" />
+
+		{% endif %}
+	</form>
+	{% endif %}
+</section>
+{% endblock %}

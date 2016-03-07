@@ -300,6 +300,16 @@ form .errorlist {
 	color: #FF6464;
 	font-weight: bold;
 }
+	form span.error {
+		color: #FF6464;
+		padding: 10px 0;
+		font-weight: bold;
+		display: inline-block;
+	}
+		form span.error:first-child {
+			font-size: 1.1em;
+			padding: 0 0 10px 0;
+		}
 	form input,
 	form textarea {
 		width: 100%;

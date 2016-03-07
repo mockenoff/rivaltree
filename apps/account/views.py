@@ -13,6 +13,7 @@ import datetime
 from django.conf import settings
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 
 from lib import utils
@@ -59,13 +60,16 @@ def signup(request):
 	""" Serve up the signup page
 
 	"""
+	if request.user.is_authenticated():
+		return redirect('/')
+
 	form = None
 	if request.method == 'POST':
 		form = forms.SignupForm(request.POST)
 		if form.is_valid():
 			user, manager, confirmation = models.create_manager(
-				username=form.cleaned_data['username'],
-				email=form.cleaned_data['email'],
+				username=form.cleaned_data['username'].lower(),
+				email=form.cleaned_data['email'].lower(),
 				password=form.cleaned_data['password'])
 
 			utils.send_template_mail(
@@ -142,6 +146,100 @@ def users(request, action=None):
 
 		return utils.json_response({'logged_in': False}, status_code=401)
 
+def forgot(request, token=None):
+	""" Reset the password
+
+	"""
+	if request.user.is_authenticated():
+		return redirect('/')
+
+	form = None
+	error = False
+	complete = False
+
+	if token:
+		try:
+			reset = models.Reset.objects.get(pk=token)
+		except (ValueError, models.Reset.DoesNotExist):
+			reset = False
+			error = 1
+
+		form = forms.ResetForm()
+
+		if reset:
+			if request.method == 'POST':
+				form = forms.ResetForm(request.POST)
+				if form.is_valid():
+					reset.reset(password=form.cleaned_data['password'])
+					complete = True
+				else:
+					error = 2
+	else:
+		if request.method == 'POST':
+			form = forms.ForgotForm(request.POST)
+			if form.is_valid():
+				manager = models.Manager.objects.filter(user__email=form.cleaned_data['email'].lower()).first()
+				if manager:
+					reset = models.Reset.objects.filter(manager=manager).first()
+					if not reset:
+						reset = models.Reset.objects.create(manager=manager)
+
+					utils.send_template_mail(
+						subject='Reset the password to your Rivaltree account',
+						from_email=settings.DEFAULT_CONTACT_EMAIL,
+						recipient_list=[manager.user.email],
+						template='forgot',
+						data={
+							'username': manager.user.username,
+							'email': manager.user.email,
+							'token': reset.id.hex,
+						})
+					complete = True
+				else:
+					error = True
+		else:
+			form = forms.ForgotForm()
+
+	return render(request, 'forgot.html', {
+		'form': form,
+		'token': token,
+		'error': error,
+		'complete': complete,
+	})
+
+def login_view(request):
+	""" Log in the user
+
+	"""
+	if request.user.is_authenticated():
+		return redirect('/')
+
+	form = None
+	error = False
+	if request.method == 'POST':
+		form = forms.LoginForm(request.POST)
+		if form.is_valid():
+			user = authenticate(
+				username=form.cleaned_data['username'],
+				password=form.cleaned_data['password'])
+			if user:
+				login(request, user)
+				return redirect(request.GET.get('next', '/'))
+			else:
+				error = True
+	else:
+		form = forms.LoginForm()
+
+	return render(request, 'login.html', {'form': form, 'error': error})
+
+def logout_view(request):
+	""" Log out the user
+
+	"""
+	if request.user.is_authenticated():
+		logout(request)
+	return redirect('/')
+
 def emails(request, template):
 	""" Debug view for email templates
 
@@ -159,8 +257,15 @@ def emails(request, template):
 			'email': 'test@email.com',
 			'token': '7f94097c3ca8415ab209fe6c1c063b07',
 		})
+	elif template == 'forgot':
+		data.update({
+			'username': 'testuser',
+			'email': 'test@email.com',
+			'token': '7f94097c3ca8415ab209fe6c1c063b07',
+		})
 	return render(request, 'emails/%s.html' % template, data)
 
+@login_required(login_url='/login/')
 def dash(request):
 	""" Serve up the dash page (catchall view for dash requests)
 
