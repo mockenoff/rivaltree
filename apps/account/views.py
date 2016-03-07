@@ -103,6 +103,15 @@ def confirm(request, token=None):
 		confirmation.confirm()
 		confirmation.manager.user.backend = 'django.contrib.auth.backends.ModelBackend'
 		login(request, confirmation.manager.user)
+
+		utils.send_template_mail(
+			subject='Welcome to Rivaltree',
+			from_email=settings.DEFAULT_CONTACT_EMAIL,
+			recipient_list=[confirmation.manager.user.email],
+			template='welcome',
+			data={
+				'username': confirmation.manager.user.username,
+			})
 		return redirect('/dash/')
 	elif not token:
 		return redirect('/')
@@ -262,6 +271,10 @@ def emails(request, template):
 			'username': 'testuser',
 			'email': 'test@email.com',
 			'token': '7f94097c3ca8415ab209fe6c1c063b07',
+		})
+	elif template == 'welcome':
+		data.update({
+			'username': 'testuser',
 		})
 	return render(request, 'emails/%s.html' % template, data)
 
