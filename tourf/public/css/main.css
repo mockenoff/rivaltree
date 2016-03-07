@@ -760,6 +760,14 @@ section.cap-wrapper {
 }
 
 /*
+	CONFIRMATION
+*/
+.confirm .cap-wrapper p,
+.confirm .cap-wrapper h1 {
+	width: 100%;
+}
+
+/*
 	ANIMATIONS
 */
 @keyframes shake {

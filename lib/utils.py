@@ -7,9 +7,29 @@
 
 """
 
+from xml.etree import ElementTree
+
 import simplejson as json
 
 from django.http import JsonResponse
+from django.core.mail import send_mail
+from django.template.loader import get_template
+
+def send_template_mail(subject, from_email, recipient_list, template, data=None):
+	""" Send a template as an email
+
+	"""
+	template_string = get_template('emails/%s.html' % template).render(data)
+	message_string = ''.join(ElementTree.fromstring(template_string).itertext())
+	send_mail(
+		subject=subject,
+		message=message_string,
+		html_message=template_string,
+		from_email=from_email,
+		recipient_list=recipient_list,
+		fail_silently=False
+	)
+	return True
 
 def get_form_data(request):
 	""" Return the embedded form data of an HTTP request

@@ -27,10 +27,10 @@ class ErrorForm(forms.Form):
 				self.fields[field].widget.attrs['class'] = ' '.join(classes)
 
 class SignupForm(ErrorForm):
-	name = forms.CharField(label='Your name')
+	username = forms.CharField(label='Your username')
 	email = forms.EmailField(label='Your email')
 	password = forms.CharField(label='Your password', widget=forms.PasswordInput, min_length=6, help_text='At least 6 characters long')
-	ERROR_FIELDS = ('name', 'email', 'password')
+	ERROR_FIELDS = ('username', 'email', 'password')
 
 class ContactForm(ErrorForm):
 	name = forms.CharField(label='Your name')

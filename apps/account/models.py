@@ -47,10 +47,39 @@ class Manager(models.Model):
 	)
 
 	# Tie back into the Django Users
-	user = models.ForeignKey(User, db_index=True)
-	account_level = models.PositiveSmallIntegerField(choices=ACCOUNT_LEVELS)
+	user = models.OneToOneField(User, on_delete=models.CASCADE, db_index=True)
+	account_level = models.PositiveSmallIntegerField(choices=ACCOUNT_LEVELS, default=ACCOUNT_PENDING)
 
 	# Object metas
 	date_created = models.DateTimeField(auto_now_add=True)
 	date_updated = models.DateTimeField(auto_now=True)
 	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+
+class Confirmation(models.Model):
+	""" Confirmation Model
+
+	"""
+
+	def confirm(self):
+		""" Confirm out a pending confirmation
+
+		"""
+		if self.manager.account_level == 2:
+			self.manager.account_level = 3
+			self.manager.save()
+		self.delete()
+
+	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+	manager = models.ForeignKey(Manager, db_index=True)
+	date_created = models.DateTimeField(auto_now_add=True)
+
+
+def create_manager(username, email, password):
+	""" All the steps to creating a fresh Manager object
+
+	"""
+	user = User.objects.create_user(username=username, email=email, password=password)
+	manager = Manager.objects.create(user=user)
+	confirmation = Confirmation.objects.create(manager=manager)
+	return user, manager, confirmation
