@@ -36,10 +36,12 @@ class Manager(models.Model):
 		return '%s (%s)' % (self.user.username, self.get_account_level_display())
 
 	ACCOUNT_DISABLED = 1
-	ACCOUNT_BASIC = 2
-	ACCOUNT_ADMIN = 3
+	ACCOUNT_PENDING = 2
+	ACCOUNT_BASIC = 3
+	ACCOUNT_ADMIN = 4
 	ACCOUNT_LEVELS = (
 		(ACCOUNT_DISABLED, 'Disabled'),
+		(ACCOUNT_PENDING, 'Pending'),
 		(ACCOUNT_BASIC, 'Basic'),
 		(ACCOUNT_ADMIN, 'Admin'),
 	)

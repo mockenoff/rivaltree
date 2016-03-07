@@ -66,6 +66,17 @@ def contact(request):
 
 	return render(request, 'contact.html', {'form': form, 'did_send': did_send})
 
+def signup(request):
+	""" Serve up the signup page
+
+	"""
+	form = None
+	if request.method == 'POST':
+		form = forms.SignupForm(request.POST)
+	else:
+		form = forms.SignupForm()
+	return render(request, 'signup.html', {'form': form})
+
 def terms(request):
 	""" Serve up the terms page
 

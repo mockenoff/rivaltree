@@ -9,22 +9,31 @@
 
 from django import forms
 
-class ContactForm(forms.Form):
-	name = forms.CharField(label='Your name')
-	email = forms.EmailField(label='Your email')
-	message = forms.CharField(label='Your message', widget=forms.Textarea(attrs={'rows': 3}))
+class ErrorForm(forms.Form):
+	ERROR_FIELDS = []
 
 	def __init__(self, *args, **kwargs):
 		""" Override __init__ to add error class to fields
 
 		"""
-		super(ContactForm, self).__init__(*args, **kwargs)
-		for field in ('name', 'email', 'message'):
+		super(ErrorForm, self).__init__(*args, **kwargs)
+		for field in self.ERROR_FIELDS:
 			if field in self.errors and self.errors[field]:
-				print(field, self.errors[field])
 				try:
 					classes = self.fields[field].widget.attrs['class'].split(' ')
 				except KeyError:
 					classes = []
 				classes.append('error')
 				self.fields[field].widget.attrs['class'] = ' '.join(classes)
+
+class SignupForm(ErrorForm):
+	name = forms.CharField(label='Your name')
+	email = forms.EmailField(label='Your email')
+	password = forms.CharField(label='Your password', widget=forms.PasswordInput, min_length=6, help_text='At least 6 characters long')
+	ERROR_FIELDS = ('name', 'email', 'password')
+
+class ContactForm(ErrorForm):
+	name = forms.CharField(label='Your name')
+	email = forms.EmailField(label='Your email')
+	message = forms.CharField(label='Your message', widget=forms.Textarea(attrs={'rows': 3}))
+	ERROR_FIELDS = ('name', 'email', 'message')

@@ -1,7 +1,7 @@
 /*
 	RESET
 */
-html, body, img, form, input, header, nav, div,
+html, body, img, form, input, header, nav, div, fieldset,
 ol, ul, li, h1, h2, h3, h4, span, p, a, textarea,
 table, thead, tbody, tr, th, td, figure, figcaption {
 	border: 0;
@@ -45,7 +45,7 @@ html {
 
 body {
 	height: 100%;
-	color: #232323;
+	color: #333333;
 	line-height: 150%;
 	background: #FAFAFA;
 	font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
@@ -100,6 +100,15 @@ ol.numbered {
 }
 	ol.numbered li {
 		list-style: decimal;
+	}
+
+ul.decor {
+	padding-left: 20px;
+	box-sizing: border-box;
+}
+	ul.decor li {
+		margin: 15px 0;
+		list-style: disc;
 	}
 
 nav li {
@@ -291,6 +300,39 @@ form .errorlist {
 	color: #FF6464;
 	font-weight: bold;
 }
+	form input,
+	form textarea {
+		width: 100%;
+		margin: 4px 0 10px 0;
+	}
+	form input[type="submit"] {
+		margin: 4px 0 10px 0;
+	}
+	form .notice {
+		color: #888;
+		font-size: 0.9em;
+	}
+
+fieldset {
+	position: relative;
+}
+	fieldset .help {
+		width: 0;
+		right: 0;
+		bottom: 20px;
+		color: #ABABAB;
+		font-size: 0.8em;
+		overflow: hidden;
+		text-align: right;
+		position: absolute;
+		white-space: nowrap;
+		pointer-events: none;
+		transition: right 0.2s ease-out, width 0.2s ease-out;
+	}
+	fieldset input:focus + .help {
+		right: 10px;
+		width: 100%;
+	}
 
 /*
 	HEADER
@@ -548,14 +590,20 @@ form .errorlist {
 	.splash.book {
 		background-image: url(/static/images/hero/book.jpg);
 	}
+	.splash.notes {
+		background-image: url(/static/images/hero/notes.jpg);
+	}
 
-.features li {
+.index .features {
+	margin: 0 auto;
+}
+.index .features li {
 	width: 49%;
 	margin: 0 0 40px 0;
 	vertical-align: top;
 	display: inline-block;
 }
-.features h2 {
+.index .features h2 {
 	font-size: 40px;
 	text-align: center;
 	margin: 40px 0 40px 0;
@@ -580,15 +628,12 @@ section.cap-wrapper {
 	vertical-align: top;
 	margin: 54px auto 70px auto;
 }
-	section.cap-wrapper > ul {
+	section.cap-wrapper > .decor {
 		width: 60%;
-		padding: 0 0 0 20px;
 	}
-		section.cap-wrapper li {
+		section.cap-wrapper > .decor li {
 			color: #444444;
-			margin: 15px 0;
 			font-size: 17px;
-			list-style: disc;
 		}
 	section.cap-wrapper > p {
 		color: #444444;
@@ -651,11 +696,6 @@ section.cap-wrapper {
 	width: 50%;
 	float: right;
 }
-	.contact-form input,
-	.contact-form textarea {
-		width: 100%;
-		margin: 4px 0 10px 0;
-	}
 .contact-side {
 	width: 37%;
 	vertical-align: top;
@@ -682,7 +722,7 @@ section.cap-wrapper {
 .terms section.cap-wrapper h1,
 .terms section.cap-wrapper h2,
 .terms section.cap-wrapper h3,
-.terms section.cap-wrapper ul {
+.terms section.cap-wrapper .decor {
 	width: 100%;
 }
 
@@ -696,8 +736,27 @@ section.cap-wrapper {
 .privacy section.cap-wrapper h1,
 .privacy section.cap-wrapper h2,
 .privacy section.cap-wrapper h3,
-.privacy section.cap-wrapper ul {
+.privacy section.cap-wrapper .decor {
 	width: 100%;
+}
+
+/*
+	SIGN UP
+*/
+.signup .splash {
+	max-height: 150px;
+}
+.signup .cap-wrapper h1 {
+	margin: 0 0 40px 0;
+}
+.signup-form {
+	width: 50%;
+	vertical-align: top;
+	display: inline-block;
+}
+.signup-side {
+	width: 37%;
+	float: right;
 }
 
 /*

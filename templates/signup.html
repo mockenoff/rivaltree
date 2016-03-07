@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up - {% endblock %}
+{% block meta_description %}Sign up for Rivaltree{% endblock %}
+
+{% block container_class %}signup{% endblock %}
+
+{% block scripts %}<script src="/static/js/forms.js"></script>{% endblock %}
+
+{% block container %}
+<div class="splash notes"></div>
+
+<section class="cap-wrapper">
+	<h1>Sign Up for Rivaltree</h1>
+
+	<form class="signup-form" action="/signup/" method="POST">
+		{% csrf_token %}
+		<label for="{{ form.name.id_for_label }}">{{ form.name.label_tag }}</label>
+		{{ form.name }}
+		<label for="{{ form.email.id_for_label }}">{{ form.email.label_tag }}</label>
+		{{ form.email }}
+		<fieldset>
+			<label for="{{ form.password.id_for_label }}">{{ form.password.label_tag }}</label>
+			{{ form.password }}
+			<span class="help">{{ form.password.help_text }}</span>
+		</fieldset>
+		<input type="submit" value="Sign Up" class="btn btn-action" />
+		<span class="notice">By signing up, you agree to the <a href="/terms/">Terms of Service</a>.</span>
+	</form>
+
+	<div class="signup-side">
+		<h2>Join Rivaltree now to get</h2>
+		<ul class="decor">
+			<li>Customizable brackets</li>
+			<li>Embeddable tournament widget</li>
+			<li>Live updating standings and scores</li>
+			<li>New friends</li>
+		</ul>
+	</div>
+</section>
+{% endblock %}
