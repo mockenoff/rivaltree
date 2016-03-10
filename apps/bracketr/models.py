@@ -320,8 +320,6 @@ class Bracket(models.Model):
 		:returns: list
 
 		"""
-		pairs = list(itertools.combinations(teams, 2))
-
 		rnum = 0
 		games = list()
 		team_total = len(teams)
