@@ -1,0 +1,40 @@
+{% load filters %}
+
+<div id="rte-{{ bracket.id }}" class="rte-embed">
+	{% if not bracket %}
+	<p class="rte-error">Couldn't find a bracket to embed</p>
+	<p class="rte-notice">Head over to <a href="https://rivaltree.com/">Rivaltree</a> to contact us about this problem.</p>
+	{% elif bracket.phase.0 < 2 %}
+	<p class="rte-alert">This bracket isn't ready!</p>
+	<p class="rte-notice">Head over to <a href="https://rivaltree.com/">Rivaltree</a> in the meantime for more jollies.</p>
+	{% else %}
+	{% if bracket.has_round_robin %}
+	<div class="rte-robin">
+		<h3>Round-robin</h3>
+		{% for round in bracket.round_robin %}
+		<table class="rte-table">
+			<tbody>
+				{% for game in round %}
+				<tr>
+					<td>{{ bracket.teams|lookup:game.team1.id|lookup:"name" }}</td>
+					<td>{{ game.team1.wins }}</td>
+					<td>{{ bracket.teams|lookup:game.team2.id|lookup:"name" }}</td>
+					<td>{{ game.team2.wins }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		{% endfor %}
+	</div>
+	{% endif %}
+	{% endif %}
+</div>
+<style>
+.rte-embed {
+	width: 100%;
+}
+.rte-embed .rte-table {
+	width: 100%;
+	margin: 20px 0 0 0;
+}
+</style>

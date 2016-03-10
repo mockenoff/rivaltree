@@ -20,4 +20,5 @@ urlpatterns = [
 	url(r'^admin/', admin.site.urls),
 	url(r'^', include('apps.account.urls')),
 	url(r'^api/', include('apps.bracketr.urls')),
+	url(r'^embed/', include('apps.embed.urls')),
 ]
