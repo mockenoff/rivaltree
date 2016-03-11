@@ -13,5 +13,4 @@ register = template.Library()
 
 @register.filter(name='lookup')
 def lookup(value, key):
-	print('LOOKUP', value, key)
 	return value[key]

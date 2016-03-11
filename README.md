@@ -41,6 +41,14 @@ $ cd /rivaltree/
 $ pip install -r requirements.txt
 ```
 
+## WebSocket Server
+
+There's also a WebSocket server for embedded widgets. It's written using [Autobahn](http://autobahn.ws/python/) and is made to stand alone from the Django loop. You run it separately and set the appropriate Django settings for the client-side connection.
+
+```
+$ python lib/embed.py debug
+```
+
 ## Local development
 
 The best way to go about running these things is to run the Django server and the Ember server simultaneously even though you'll only be accessing the Django app. This is so Ember's watcher will continually build its changes as needed and then you'll just have to refresh your browser.

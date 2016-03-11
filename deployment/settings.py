@@ -149,3 +149,9 @@ SESSION_REDIS_PORT = 6379
 SESSION_REDIS_DB = 0
 SESSION_REDIS_PASSWORD = 'rival_rw_pass$'
 SESSION_REDIS_PREFIX = 'session'
+
+# WebSocket settings
+
+WS_BASE = '/'
+WS_PORT = 9000
+WS_URL = 'ws://elite-dodgeball.com'
