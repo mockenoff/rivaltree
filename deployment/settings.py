@@ -138,3 +138,14 @@ MAILGUN_SERVER_NAME = 'mg.elite-dodgeball.com'
 MAILGUN_ACCESS_KEY = 'key-dummy'
 EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
 DEFAULT_CONTACT_EMAIL = 'contact@rivaltree.com'
+
+# Redis session settings
+# https://github.com/martinrusev/django-redis-sessions
+
+SESSION_ENGINE = 'redis_sessions.session'
+
+SESSION_REDIS_HOST = 'localhost'
+SESSION_REDIS_PORT = 6379
+SESSION_REDIS_DB = 0
+SESSION_REDIS_PASSWORD = 'rival_rw_pass$'
+SESSION_REDIS_PREFIX = 'session'
