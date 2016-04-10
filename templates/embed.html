@@ -31,7 +31,7 @@
 	<h3>Elimination</h3>
 	<div class="rte-bracket">
 		{% for round in bracket.winners %}
-		<ul class="rte-round rte-round-{{ forloop.index0 }}">
+		<ul class="rte-round rte-round-{{ forloop.counter0 }}">
 			<li class="rte-spacer">&nbsp;</li>
 			{% for game in round %}
 				{% if not game %}
@@ -60,7 +60,65 @@
 			{% endfor %}
 		</ul>
 		{% endfor %}
+		<ul class="rte-round rte-round-{{ bracket.winners|length }}">
+			<li class="rte-spacer">&nbsp;</li>
+			{% if bracket.is_double_elimination %}
+			<li class="rte-game rte-game-top">#1</li>
+			<li class="rte-bracket-spacer">&nbsp;</li>
+			{% else %}
+			<li class="rte-game rte-game-top rte-winner">Champion</li>
+			<li class="rte-spacer">&nbsp;</li>
+			{% endif %}
+		</ul>
+		{% if bracket.is_double_elimination %}
+		<ul class="rte-round rte-round-end">
+			<li class="rte-spacer">&nbsp;</li>
+			<li class="rte-spacer">&nbsp;</li>
+			<li class="rte-game rte-game-top rte-winner">Champion</li>
+		</ul>
+		{% endif %}
 	</div>
+	{% if bracket.is_double_elimination %}
+	<div class="rte-bracket">
+		{% for round in bracket.losers %}
+		<ul class="rte-round rte-round-{{ forloop.counter0 }}">
+			<li class="rte-spacer">&nbsp;</li>
+			{% for game in round %}
+				{% if not game %}
+				<li class="rte-game rte-game-top rte-empty">&nbsp;</li>
+				<li class="rte-game rte-game-spacer rte-empty">&nbsp;</li>
+				<li class="rte-game rte-game-bottom rte-empty">&nbsp;</li>
+				<li class="rte-spacer">&nbsp;</li>
+				{% else %}
+					{% if not game.team1.id %}
+					<li class="rte-game rte-game-top">#{{ game.team1.seed }}</li>
+					{% else %}
+					<li class="rte-game rte-game-top {% if game.team1.wins > game.team2.wins %}rte-winner{% endif %}">
+						{{ game.team1.seed }} {{ bracket.teams|lookup:game.team1.id|lookup:"name" }} <span class="rte-wins">{{ game.team1.wins }}</span>
+					</li>
+					{% endif %}
+					<li class="rte-game rte-game-spacer">&nbsp;</li>
+					{% if not game.team2.id %}
+					<li class="rte-game rte-game-bottom">#{{ game.team2.seed }}</li>
+					{% else %}
+					<li class="rte-game rte-game-bottom {% if game.team2.wins > game.team1.wins %}rte-winner{% endif %}">
+						{{ game.team2.seed }} {{ bracket.teams|lookup:game.team2.id|lookup:"name" }} <span class="rte-wins">{{ game.team2.wins }}</span>
+					</li>
+					{% endif %}
+					<li class="rte-spacer">&nbsp;</li>
+				{% endif %}
+			{% endfor %}
+		</ul>
+		{% endfor %}
+		<ul class="rte-round rte-round-{{ bracket.winners|length }}">
+			<li class="rte-bracket-spacer">&nbsp;</li>
+			<li class="rte-game rte-game-bottom">#2</li>
+			<li class="rte-spacer">&nbsp;</li>
+		</ul>
+		<ul class="rte-round rte-round-end">
+		</ul>
+	</div>
+	{% endif %}
 	{% endif %}
 	{% endif %}
 </div>
@@ -272,17 +330,12 @@
 	width: 100%;
 	margin: 20px 0 0 0;
 }
-.rte-bracket {
+.rte-embed .rte-robin {
+	margin: 0 0 20px 0;
+}
+.rte-embed .rte-bracket {
 	display: flex;
 	flex-direction: row;
-	width: 90%;
-	padding: 0 20px;
-	background: #FFF;
-	margin: 10px auto;
-	overflow-x: scroll;
-	border-radius: 5px;
-	box-sizing: border-box;
-	border: 1px solid #D8D8D8;
 }
 	.rte-bracket .rte-round {
 		display: flex;
@@ -316,10 +369,14 @@
 	.rte-bracket .rte-game-top {
 		border-bottom: 1px solid #AAA;
 	}
-	.rte-bracket .rte-game-spacer {
+	.rte-bracket .rte-game-spacer,
+	.rte-bracket .rte-bracket-spacer {
 		border-right: 1px solid #AAA;
 		min-height: 40px;
 	}
+		.rte-bracket .rte-bracket-spacer {
+			flex-grow: 0.5;
+		}
 	.rte-bracket .rte-game-bottom {
 		border-top: 1px solid #AAA;
 	}

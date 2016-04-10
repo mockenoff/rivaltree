@@ -41,10 +41,10 @@ def normalize_bracket(games):
 
 			for j in range(game_total):
 				if next_round:
-					new_games.append(find_matching_game(games[i], next_round[j]['team1']))
-					new_games.append(find_matching_game(games[i], next_round[j]['team2']))
+					new_games.append(find_matching_game(games[i], next_round[j]['team1'] if next_round[j] else None))
+					new_games.append(find_matching_game(games[i], next_round[j]['team2'] if next_round[j] else None))
 				else:
-					new_games.push(None, None)
+					new_games.extend([None, None])
 
 			games[i] = new_games
 
@@ -65,9 +65,17 @@ def index(request, bracket_id=None):
 		}, status=404)
 
 	bracket = bracketr_models.Serializer.bracket(bracket)
-	for key in ['winners']:
+	for key in ['winners', 'losers']:
 		if key in bracket:
 			bracket[key] = normalize_bracket(bracket[key])
+
+	if bracket['is_double_elimination']:
+		winners_total = len(bracket['winners'])
+		losers_total = len(bracket['losers'])
+		if winners_total < losers_total:
+			bracket['winners'] = [[] for i in range(losers_total - winners_total)] + bracket['winners']
+		elif losers_total < winners_total:
+			bracket['losers'] = [[] for i in range(winners_total - losers_total)] + bracket['losers']
 
 	return render(request, 'embed.html', {
 		'bracket': bracket,
