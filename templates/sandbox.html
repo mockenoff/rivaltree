@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}Embed sandbox - {% endblock %}
+{% block meta_description %}Embed test sandbox{% endblock %}
+
+{% block container_class %}sandbox{% endblock %}
+
+{% block container %}
+<section class="cap-wrapper">
+	<h1>Embed Sandbox</h1>
+	<div class="rivaltree-widget" data-bracket-id="7f94097c3ca8415ab209fe6c1c063b07">
+		<script type="text/javascript" language="javascript">
+			!function(d,s,id){
+				var e, p = /^http:/.test(d.location) ? 'http' : 'https';
+				if(!d.getElementById(id)) {
+					e = d.createElement(s);
+					e.id = id;
+					e.src = p + '://local.rivaltree.com:8000/static/js/embed.js';
+					d.body.appendChild(e);
+				}
+				if(typeof window.__rte === 'object' && d.readyState === 'complete') {
+					window.__rte.init();
+				}
+			}(document,'script','rivaltree-script');
+		</script>
+		<div class="rte-adblock">
+			<img src="//local.rivaltree.com:8000/static/images/loading.gif" style="width:15px;height:15px;" onerror="this.parentNode.innerHTML='Turn off your ad blocker to view content'" />
+			<noscript>Turn on your JavaScript to view content</noscript>
+		</div>
+	</div>
+</section>
+{% endblock %}

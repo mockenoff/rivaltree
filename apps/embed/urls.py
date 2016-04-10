@@ -9,3 +9,4 @@ urlpatterns = [
 
 if settings.DEBUG:
 	urlpatterns.insert(0, url(r'^console', views.console, name='console'))
+	urlpatterns.insert(0, url(r'^sandbox', views.sandbox, name='sandbox'))
