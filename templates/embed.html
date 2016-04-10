@@ -9,8 +9,8 @@
 	<p class="rte-notice">Head over to <a href="https://rivaltree.com/">Rivaltree</a> in the meantime for more jollies.</p>
 	{% else %}
 	{% if bracket.has_round_robin %}
+	<h3>Round-robin</h3>
 	<div class="rte-robin">
-		<h3>Round-robin</h3>
 		{% for round in bracket.round_robin %}
 		<table class="rte-table">
 			<tbody>
@@ -28,8 +28,8 @@
 	</div>
 	{% endif %}
 	{% if bracket.phase.0 > 2 %}
+	<h3>Elimination</h3>
 	<div class="rte-bracket">
-		<h3>Elimination</h3>
 		{% for round in bracket.winners %}
 		<ul class="rte-round rte-round-{{ forloop.index0 }}">
 			<li class="rte-spacer">&nbsp;</li>
