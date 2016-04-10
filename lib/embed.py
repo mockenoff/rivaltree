@@ -57,12 +57,23 @@ class ServerProtocol(WebSocketServerProtocol):
 			print('Binary message received: {} bytes'.format(len(payload)), self.http_request_path)
 		else:
 			print('Text message received: {}'.format(payload.decode('utf8')), self.http_request_path)
-			# data = json.loads(payload.decode('utf8'))
-			# if data['type'] == 'SUB':
-				# self.factory.subscribe(data['bracket_id'], self)
-				# self.sendMessage(json.dumps({...}), False)
-			# elif data['type'] == 'PUB':
-				# self.factory.broadcast(json.dumps({...}), data['bracket_id'])
+			data = json.loads(payload.decode('utf8'))
+			if data['type'] == 'SUB':
+				print('SUB', data['bracket_id'])
+				self.factory.subscribe(data['bracket_id'], self)
+				self.sendMessage(json.dumps({
+					'type': 'SUB',
+					'did_subscribe': True,
+					'bracket_id': data['bracket_id'],
+				}).encode('utf8'), False)
+			elif data['type'] == 'PUB':
+				print('PUB', data['bracket_id'])
+				self.factory.broadcast(json.dumps(data), data['bracket_id'])
+				self.sendMessage(json.dumps({
+					'type': 'PUB',
+					'did_publish': True,
+					'bracket_id': data['bracket_id'],
+				}).encode('utf8'), False)
 
 	def connectionLost(self, reason):
 		print('WebSocket connection lost: %s' % reason)
@@ -110,13 +121,19 @@ class ServerFactory(WebSocketServerFactory):
 			pass
 
 	def broadcast(self, msg, bracket_id=None):
-		print('broadcasting message \'{}\' ..'.format(msg))
-		if bracket_id and bracket_id in self.brackets:
-			pass
-		else:
+		if not bracket_id:
+			print('broadcasting message \'{}\' ..'.format(msg))
 			for client in self.clients:
 				client.sendMessage(msg.encode('utf8'))
 				print('message sent to {}'.format(client.peer))
+		elif bracket_id in self.brackets:
+			print('publishing message \'{}\' ..'.format(msg))
+			for client_index in self.brackets[bracket_id]:
+				try:
+					self.clients[client_index].sendMessage(msg.encode('utf8'))
+					print('message sent to {}'.format(self.clients[client_index].peer))
+				except IndexError:
+					print('client_index {} not found in clients'.format(client_index))
 
 
 if __name__ == '__main__':
