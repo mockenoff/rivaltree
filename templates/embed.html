@@ -224,6 +224,10 @@
 							reconnect: true,
 							reconnectAttempts: 5,
 							reconnectInterval: 3000,
+							onopen: null,
+							onmessage: null,
+							onerror: null,
+							onclose: null,
 						},
 						rc = {
 							attempts: 0,
@@ -279,6 +283,7 @@
 						}
 					}
 					this.sendMessage = function(msg) {
+						console.log('send message', msg);
 						ws.send(msg);
 					};
 				},
@@ -290,7 +295,24 @@
 		}(document, window);
 	}
 
-	var ws = new __rivaltree.WebSocket('{{ ws_url }}');
+	var ws = new __rivaltree.WebSocket('{{ ws_url }}', {
+		onopen: function() {
+			var brackets = document.querySelectorAll('.rte-embed[data-id]:not([data-loaded])');
+			for (var i = 0, l = brackets.length; i < l; i++) {
+				brackets[i].loaded = false;
+				ws.sendMessage(JSON.stringify({type:'SUB', bracket_id:brackets[i].dataset.id}));
+			}
+		},
+		onmessage: function(msg) {
+			var data = JSON.parse(msg);
+			if (data.type === 'SUB') {
+				var bracket = document.querySelector('.rte-embed[data-id="'+data.bracket_id+'"]');
+				if (bracket !== null) {
+					bracket.dataset.loaded = true;
+				}
+			}
+		},
+	});
 </script>
 <style>
 .rte-embed,

@@ -99,7 +99,7 @@ class ServerFactory(WebSocketServerFactory):
 		print('unregistered client {}'.format(client.peer))
 		try:
 			client_index = self.clients.index(client)
-			self.clients.remove(client)
+			del self.clients[client_index]
 			for bracket_id in self.brackets:
 				self.brackets[bracket_id].remove(client_index)
 		except ValueError:
