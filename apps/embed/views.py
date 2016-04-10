@@ -82,3 +82,8 @@ def index(request, bracket_id=None):
 		'uuid': uuid.uuid4().hex,
 		'ws_url': '%s:%s%s' % (settings.WS_URL, settings.WS_PORT, settings.WS_BASE),
 	})
+
+def console(request):
+	return render(request, 'console.html', {
+		'ws_url': '%s:%s%s' % (settings.WS_URL, settings.WS_PORT, settings.WS_BASE),
+	})
