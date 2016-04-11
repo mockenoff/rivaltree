@@ -22,6 +22,7 @@ django.setup()
 
 # Now the non-meta code
 
+import copy
 import simplejson as json
 
 from twisted.python import log
@@ -31,8 +32,48 @@ from autobahn.twisted.websocket import WebSocketServerProtocol, WebSocketServerF
 from django.conf import settings
 from apps.bracketr import models
 
-def get_diff(bracket1, bracket2):
-	return []
+def get_diff(old_bracket, new_bracket):
+	""" Find updated games in a new bracket compared to an old bracket
+
+	:param old_bracket: Old bracket
+	:type old_bracket: dict
+	:param new_bracket: New bracket
+	:type new_bracket: dict
+	:returns: list
+
+	"""
+	games = []
+	old_games = {}
+	new_games = {}
+
+	if not isinstance(old_bracket, dict):
+		old_bracket = {}
+	else:
+		old_bracket = copy.deepcopy(old_bracket)
+
+	if not isinstance(new_bracket, dict):
+		new_bracket = {}
+	else:
+		new_bracket = copy.deepcopy(new_bracket)
+
+	for key in ('round_robin', 'winners', 'losers', 'winner_loser'):
+		if key in old_bracket:
+			for row in old_bracket[key]:
+				for game in row:
+					game['type'] = key
+					old_games[game['id']] = game
+
+		if key in new_bracket:
+			for row in new_bracket[key]:
+				for game in row:
+					game['type'] = key
+					new_games[game['id']] = game
+
+	for game_id in new_games:
+		if game_id not in old_games or new_games[game_id] != old_games[game_id]:
+			games.append(new_games[game_id])
+
+	return games
 
 class ServerProtocol(WebSocketServerProtocol):
 	def onConnect(self, request):
@@ -54,8 +95,12 @@ class ServerProtocol(WebSocketServerProtocol):
 			self.factory.register(self)
 
 	def onMessage(self, payload, is_binary):
-		# SUB message - {'type': 'SUB', 'bracket_id': 'bracket_id'}
-		# PUB message - {'type': 'PUB', 'bracket_id': 'bracket_id', 'bracket': {...}}
+		""" Callback for whenever the server gets a message
+
+		SUB message - {'type': 'SUB', 'bracket_id': 'bracket_id'}
+		PUB message - {'type': 'PUB', 'bracket_id': 'bracket_id', 'bracket': {...}}
+
+		"""
 		if is_binary:
 			print('Binary message received: {} bytes'.format(len(payload)), self.http_request_path)
 		else:
@@ -142,17 +187,25 @@ class ServerFactory(WebSocketServerFactory):
 		except (ValueError, KeyError):
 			pass
 
-	def broadcast(self, msg, bracket_id=None):
+	def broadcast(self, message, bracket_id=None):
+		""" Sends a message to multiple clients
+
+		:param message: The message to broadcast
+		:type message: str
+		:param bracket_id: If supplied, will only broadcast to clients subscribed to that bracket
+		:type bracket_id: str
+
+		"""
 		if not bracket_id:
-			print('broadcasting message \'{}\' ..'.format(msg))
+			print('broadcasting message \'{}\' ..'.format(message))
 			for client in self.clients:
-				client.sendMessage(msg.encode('utf8'))
+				client.sendMessage(message.encode('utf8'))
 				print('message sent to {}'.format(client.peer))
 		elif bracket_id in self.brackets:
-			print('publishing message \'{}\' ..'.format(msg))
+			print('publishing message \'{}\' ..'.format(message))
 			for client_index in self.brackets[bracket_id]:
 				try:
-					self.clients[client_index].sendMessage(msg.encode('utf8'))
+					self.clients[client_index].sendMessage(message.encode('utf8'))
 					print('message sent to {}'.format(self.clients[client_index].peer))
 				except IndexError:
 					print('client_index {} not found in clients'.format(client_index))
