@@ -175,12 +175,23 @@ if (window.__rte === undefined) {
 			inited: false,
 			socket: null,
 			widgets: [],
+			brackets: {},
 			injectResponse: function(id, mk) {
 				__rte.widgets[id].innerHTML = mk;
 				__rte.widgets[id].setAttribute('data-widget-uid', id);
+
+				var bracket_id = __rte.widgets[id].getAttribute('data-bracket-id');
+				if (__rte.brackets[bracket_id] === undefined) {
+					__rte.brackets[bracket_id] = [__rte.widgets[id]];
+				} else {
+					__rte.brackets[bracket_id].push(__rte.widgets[id]);
+				}
 			},
 			click: function(e) {
 				var t = e.target || e.srcElement;
+			},
+			update: function(b, g) {
+				// Iterate through each game in g, using id and team attributes for update vectors
 			},
 			init: function(e) {
 				if (e !== undefined && e.type === 'readystatechange' && doc.readyState !== 'complete') {
@@ -207,7 +218,7 @@ if (window.__rte === undefined) {
 						} catch (err){}
 
 						if (window.WebSocket !== undefined && __rte.socket === null) {
-							__rte.socket = new __rivaltree.WebSocket('ws://local.rivaltree.com:9000/', {
+							__rte.socket = new __rivaltree.WebSocket('ws://rivaltree.com:9000/', {
 								onopen: function() {
 									for (var i = 0, l = __rte.widgets.length; i < l; i++) {
 										if (__rte.widgets[i].getAttribute('data-subscribed') !== 'true') {
@@ -223,6 +234,10 @@ if (window.__rte === undefined) {
 											if (__rte.widgets[i].getAttribute('data-bracket-id') === data.bracket_id) {
 												__rte.widgets[i].setAttribute('data-subscribed', true);
 											}
+										}
+									} else if (data.type === 'PUB' && __rte.brackets[data.bracket_id] !== undefined) {
+										for (var i = 0, l = __rte.brackets[data.bracket_id].length; i < l; i++) {
+											__rte.update(__rte.brackets[data.bracket_id][i], data.games);
 										}
 									}
 								},

@@ -31,6 +31,9 @@ from autobahn.twisted.websocket import WebSocketServerProtocol, WebSocketServerF
 from django.conf import settings
 from apps.bracketr import models
 
+def get_diff(bracket1, bracket2):
+	return []
+
 class ServerProtocol(WebSocketServerProtocol):
 	def onConnect(self, request):
 		print('Client connecting: {}'.format(request.peer))
@@ -58,6 +61,7 @@ class ServerProtocol(WebSocketServerProtocol):
 		else:
 			print('Text message received: {}'.format(payload.decode('utf8')), self.http_request_path)
 			data = json.loads(payload.decode('utf8'))
+
 			if data['type'] == 'SUB':
 				print('SUB', data['bracket_id'])
 				self.factory.subscribe(data['bracket_id'], self)
@@ -66,9 +70,24 @@ class ServerProtocol(WebSocketServerProtocol):
 					'did_subscribe': True,
 					'bracket_id': data['bracket_id'],
 				}).encode('utf8'), False)
+
 			elif data['type'] == 'PUB':
 				print('PUB', data['bracket_id'])
-				self.factory.broadcast(json.dumps(data), data['bracket_id'])
+
+				# TODO: Figure out the diff between last_updates[bracket_id] and data[bracket]
+				games = get_diff(
+					self.factory.last_updates[data['bracket_id']]
+					if data['bracket_id'] in self.factory.last_updates
+					else None,
+					data['bracket'])
+				self.factory.last_updates[data['bracket_id']] = data['bracket']
+
+				self.factory.broadcast(json.dumps({
+					'type': 'PUB',
+					'games': games,
+					'bracket_id': data['bracket_id'],
+				}), data['bracket_id'])
+
 				self.sendMessage(json.dumps({
 					'type': 'PUB',
 					'did_publish': True,
@@ -89,6 +108,7 @@ class ServerFactory(WebSocketServerFactory):
 		WebSocketServerFactory.__init__(self, url)
 		self.clients = []
 		self.brackets = {}
+		self.last_updates = {}
 
 	def register(self, client):
 		print('registered client {}'.format(client.peer))
@@ -102,6 +122,8 @@ class ServerFactory(WebSocketServerFactory):
 			del self.clients[client_index]
 			for bracket_id in self.brackets:
 				self.brackets[bracket_id].remove(client_index)
+				if not self.brackets[bracket_id] and bracket_id in self.last_updates:
+					del self.last_updates[bracket_id]
 		except ValueError:
 			pass
 

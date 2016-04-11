@@ -15,11 +15,11 @@
 		<table class="rte-table">
 			<tbody>
 				{% for game in round %}
-				<tr>
+				<tr data-game-id="{{ game.id }}">
 					<td>{{ bracket.teams|lookup:game.team1.id|lookup:"name" }}</td>
-					<td>{{ game.team1.wins }}</td>
+					<td data-team="1">{{ game.team1.wins }}</td>
 					<td>{{ bracket.teams|lookup:game.team2.id|lookup:"name" }}</td>
-					<td>{{ game.team2.wins }}</td>
+					<td data-team="2">{{ game.team2.wins }}</td>
 				</tr>
 				{% endfor %}
 			</tbody>
@@ -41,18 +41,22 @@
 				<li class="rte-spacer">&nbsp;</li>
 				{% else %}
 					{% if not game.team1.id %}
-					<li class="rte-game rte-game-top">#{{ game.team1.seed }}</li>
+					<li class="rte-game rte-game-top" data-game-id="{{ game.id }}" data-team="1">
+						#{{ game.team1.seed }} <span class="rte-wins"></span>
+					</li>
 					{% else %}
-					<li class="rte-game rte-game-top {% if game.team1.wins > game.team2.wins %}rte-winner{% endif %}">
-						{{ game.team1.seed }} {{ bracket.teams|lookup:game.team1.id|lookup:"name" }} <span class="rte-wins">{{ game.team1.wins }}</span>
+					<li class="rte-game rte-game-top {% if game.team1.wins > game.team2.wins %}rte-winner{% endif %}" data-game-id="{{ game.id }}" data-team="1">
+						#{{ game.team1.seed }} {{ bracket.teams|lookup:game.team1.id|lookup:"name" }} <span class="rte-wins">{{ game.team1.wins }}</span>
 					</li>
 					{% endif %}
 					<li class="rte-game rte-game-spacer">&nbsp;</li>
 					{% if not game.team2.id %}
-					<li class="rte-game rte-game-bottom">#{{ game.team2.seed }}</li>
+					<li class="rte-game rte-game-bottom" data-game-id="{{ game.id }}" data-team="2">
+						#{{ game.team2.seed }} <span class="rte-wins"></span>
+					</li>
 					{% else %}
-					<li class="rte-game rte-game-bottom {% if game.team2.wins > game.team1.wins %}rte-winner{% endif %}">
-						{{ game.team2.seed }} {{ bracket.teams|lookup:game.team2.id|lookup:"name" }} <span class="rte-wins">{{ game.team2.wins }}</span>
+					<li class="rte-game rte-game-bottom {% if game.team2.wins > game.team1.wins %}rte-winner{% endif %}" data-game-id="{{ game.id }}" data-team="2">
+						#{{ game.team2.seed }} {{ bracket.teams|lookup:game.team2.id|lookup:"name" }} <span class="rte-wins">{{ game.team2.wins }}</span>
 					</li>
 					{% endif %}
 					<li class="rte-spacer">&nbsp;</li>
@@ -63,7 +67,9 @@
 		<ul class="rte-round rte-round-{{ bracket.winners|length }}">
 			<li class="rte-spacer">&nbsp;</li>
 			{% if bracket.is_double_elimination %}
-			<li class="rte-game rte-game-top">#1</li>
+			<li class="rte-game rte-game-top" data-game-id="{{ bracket.winner_loser.1.0.id }}" data-team="1">
+				#1 <span class="rte-wins"></span>
+			</li>
 			<li class="rte-bracket-spacer">&nbsp;</li>
 			{% else %}
 			<li class="rte-game rte-game-top rte-winner">Champion</li>
@@ -91,18 +97,22 @@
 				<li class="rte-spacer">&nbsp;</li>
 				{% else %}
 					{% if not game.team1.id %}
-					<li class="rte-game rte-game-top">#{{ game.team1.seed }}</li>
+					<li class="rte-game rte-game-top" data-game-id="{{ game.id }}" data-team="1">
+						#{{ game.team1.seed }} <span class="rte-wins"></span>
+					</li>
 					{% else %}
-					<li class="rte-game rte-game-top {% if game.team1.wins > game.team2.wins %}rte-winner{% endif %}">
-						{{ game.team1.seed }} {{ bracket.teams|lookup:game.team1.id|lookup:"name" }} <span class="rte-wins">{{ game.team1.wins }}</span>
+					<li class="rte-game rte-game-top {% if game.team1.wins > game.team2.wins %}rte-winner{% endif %}" data-game-id="{{ game.id }}" data-team="1">
+						#{{ game.team1.seed }} {{ bracket.teams|lookup:game.team1.id|lookup:"name" }} <span class="rte-wins">{{ game.team1.wins }}</span>
 					</li>
 					{% endif %}
 					<li class="rte-game rte-game-spacer">&nbsp;</li>
 					{% if not game.team2.id %}
-					<li class="rte-game rte-game-bottom">#{{ game.team2.seed }}</li>
+					<li class="rte-game rte-game-bottom" data-game-id="{{ game.id }}" data-team="2">
+						#{{ game.team2.seed }} <span class="rte-wins"></span>
+					</li>
 					{% else %}
-					<li class="rte-game rte-game-bottom {% if game.team2.wins > game.team1.wins %}rte-winner{% endif %}">
-						{{ game.team2.seed }} {{ bracket.teams|lookup:game.team2.id|lookup:"name" }} <span class="rte-wins">{{ game.team2.wins }}</span>
+					<li class="rte-game rte-game-bottom {% if game.team2.wins > game.team1.wins %}rte-winner{% endif %}" data-game-id="{{ game.id }}" data-team="2">
+						#{{ game.team2.seed }} {{ bracket.teams|lookup:game.team2.id|lookup:"name" }} <span class="rte-wins">{{ game.team2.wins }}</span>
 					</li>
 					{% endif %}
 					<li class="rte-spacer">&nbsp;</li>
@@ -112,7 +122,9 @@
 		{% endfor %}
 		<ul class="rte-round rte-round-{{ bracket.winners|length }}">
 			<li class="rte-bracket-spacer">&nbsp;</li>
-			<li class="rte-game rte-game-bottom">#2</li>
+			<li class="rte-game rte-game-bottom" data-game-id="{{ bracket.winner_loser.1.0.id }}" data-team="2">
+				#2 <span class="rte-wins"></span>
+			</li>
 			<li class="rte-spacer">&nbsp;</li>
 		</ul>
 		<ul class="rte-round rte-round-end">
