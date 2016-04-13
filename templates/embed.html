@@ -42,21 +42,21 @@
 				{% else %}
 					{% if not game.team1.id %}
 					<li class="rte-game rte-game-top" data-game-id="{{ game.id }}" data-team="1">
-						#{{ game.team1.seed }} <span class="rte-wins"></span>
+						<span class="rte-team">#{{ game.team1.seed }}</span> <span class="rte-wins"></span>
 					</li>
 					{% else %}
 					<li class="rte-game rte-game-top {% if game.team1.wins > game.team2.wins %}rte-winner{% endif %}" data-game-id="{{ game.id }}" data-team="1">
-						#{{ game.team1.seed }} {{ bracket.teams|lookup:game.team1.id|lookup:"name" }} <span class="rte-wins">{{ game.team1.wins }}</span>
+						<span class="rte-team">{{ bracket.teams|lookup:game.team1.id|lookup:"name" }}</span> <span class="rte-wins">{{ game.team1.wins }}</span>
 					</li>
 					{% endif %}
 					<li class="rte-game rte-game-spacer">&nbsp;</li>
 					{% if not game.team2.id %}
 					<li class="rte-game rte-game-bottom" data-game-id="{{ game.id }}" data-team="2">
-						#{{ game.team2.seed }} <span class="rte-wins"></span>
+						<span class="rte-team">#{{ game.team2.seed }}</span> <span class="rte-wins"></span>
 					</li>
 					{% else %}
 					<li class="rte-game rte-game-bottom {% if game.team2.wins > game.team1.wins %}rte-winner{% endif %}" data-game-id="{{ game.id }}" data-team="2">
-						#{{ game.team2.seed }} {{ bracket.teams|lookup:game.team2.id|lookup:"name" }} <span class="rte-wins">{{ game.team2.wins }}</span>
+						<span class="rte-team">{{ bracket.teams|lookup:game.team2.id|lookup:"name" }}</span> <span class="rte-wins">{{ game.team2.wins }}</span>
 					</li>
 					{% endif %}
 					<li class="rte-spacer">&nbsp;</li>

@@ -67,6 +67,10 @@ def get_diff(old_bracket, new_bracket):
 			for row in new_bracket[key]:
 				for game in row:
 					game['type'] = key
+					if game['team1']['wins'] > game['team2']['wins']:
+						game['team1']['is_winner'] = True
+					elif game['team2']['wins'] > game['team1']['wins']:
+						game['team2']['is_winner'] = True
 					new_games[game['id']] = game
 
 	for game_id in new_games:
@@ -130,6 +134,7 @@ class ServerProtocol(WebSocketServerProtocol):
 				self.factory.broadcast(json.dumps({
 					'type': 'PUB',
 					'games': games,
+					'teams': data['bracket']['teams'],
 					'bracket_id': data['bracket_id'],
 				}), data['bracket_id'])
 

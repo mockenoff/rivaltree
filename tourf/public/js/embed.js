@@ -190,8 +190,40 @@ if (window.__rte === undefined) {
 			click: function(e) {
 				var t = e.target || e.srcElement;
 			},
-			update: function(b, g) {
-				// Iterate through each game in g, using id and team attributes for update vectors
+			update: function(bracket, games, teams) {
+				// Iterate through each game in games, using id and team attributes for update vectors
+				for (var i = 0, l = games.length; i < l; i++) {
+					if (games[i].type === 'round_robin') {
+						var wins = bracket.querySelectorAll('[data-game-id="'+games[i].id+'"] [data-team]');
+						for (var j = 0, k = wins.length; j < k; j++) {
+							var data = games[i]['team'+wins[j].getAttribute('data-team')];
+							wins[j].textContent = data.wins;
+							if (data.is_winner === true) {
+								__rivaltree.addClass(wins[j], 'rte-winner');
+							} else {
+								__rivaltree.removeClass(wins[j], 'rte-winner');
+							}
+						}
+					} else {
+						var wraps = bracket.querySelectorAll('[data-game-id="'+games[i].id+'"]');
+						for (var j = 0, k = wraps.length; j < k; j++) {
+							var data = games[i]['team'+wraps[j].getAttribute('data-team')],
+								nodes = wraps[j].querySelectorAll('.rte-wins, .rte-team');
+							if (data.is_winner === true) {
+								__rivaltree.addClass(wraps[j], 'rte-winner');
+							} else {
+								__rivaltree.removeClass(wraps[j], 'rte-winner');
+							}
+							for (var n = 0, m = nodes.length; n < m; n++) {
+								if (__rivaltree.hasClass(nodes[n], 'rte-wins') === true) {
+									nodes[n].textContent = data.id === null ? '' : data.wins;
+								} else if (__rivaltree.hasClass(nodes[n], 'rte-team') === true) {
+									nodes[n].textContent = data.id === null ? '#'+data.seed : teams[data.id].name;
+								}
+							}
+						}
+					}
+				}
 			},
 			init: function(e) {
 				if (e !== undefined && e.type === 'readystatechange' && doc.readyState !== 'complete') {
@@ -237,7 +269,7 @@ if (window.__rte === undefined) {
 										}
 									} else if (data.type === 'PUB' && __rte.brackets[data.bracket_id] !== undefined) {
 										for (var i = 0, l = __rte.brackets[data.bracket_id].length; i < l; i++) {
-											__rte.update(__rte.brackets[data.bracket_id][i], data.games);
+											__rte.update(__rte.brackets[data.bracket_id][i], data.games, data.teams);
 										}
 									}
 								},
