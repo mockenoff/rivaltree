@@ -11,9 +11,12 @@
 	{% if bracket.has_round_robin %}
 	<h3>Round-robin</h3>
 	<div class="rte-robin">
-		{% for round in bracket.round_robin %}
 		<table class="rte-table">
-			<tbody>
+		<tbody>
+			{% for round in bracket.round_robin %}
+			<tr class="rte-header">
+				<td colspan="4">Round {{ forloop.counter }}</td>
+			</tr>
 				{% for game in round %}
 				<tr data-game-id="{{ game.id }}">
 					<td>{{ bracket.teams|lookup:game.team1.id|lookup:"name" }}</td>
@@ -22,9 +25,9 @@
 					<td data-team="2">{{ game.team2.wins }}</td>
 				</tr>
 				{% endfor %}
-			</tbody>
-		</table>
-		{% endfor %}
+			{% endfor %}
+		</tbody>
+	</table>
 	</div>
 	{% endif %}
 	{% if bracket.phase.0 > 2 %}
@@ -170,15 +173,26 @@
 }
 .rte-embed .rte-table {
 	width: 100%;
-	margin: 20px 0 0 0;
+	margin: 10px 0 0 0;
 }
 .rte-embed .rte-robin {
 	margin: 0 0 20px 0;
 }
+	.rte-embed .rte-header td {
+		font-weight: bold;
+		padding: 10px 0 4px 0;
+		border-bottom: 1px solid #EEE;
+	}
+	.rte-embed .rte-header + [data-game-id] td {
+		padding-top: 4px;
+	}
 .rte-embed .rte-bracket {
 	display: flex;
 	flex-direction: row;
 }
+	.rte-embed .rte-winner {
+		font-weight: bold;
+	}
 	.rte-bracket .rte-round {
 		display: flex;
 		flex-direction: column;
@@ -196,11 +210,8 @@
 			flex-grow: 1;
 		}
 	.rte-bracket .rte-game {
-		padding-left: 20px;
+		padding: 0 20px;
 	}
-		.rte-bracket .rte-game.rte-winner {
-			font-weight: bold;
-		}
 		.rte-bracket .rte-game.rte-empty {
 			opacity: 0;
 		}

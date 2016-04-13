@@ -200,8 +200,10 @@ if (window.__rte === undefined) {
 							wins[j].textContent = data.wins;
 							if (data.is_winner === true) {
 								__rivaltree.addClass(wins[j], 'rte-winner');
+								__rivaltree.addClass(wins[j].previousElementSibling, 'rte-winner');
 							} else {
 								__rivaltree.removeClass(wins[j], 'rte-winner');
+								__rivaltree.removeClass(wins[j].previousElementSibling, 'rte-winner');
 							}
 						}
 					} else {
