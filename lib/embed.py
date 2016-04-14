@@ -123,7 +123,6 @@ class ServerProtocol(WebSocketServerProtocol):
 			elif data['type'] == 'PUB':
 				print('PUB', data['bracket_id'])
 
-				# TODO: Figure out the diff between last_updates[bracket_id] and data[bracket]
 				games = get_diff(
 					self.factory.last_updates[data['bracket_id']]
 					if data['bracket_id'] in self.factory.last_updates
@@ -134,6 +133,7 @@ class ServerProtocol(WebSocketServerProtocol):
 				self.factory.broadcast(json.dumps({
 					'type': 'PUB',
 					'games': games,
+					'phase': data['bracket']['phase'],
 					'teams': data['bracket']['teams'],
 					'bracket_id': data['bracket_id'],
 				}), data['bracket_id'])

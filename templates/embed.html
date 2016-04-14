@@ -9,7 +9,7 @@
 	<p class="rte-notice">Head over to <a href="https://rivaltree.com/">Rivaltree</a> in the meantime for more jollies.</p>
 	{% else %}
 	{% if bracket.has_round_robin %}
-	<h3>Round-robin</h3>
+	<h3 class="rte-robin-header">Round-robin</h3>
 	<div class="rte-robin">
 		<table class="rte-table">
 		<tbody>
@@ -30,9 +30,8 @@
 	</table>
 	</div>
 	{% endif %}
-	{% if bracket.phase.0 > 2 %}
-	<h3>Elimination</h3>
-	<div class="rte-bracket">
+	<h3 class="rte-bracket-header {% if bracket.phase.0 < 3 %}rte-hidden{% endif %}">Elimination</h3>
+	<div class="rte-bracket  {% if bracket.phase.0 < 3 %}rte-hidden{% endif %}">
 		{% for round in bracket.winners %}
 		<ul class="rte-round rte-round-{{ forloop.counter0 }}">
 			<li class="rte-spacer">&nbsp;</li>
@@ -88,7 +87,7 @@
 		{% endif %}
 	</div>
 	{% if bracket.is_double_elimination %}
-	<div class="rte-bracket">
+	<div class="rte-bracket {% if bracket.phase.0 < 3 %}rte-hidden{% endif %}">
 		{% for round in bracket.losers %}
 		<ul class="rte-round rte-round-{{ forloop.counter0 }}">
 			<li class="rte-spacer">&nbsp;</li>
@@ -135,7 +134,6 @@
 	</div>
 	{% endif %}
 	{% endif %}
-	{% endif %}
 </div>
 <style>
 .rte-embed,
@@ -171,6 +169,9 @@
 .rte-embed {
 	width: 100%;
 }
+	.rte-embed .rte-hidden {
+		display: none !important;
+	}
 .rte-embed .rte-table {
 	width: 100%;
 	margin: 10px 0 0 0;
