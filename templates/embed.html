@@ -1,13 +1,14 @@
 {% load filters %}
 
-<div id="rte-{{ uuid }}" class="rte-embed">
+<div id="rte-{{ uuid }}" class="rte-embed {% if bracket %}rte-phase-{% filter lower %}{{ bracket.phase.1 }}{% endfilter %}{% endif %}">
 	{% if not bracket %}
 	<p class="rte-error">Couldn't find a bracket to embed</p>
 	<p class="rte-notice">Head over to <a href="https://rivaltree.com/">Rivaltree</a> to contact us about this problem.</p>
-	{% elif bracket.phase.0 < 2 %}
-	<p class="rte-alert">This bracket isn't ready!</p>
-	<p class="rte-notice">Head over to <a href="https://rivaltree.com/">Rivaltree</a> in the meantime for more jollies.</p>
 	{% else %}
+	<div class="rte-message">
+		<p class="rte-alert">This bracket isn't ready!</p>
+		<p class="rte-notice">Head over to <a href="https://rivaltree.com/">Rivaltree</a> in the meantime for more jollies.</p>
+	</div>
 	{% if bracket.has_round_robin %}
 	<h3 class="rte-robin-header">Round-robin</h3>
 	<div class="rte-robin">
@@ -30,8 +31,8 @@
 	</table>
 	</div>
 	{% endif %}
-	<h3 class="rte-bracket-header {% if bracket.phase.0 < 3 %}rte-hidden{% endif %}">Elimination</h3>
-	<div class="rte-bracket  {% if bracket.phase.0 < 3 %}rte-hidden{% endif %}">
+	<h3 class="rte-bracket-header">Elimination</h3>
+	<div class="rte-bracket">
 		{% for round in bracket.winners %}
 		<ul class="rte-round rte-round-{{ forloop.counter0 }}">
 			<li class="rte-spacer">&nbsp;</li>
@@ -87,7 +88,7 @@
 		{% endif %}
 	</div>
 	{% if bracket.is_double_elimination %}
-	<div class="rte-bracket {% if bracket.phase.0 < 3 %}rte-hidden{% endif %}">
+	<div class="rte-bracket">
 		{% for round in bracket.losers %}
 		<ul class="rte-round rte-round-{{ forloop.counter0 }}">
 			<li class="rte-spacer">&nbsp;</li>
@@ -169,7 +170,19 @@
 .rte-embed {
 	width: 100%;
 }
-	.rte-embed .rte-hidden {
+	.rte-embed.rte-phase-new .rte-robin,
+	.rte-embed.rte-phase-new .rte-robin-header,
+	.rte-embed.rte-phase-new .rte-bracket,
+	.rte-embed.rte-phase-new .rte-bracket-header,
+	.rte-embed.rte-phase-round-robin .rte-message,
+	.rte-embed.rte-phase-round-robin .rte-bracket,
+	.rte-embed.rte-phase-round-robin .rte-robin-header,
+	.rte-embed.rte-phase-round-robin .rte-bracket-header,
+	.rte-embed.rte-phase-bracket .rte-message,
+	.rte-embed.rte-phase-bracket .rte-robin,
+	.rte-embed.rte-phase-bracket .rte-robin-header,
+	.rte-embed.rte-phase-bracket .rte-bracket-header,
+	.rte-embed.rte-phase-finished .rte-message {
 		display: none !important;
 	}
 .rte-embed .rte-table {
@@ -182,10 +195,14 @@
 	.rte-embed .rte-header td {
 		font-weight: bold;
 		padding: 10px 0 4px 0;
-		border-bottom: 1px solid #EEE;
+		border-bottom: 1px solid #CCC;
 	}
 	.rte-embed .rte-header + [data-game-id] td {
-		padding-top: 4px;
+		padding: 4px 0;
+		border-bottom: 1px solid #EEE;
+	}
+	.rte-embed .rte-robin [data-game-id] td:first-child {
+		padding-left: 10px;
 	}
 .rte-embed .rte-bracket {
 	display: flex;

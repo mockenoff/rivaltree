@@ -182,9 +182,9 @@ if (window.__rte === undefined) {
 
 				var bracket_id = __rte.widgets[id].getAttribute('data-bracket-id');
 				if (__rte.brackets[bracket_id] === undefined) {
-					__rte.brackets[bracket_id] = [__rte.widgets[id]];
+					__rte.brackets[bracket_id] = [__rte.widgets[id].children[0]];
 				} else {
-					__rte.brackets[bracket_id].push(__rte.widgets[id]);
+					__rte.brackets[bracket_id].push(__rte.widgets[id].children[0]);
 				}
 			},
 			click: function(e) {
@@ -192,15 +192,7 @@ if (window.__rte === undefined) {
 			},
 			update: function(bracket, games, teams, phase) {
 				// Show/hide elimination bracket based on phase[0]
-				var elims = bracket.querySelectorAll('.rte-bracket, .rte-bracket-header');
-				for (var i = 0, l = elims.length; i < l; i++) {
-					var hasClass = __rivaltree.hasClass(elims[i], 'rte-hidden');
-					if (phase[0] < 3 && hasClass === false) {
-						__rivaltree.addClass(elims[i], 'rte-hidden');
-					} else if (phase[0] > 2 && hasClass === true) {
-						__rivaltree.removeClass(elims[i], 'rte-hidden');
-					}
-				}
+				bracket.className = 'rte-embed rte-phase-'+phase[1].toLowerCase();
 				// Iterate through each game in games, using id and team attributes for update vectors
 				for (var i = 0, l = games.length; i < l; i++) {
 					if (games[i].type === 'round_robin') {
