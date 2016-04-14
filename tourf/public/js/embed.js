@@ -208,6 +208,15 @@ if (window.__rte === undefined) {
 								__rivaltree.removeClass(wins[j].previousElementSibling, 'rte-winner');
 							}
 						}
+					} else if (games[i].type === 'champion') {
+						var champion = bracket.querySelector('.rte-champion'),
+							textContent = champion.textContent;
+						if (games[i].team1.is_winner === true) {
+							textContent = teams[games[i].team1.id].name;
+						} else if (games[i].team2.is_winner === true) {
+							textContent = teams[games[i].team2.id].name;
+						}
+						champion.textContent = textContent
 					} else {
 						var wraps = bracket.querySelectorAll('[data-game-id="'+games[i].id+'"]');
 						for (var j = 0, k = wraps.length; j < k; j++) {

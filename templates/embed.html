@@ -71,11 +71,11 @@
 			<li class="rte-spacer">&nbsp;</li>
 			{% if bracket.is_double_elimination %}
 			<li class="rte-game rte-game-top" data-game-id="{{ bracket.winner_loser.1.0.id }}" data-team="1">
-				#1 <span class="rte-wins"></span>
+				<span class="rte-team">#1</span> <span class="rte-wins"></span>
 			</li>
 			<li class="rte-bracket-spacer">&nbsp;</li>
 			{% else %}
-			<li class="rte-game rte-game-top rte-winner">Champion</li>
+			<li class="rte-game rte-game-top rte-winner rte-champion">Champion</li>
 			<li class="rte-spacer">&nbsp;</li>
 			{% endif %}
 		</ul>
@@ -83,7 +83,7 @@
 		<ul class="rte-round rte-round-end">
 			<li class="rte-spacer">&nbsp;</li>
 			<li class="rte-spacer">&nbsp;</li>
-			<li class="rte-game rte-game-top rte-winner">Champion</li>
+			<li class="rte-game rte-game-top rte-winner rte-champion">Champion</li>
 		</ul>
 		{% endif %}
 	</div>
@@ -126,7 +126,7 @@
 		<ul class="rte-round rte-round-{{ bracket.winners|length }}">
 			<li class="rte-bracket-spacer">&nbsp;</li>
 			<li class="rte-game rte-game-bottom" data-game-id="{{ bracket.winner_loser.1.0.id }}" data-team="2">
-				#2 <span class="rte-wins"></span>
+				<span class="rte-team">#2</span> <span class="rte-wins"></span>
 			</li>
 			<li class="rte-spacer">&nbsp;</li>
 		</ul>

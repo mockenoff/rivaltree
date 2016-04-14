@@ -32,6 +32,32 @@ from autobahn.twisted.websocket import WebSocketServerProtocol, WebSocketServerF
 from django.conf import settings
 from apps.bracketr import models
 
+def find_champion(bracket):
+	""" Find the championship game from the bracket
+
+	:param bracket: Bracket to search
+	:type bracket: dict
+	:returns: dict
+
+	"""
+	game = None
+	if bracket['is_double_elimination']:
+		game = (bracket['winner_loser'][0][0]
+				if bracket['winner_loser'][0][0]['team1']['id'] and bracket['winner_loser'][0][0]['team2']['id']
+				else bracket['winner_loser'][1][0])
+	else:
+		game = bracket['winners'][0][0]
+
+	game = copy.deepcopy(game)
+	game['type'] = 'champion'
+
+	if game['team1']['wins'] > game['team2']['wins']:
+		game['team1']['is_winner'] = True
+	elif game['team2']['wins'] > game['team1']['wins']:
+		game['team2']['is_winner'] = True
+
+	return game
+
 def get_diff(old_bracket, new_bracket):
 	""" Find updated games in a new bracket compared to an old bracket
 
@@ -129,6 +155,9 @@ class ServerProtocol(WebSocketServerProtocol):
 					else None,
 					data['bracket'])
 				self.factory.last_updates[data['bracket_id']] = data['bracket']
+
+				if data['bracket']['phase'][0] > 3:
+					games.append(find_champion(data['bracket']))
 
 				self.factory.broadcast(json.dumps({
 					'type': 'PUB',
