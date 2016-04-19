@@ -58,7 +58,7 @@ def index(request, bracket_id=None):
 	try:
 		bracket = bracketr_models.Bracket.objects.get(pk=bracket_id)
 	except (bracketr_models.Bracket.DoesNotExist, ValueError):
-		return render(request, 'embed.html', {
+		return render(request, 'embed/embed.html', {
 			'bracket': None,
 			'uuid': uuid.uuid4().hex,
 			'ws_url': '%s:%s%s' % (settings.WS_URL, settings.WS_PORT, settings.WS_BASE),
@@ -69,6 +69,7 @@ def index(request, bracket_id=None):
 		if key in bracket:
 			bracket[key] = normalize_bracket(bracket[key])
 
+	# Buffer out winners and losers to keep columns even
 	if bracket['is_double_elimination']:
 		winners_total = len(bracket['winners'])
 		losers_total = len(bracket['losers'])
@@ -77,16 +78,16 @@ def index(request, bracket_id=None):
 		elif losers_total < winners_total:
 			bracket['losers'] = [[] for i in range(winners_total - losers_total)] + bracket['losers']
 
-	return render(request, 'embed.html', {
+	return render(request, 'embed/embed.html', {
 		'bracket': bracket,
 		'uuid': uuid.uuid4().hex,
 		'ws_url': '%s:%s%s' % (settings.WS_URL, settings.WS_PORT, settings.WS_BASE),
 	})
 
 def console(request):
-	return render(request, 'console.html', {
+	return render(request, 'embed/console.html', {
 		'ws_url': '%s:%s%s' % (settings.WS_URL, settings.WS_PORT, settings.WS_BASE),
 	})
 
 def sandbox(request):
-	return render(request, 'sandbox.html')
+	return render(request, 'embed/sandbox.html')
