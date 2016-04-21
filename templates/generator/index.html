@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}Bracket Generator - {% endblock %}
+{% block meta_description %}Generate single-elimination, double-elimination, and round-robin tournament brackets{% endblock %}
+
+{% block container_class %}generator{% endblock %}
+
+{% block styles %}
+<link href="{% static "css/generator.css" %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block scripts %}
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+<script src="/static/js/generator.js"></script>
+{% endblock %}
+
+{% block container %}
+<section class="cap-wrapper gen-wrapper" ng-app="GenApp" ng-cloak>
+	<h1>Bracket Generator</h1>
+
+	<div ng-controller="GenCtrl">
+		<form>
+			<label for="bracket-type">Bracket type</label>
+			<ul class="dropdown" dropdown dropdown-value="bracketType" dropdown-text="bracketText">
+				<li class="selected" dropdown-toggle tabindex="0">
+					[[ bracketText ]]
+					<i aria-hidden="true" class="fa fa-caret-down"></i>
+				</li>
+				<div class="menu">
+					<div class="items">
+						<li data-value="single" class="keyed">Single-elimination</li>
+						<li data-value="double">Double-elimination</li>
+					</div>
+				</div>
+			</ul>
+
+			<input id="round-robin" type="checkbox" ng-model="hasRoundRobin" class="fancy" />
+			<label for="round-robin">Include round-robin</label>
+
+			<input id="list-type" type="checkbox" ng-model="useParticipants" class="fancy" />
+			<label for="list-type">Use participants</label>
+
+			<fieldset ng-class="{'form-hide': useParticipants === true}">
+				<label for="participants">Number of participants</label>
+				<input id="participants" type="number" ng-model="numParticipants" />
+			</fieldset>
+
+			<fieldset ng-class="{'form-hide': useParticipants === false}">
+				<label for="list-input">Participants list</label>
+				<ol>
+					<li ng-repeat="item in listItems track by $index" class="list-item">
+						<input type="text" ng-model="listItems[$index]" />
+						<a ng-click="removeItem($index)" class="remove">x</a>
+					</li>
+					<li><input type="text" id="list-input" placeholder="Add participant" ng-model="listInput" ng-keydown="keydown($event)" /></li>
+				</ol>
+			</fieldset>
+
+			<input type="submit" value="Generate" class="btn btn-action" />
+		</form>
+	</div>
+</section>
+{% endblock %}

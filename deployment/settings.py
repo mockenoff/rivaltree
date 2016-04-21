@@ -154,4 +154,4 @@ SESSION_REDIS_PREFIX = 'session'
 
 WS_BASE = '/'
 WS_PORT = 9000
-WS_URL = 'ws://elite-dodgeball.com'
+WS_URL = 'ws://rivaltree.com'

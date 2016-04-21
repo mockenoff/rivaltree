@@ -21,4 +21,5 @@ urlpatterns = [
 	url(r'^', include('apps.account.urls')),
 	url(r'^api/', include('apps.bracketr.urls')),
 	url(r'^embed/', include('apps.embed.urls')),
+	url(r'^generator/', include('apps.generator.urls')),
 ]

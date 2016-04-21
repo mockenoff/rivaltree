@@ -218,6 +218,7 @@ input {
 	font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
 }
 	input[type="text"],
+	input[type="number"],
 	input[type="email"],
 	input[type="password"] {
 		padding: 8px;
@@ -227,11 +228,13 @@ input {
 		border: 1px solid #DDD;
 	}
 		input[type="text"]:focus,
+		input[type="number"]:focus,
 		input[type="email"]:focus,
 		input[type="password"]:focus {
 			border-color: #AAA;
 		}
 		input[type="text"][disabled],
+		input[type="number"][disabled],
 		input[type="email"][disabled],
 		input[type="password"][disabled] {
 			background: #EFEFEF;
@@ -263,6 +266,7 @@ input {
 
 textarea.error,
 input[type="text"].error,
+input[type="number"].error,
 input[type="email"].error,
 input[type="password"].error {
 	position: relative;
@@ -348,9 +352,12 @@ fieldset {
 	HEADER
 */
 #header {
+	z-index: 1;
 	width: 100%;
 	height: 80px;
+	position: relative;
 	background: #FEFEFE;
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
 #logo {
