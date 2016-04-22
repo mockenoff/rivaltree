@@ -68,6 +68,7 @@ genApp.controller('GenCtrl',
 
 	$scope.generateBracket = function() {
 		var params = {
+			format: 'json',
 			bracketType: $scope.bracketType,
 			hasRoundRobin: $scope.hasRoundRobin,
 			useParticipants: $scope.useParticipants,
@@ -81,7 +82,7 @@ genApp.controller('GenCtrl',
 
 		$http({
 			method: 'GET',
-			url: '/generator/json/',
+			url: '/generator/',
 			params: params,
 		}).then(function successCallback(response) {
 			// this callback will be called asynchronously
