@@ -165,6 +165,14 @@ nav li {
 		border: 2px solid #BCD4D8;
 	}
 
+.btn:disabled {
+	color: #AAA;
+	cursor: default;
+	background: #DDD;
+	border: 2px solid #CCC;
+	text-shadow: -1px -1px 1px rgba(255, 255, 255, 0.4);
+}
+
 /*
 	STICKY FOOTER
 */

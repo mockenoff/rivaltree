@@ -57,7 +57,7 @@
 			<input id="list-type" type="checkbox" ng-model="useParticipants" class="fancy" />
 			<label for="list-type">Use list of participants</label>
 
-			<input type="submit" value="Generate" class="btn btn-action" ng-click="generateBracket()" />
+			<input type="submit" value="Generate" class="btn btn-action" ng-click="generateBracket()" ng-disabled="isDisabled" />
 		</form>
 	</div>
 </section>

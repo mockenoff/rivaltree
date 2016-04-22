@@ -7,7 +7,11 @@ genApp.config(function($interpolateProvider) {
 	$interpolateProvider.endSymbol(']]');
 });
 
-genApp.controller('GenCtrl', ['$scope', function($scope) {
+genApp.controller('GenCtrl',
+		['$scope', '$http',
+		function($scope, $http) {
+
+	$scope.isDisabled = true;
 	$scope.hasRoundRobin = false;
 	$scope.bracketType = 'single';
 	$scope.bracketText = 'Single-elimination';
@@ -16,18 +20,19 @@ genApp.controller('GenCtrl', ['$scope', function($scope) {
 	$scope.listInput = '';
 	$scope.listItems = [];
 
-	$scope.keydown = function($event) {
-		var keyCode = $event.keyCode || $event.which;
+	$scope.keydown = function(evt) {
+		var keyCode = evt.keyCode || evt.which;
 		if (keyCode === 27) {
 			if ($scope.listInput) {
 				$scope.listInput = null;
 			} else {
-				$event.target.blur();
+				evt.target.blur();
 			}
 		} else if (keyCode === 13 && $scope.listInput) {
 			$scope.listItems.push($scope.listInput);
 			$scope.listInput = '';
-			$event.target.focus();
+			evt.target.focus();
+			evt.preventDefault();
 		}
 	};
 
@@ -35,8 +40,56 @@ genApp.controller('GenCtrl', ['$scope', function($scope) {
 		$scope.listItems.splice($index, 1);
 	};
 
+	$scope.canSubmit = function() {
+		if (['single', 'double'].indexOf($scope.bracketType) === -1) {
+			return false;
+		}
+		if ($scope.hasRoundRobin === undefined) {
+			return false;
+		}
+		if ($scope.useParticipants === undefined) {
+			return false;
+		}
+		if ($scope.useParticipants === true && (angular.isArray($scope.listItems) === false || $scope.listItems.length < 1)) {
+			return false;
+		}
+		if ($scope.useParticipants === false && (angular.isNumber($scope.numParticipants) === false || $scope.numParticipants < 1)) {
+			return false;
+		}
+		return true;
+	};
+
+	var disabledCheck = function() {
+		$scope.isDisabled = $scope.canSubmit() === true ? false : true;
+	};
+
+	$scope.$watchCollection('listItems', disabledCheck);
+	$scope.$watchGroup(['hasRoundRobin', 'bracketType', 'useParticipants', 'numParticipants'], disabledCheck);
+
 	$scope.generateBracket = function() {
-		console.log('generateBracket');
+		var params = {
+			bracketType: $scope.bracketType,
+			hasRoundRobin: $scope.hasRoundRobin,
+			useParticipants: $scope.useParticipants,
+		};
+
+		if ($scope.useParticipants === false) {
+			params.numParticipants = $scope.numParticipants;
+		} else {
+			params.listItems = $scope.listItems;
+		}
+
+		$http({
+			method: 'GET',
+			url: '/generator/json/',
+			params: params,
+		}).then(function successCallback(response) {
+			// this callback will be called asynchronously
+			// when the response is available
+		}, function errorCallback(response) {
+			// called asynchronously if an error occurs
+			// or server returns response with an error status.
+		});
 	};
 
 window.$scope = $scope;
@@ -123,8 +176,10 @@ genApp.service('dropdownService', ['$document', '$rootScope', function($document
 	};
 }]);
 
-genApp.controller('dropdownController', ['$scope', '$attrs', '$animate', '$element', 'dropdownConfig', 'dropdownService',
-								function( $scope,   $attrs,   $animate,   $element,   dropdownConfig,   dropdownService) {
+genApp.controller('dropdownController',
+		['$scope', '$attrs', '$animate', '$element', 'dropdownConfig', 'dropdownService',
+		function($scope, $attrs, $animate, $element, dropdownConfig, dropdownService) {
+
 	var self = this,
 		scope = $scope.$new(), // create a child scope so we are not polluting original one
 		getIsOpen,
