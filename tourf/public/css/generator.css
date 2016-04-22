@@ -1,6 +1,39 @@
 section.gen-wrapper {
 	overflow: visible;
 }
+	section.gen-wrapper > h1 {
+		width: 100%;
+	}
+
+fieldset {
+	padding: 25px 0 0 0;
+}
+
+form input {
+	margin: 4px 0 8px 0;
+}
+	form input[type="text"],
+	form input[type="number"] {
+		font-size: 1.05em;
+	}
+	form input[type="submit"] {
+		margin: 25px 0 0 0;
+	}
+
+ol > li {
+	color: #666;
+	margin: 0 0 0 15px;
+	padding: 0 0 0 10px;
+	list-style: decimal;
+}
+
+input[type="checkbox"].fancy {
+	width: auto;
+}
+	input[type="checkbox"].fancy + label:before {
+		float: right;
+		margin: 0 0 0 20px;
+	}
 
 .list-item {
 	position: relative;
@@ -19,11 +52,13 @@ section.gen-wrapper {
 }
 
 .dropdown {
-	height: 30px;
+	width: 100%;
+	height: 40px;
 	cursor: pointer;
 	line-height: 120%;
 	position: relative;
 	vertical-align: top;
+	margin: 4px 0 10px 0;
 	display: inline-block;
 }
 	.dropdown .menu {
@@ -36,8 +71,10 @@ section.gen-wrapper {
 		border-bottom-right-radius: 3px;
 		box-shadow: 0px 2px 5px 1px rgba(100, 100, 100, 0.5);
 	}
+		.dropdown .menu li.keyed {
+			background: #FAFAFA;
+		}
 		.dropdown .menu li:hover,
-		.dropdown .menu li.keyed,
 		.dropdown .menu li.current {
 			background: #E5F1F2;
 		}
@@ -64,10 +101,10 @@ section.gen-wrapper {
 		top: 0;
 		right: 0;
 		color: #666;
-		width: 25px;
-		height: 22px;
+		width: 35px;
+		height: 28px;
 		text-align: center;
-		padding: 6px 0 0 0;
+		padding: 11px 0 0 0;
 		position: absolute;
 		border-left: 1px solid #AAA;
 	}
@@ -79,14 +116,17 @@ section.gen-wrapper {
 		position: relative;
 		box-sizing: border-box;
 	}
+		.dropdown li.keyed {
+			color: #2696A5;
+		}
 		.dropdown li:hover,
-		.dropdown li.keyed,
 		.dropdown li.current {
 			color: #2696A5;
 		}
 		.dropdown li.selected {
+			background: #FFF;
+			line-height: 180%;
 			border-radius: 3px;
-			background: #FAFAFA;
 			border: solid 1px #BBB;
-			padding: 4px 40px 4px 6px;
+			padding: 4px 40px 4px 10px;
 		}

@@ -35,6 +35,10 @@ genApp.controller('GenCtrl', ['$scope', function($scope) {
 		$scope.listItems.splice($index, 1);
 	};
 
+	$scope.generateBracket = function() {
+		console.log('generateBracket');
+	};
+
 window.$scope = $scope;
 }]);
 
@@ -109,13 +113,12 @@ genApp.service('dropdownService', ['$document', '$rootScope', function($document
 			evt.preventDefault();
 			evt.stopPropagation();
 			openScope.focusDropdownEntry(evt.which);
-		} else if (evt.which === 13 && openScope.isOpen) {
-			var selectedOption = openScope.getSelectedOption();
-			if (selectedOption !== false) {
-				evt.preventDefault();
-				evt.stopPropagation();
-				closeDropdown({target: selectedOption.node[0]});
-			}
+		} else if ([9, 13].indexOf(evt.which) !== -1 && openScope.isOpen) {
+			var selectedOption = openScope.getSelectedOption(),
+				fakeEvt = selectedOption !== false ? {target: selectedOption.node[0]} : undefined;
+			evt.preventDefault();
+			evt.stopPropagation();
+			closeDropdown(fakeEvt);
 		}
 	};
 }]);
@@ -176,19 +179,19 @@ genApp.controller('dropdownController', ['$scope', '$attrs', '$animate', '$eleme
 	};
 
 	scope.setSelectedOption = function(index) {
-		if (selectedOption in elems) {
-			elems[selectedOption].node.removeClass(dropdownConfig.keyedClass);
-		}
+		for (var i = 0, l = elems.length; i < l; i++) {
+			if (index === i) {
+				selectedOption = index;
+				elems[index].node.addClass(dropdownConfig.keyedClass);
 
-		if (index in elems === true) {
-			selectedOption = index;
-			elems[index].node.addClass(dropdownConfig.keyedClass);
-
-			if ($scope.dropdownValue) {
-				$scope.dropdownValue = elems[index].value;
-			}
-			if ($scope.dropdownText) {
-				$scope.dropdownText = elems[index].text;
+				if ($scope.dropdownValue) {
+					$scope.dropdownValue = elems[index].value;
+				}
+				if ($scope.dropdownText) {
+					$scope.dropdownText = elems[index].text;
+				}
+			} else {
+				elems[i].node.removeClass(dropdownConfig.keyedClass);
 			}
 		}
 	};
@@ -231,6 +234,10 @@ genApp.controller('dropdownController', ['$scope', '$attrs', '$animate', '$eleme
 		} else {
 			dropdownService.close(scope, $element);
 			selectedOption = null;
+
+			for (var i = 0, l = elems.length; i < l; i++) {
+				elems[i].node.removeClass(dropdownConfig.currentClass);
+			}
 		}
 
 		if (angular.isFunction(setIsOpen) === true) {
@@ -262,20 +269,34 @@ genApp.directive('dropdownToggle', function() {
 				return;
 			}
 
+			var openTimestamp = null;
 			dropdownCtrl.toggleElement = element;
 
-			var toggleDropdown = function(evt) {
+			var closeDropdown = function(evt) {
 				evt.preventDefault();
 				evt.stopPropagation();
 
-				if (element.hasClass('disabled') === false && !attrs.disabled) {
+				if (element.hasClass('disabled') === false && !attrs.disabled && Date.now() - openTimestamp > 200) {
 					scope.$apply(function() {
 						dropdownCtrl.toggle();
 					});
 				}
 			};
 
-			element.bind('click', toggleDropdown);
+			var openDropdown = function(evt) {
+				evt.preventDefault();
+				evt.stopPropagation();
+
+				if (element.hasClass('disabled') === false && !attrs.disabled) {
+					scope.$apply(function() {
+						dropdownCtrl.toggle(true);
+						openTimestamp = Date.now();
+					});
+				}
+			};
+
+			element.bind('click', closeDropdown);
+			element.bind('focus', openDropdown);
 
 			// WAI-ARIA
 			element.attr({ 'aria-haspopup': true, 'aria-expanded': false });
@@ -284,7 +305,7 @@ genApp.directive('dropdownToggle', function() {
 			});
 
 			scope.$on('$destroy', function() {
-				element.unbind('click', toggleDropdown);
+				element.unbind('click', closeDropdown);
 			});
 		}
 	};

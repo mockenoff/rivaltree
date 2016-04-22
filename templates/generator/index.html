@@ -38,16 +38,13 @@
 			<input id="round-robin" type="checkbox" ng-model="hasRoundRobin" class="fancy" />
 			<label for="round-robin">Include round-robin</label>
 
-			<input id="list-type" type="checkbox" ng-model="useParticipants" class="fancy" />
-			<label for="list-type">Use participants</label>
-
 			<fieldset ng-class="{'form-hide': useParticipants === true}">
 				<label for="participants">Number of participants</label>
 				<input id="participants" type="number" ng-model="numParticipants" />
 			</fieldset>
 
 			<fieldset ng-class="{'form-hide': useParticipants === false}">
-				<label for="list-input">Participants list</label>
+				<label for="list-input">Participants</label>
 				<ol>
 					<li ng-repeat="item in listItems track by $index" class="list-item">
 						<input type="text" ng-model="listItems[$index]" />
@@ -57,7 +54,10 @@
 				</ol>
 			</fieldset>
 
-			<input type="submit" value="Generate" class="btn btn-action" />
+			<input id="list-type" type="checkbox" ng-model="useParticipants" class="fancy" />
+			<label for="list-type">Use list of participants</label>
+
+			<input type="submit" value="Generate" class="btn btn-action" ng-click="generateBracket()" />
 		</form>
 	</div>
 </section>
