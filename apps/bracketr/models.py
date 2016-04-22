@@ -674,7 +674,7 @@ class Game(models.Model):
 		""" Override the save method so seeding changes propagate through the bracket
 
 		"""
-		super(Bracket, self).save(*args, **kwargs)
+		super(Game, self).save(*args, **kwargs)
 
 	def __str__(self):
 		""" String representation
