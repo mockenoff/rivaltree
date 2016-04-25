@@ -301,7 +301,10 @@ class Bracket(models.Model):
 		if save:
 			Game.objects.bulk_create(games)
 
-		return bracket, games
+		# With unfulfilled brackets, sustain_count * 2 could be too many loser rounds
+		trim_bracket = [bracket[rnum] for rnum in range(len(bracket)) if bracket[rnum]]
+
+		return trim_bracket, games
 
 	def make_round_robin(self, teams, save=False):
 		""" Create all the round-robin Game objects
