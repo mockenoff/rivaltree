@@ -8,6 +8,7 @@
 """
 
 import re
+import copy
 import math
 import uuid
 import random
@@ -313,6 +314,8 @@ class Bracket(models.Model):
 		:returns: list
 
 		"""
+		teams = copy.deepcopy(teams)
+
 		rnum = 0
 		games = list()
 		team_total = len(teams)
