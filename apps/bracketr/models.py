@@ -197,10 +197,10 @@ class Bracket(models.Model):
 
 		games = list()
 		bracket = list()
-		seeded = set()
 		rounds = math.ceil(math.log(count, 2))
 
 		for rnum in range(rounds):
+			skipped = 0
 			bracket.append(list())
 			game_count = int(math.pow(2, rnum))
 			team_count = game_count * 2
@@ -210,31 +210,24 @@ class Bracket(models.Model):
 				seed2 = team_count - (seed1 - 1)
 
 				if seed2 > count:
+					skipped += 1
 					continue
 				if seed1 > seed2:
 					break
 
+				alt_gnum = gnum - skipped
 				bracket[rnum].append({
 					'team1': Game.make_bracket_object(seed1),
 					'team2': Game.make_bracket_object(seed2),
 				})
-				game = Game(bracket=self, group=group, round_number=rnum, number=gnum, team1_seed=seed1, team2_seed=seed2)
+				game = Game(bracket=self, group=group, round_number=rnum, number=alt_gnum, team1_seed=seed1, team2_seed=seed2)
 
 				if teams:
-					teams1 = teams[seed1-1]
-					teams2 = teams[seed2-1]
+					game.team1 = teams[seed1-1]
+					bracket[rnum][alt_gnum]['team1']['id'] = game.team1.id.hex
 
-					if teams1 not in seeded:
-						game.team1 = teams[seed1-1]
-						game.team1_seed = seed1
-						bracket[rnum][gnum]['team1']['id'] = game.team1.id.hex
-						seeded.add(game.team1)
-
-					if teams2 not in seeded:
-						game.team2 = teams[seed2-1]
-						game.team2_seed = seed2
-						bracket[rnum][gnum]['team2']['id'] = teams[seed2-1].id.hex
-						seeded.add(game.team2)
+					game.team2 = teams[seed2-1]
+					bracket[rnum][alt_gnum]['team2']['id'] = teams[seed2-1].id.hex
 
 				games.append(game)
 
