@@ -143,13 +143,13 @@ class Bracket(models.Model):
 				seeds.remove(team.starting_seed)
 			bulk_update(teams, update_fields=['starting_seed'])
 
-		games['winners'], saves = self.make_bracket(teams=len(teams), group=Game.GROUP_WINNER, save=True)
+		games['winners'], saves = self.make_bracket(teams=len(teams), group=Game.GROUP_WINNER, fill=False, save=True)
 
 		if self.is_double_elimination:
 			games['losers'], saves = self.make_losers_bracket(games['winners'], save=True)
 			games['winner_loser'], saves = self.make_winlose_bracket(save=True)
 		elif self.has_third_place:
-			games['third'], saves = self.make_bracket(2, group=Game.GROUP_THIRD, save=False)
+			games['third'], saves = self.make_bracket(2, group=Game.GROUP_THIRD, fill=False, save=False)
 
 		return games
 
@@ -178,13 +178,15 @@ class Bracket(models.Model):
 
 		return bracket, games
 
-	def make_bracket(self, teams, group, save=False):
+	def make_bracket(self, teams, group, fill=False, save=False):
 		""" Generate a bracket object
 
 		:param teams: Make blank if teams is an int or will use teams order as seeds
 		:type teams: list
 		:param group: Bracket group type
 		:type group: Game.GROUP_CHOICES
+		:param fill: Fill in all bracket objects of team IDs, etc.
+		:type fill: bool
 		:param save: Whether to save the created Game objects
 		:type save: bool
 		:returns: dict
@@ -198,6 +200,7 @@ class Bracket(models.Model):
 
 		games = list()
 		bracket = list()
+		seeded = set()
 		rounds = math.ceil(math.log(count, 2))
 
 		for rnum in range(rounds):
@@ -224,11 +227,20 @@ class Bracket(models.Model):
 				game = Game(bracket=self, group=group, round_number=rnum, number=alt_gnum, team1_seed=seed1, team2_seed=seed2)
 
 				if teams:
-					game.team1 = teams[seed1-1]
-					bracket[rnum][alt_gnum]['team1']['id'] = game.team1.id.hex
+					teams1 = teams[seed1-1]
+					teams2 = teams[seed2-1]
 
-					game.team2 = teams[seed2-1]
-					bracket[rnum][alt_gnum]['team2']['id'] = teams[seed2-1].id.hex
+					if teams1 not in seeded or fill:
+						game.team1 = teams1
+						game.team1_seed = seed1
+						bracket[rnum][alt_gnum]['team1']['id'] = game.team1.id.hex
+						seeded.add(game.team1)
+
+					if teams2 not in seeded or fill:
+						game.team2 = teams2
+						game.team2_seed = seed2
+						bracket[rnum][alt_gnum]['team2']['id'] = game.team2.id.hex
+						seeded.add(game.team2)
 
 				games.append(game)
 
