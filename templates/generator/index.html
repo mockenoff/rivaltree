@@ -31,12 +31,15 @@
 					<div class="items">
 						<li data-value="single" class="keyed">Single-elimination</li>
 						<li data-value="double">Double-elimination</li>
+						<li data-value="round-robin">Round-robin</li>
 					</div>
 				</div>
 			</ul>
 
-			<input id="round-robin" type="checkbox" ng-model="hasRoundRobin" class="fancy" />
-			<label for="round-robin">Include round-robin</label>
+			<fieldset ng-class="{'form-hide': bracketType === 'round-robin'}">
+				<input id="round-robin" type="checkbox" ng-model="hasRoundRobin" class="fancy" />
+				<label for="round-robin">Include round-robin</label>
+			</fieldset>
 
 			<fieldset ng-class="{'form-hide': useParticipants === true}">
 				<label for="participants">Number of participants</label>

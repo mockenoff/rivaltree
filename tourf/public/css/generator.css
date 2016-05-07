@@ -8,6 +8,9 @@ section.gen-wrapper {
 fieldset {
 	padding: 25px 0 0 0;
 }
+	.dropdown + fieldset {
+		padding: 0;
+	}
 
 form input {
 	margin: 4px 0 8px 0;

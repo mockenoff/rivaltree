@@ -37,7 +37,7 @@ def generateBracket(bracket_type, has_round_robin, use_participants, num_partici
 
 	"""
 	is_valid = True
-	if bracket_type not in ('single', 'double'):
+	if bracket_type not in ('single', 'double', 'round-robin'):
 		is_valid = 'Invalid bracketType'
 	elif use_participants and (not isinstance(list_items, list) or not list_items):
 		is_valid = 'Need some participants since useParticipants is true'
@@ -47,4 +47,36 @@ def generateBracket(bracket_type, has_round_robin, use_participants, num_partici
 	if is_valid != True:
 		return utils.json_response({'error': is_valid}, status_code=400)
 
-	return utils.json_response({'bracket': None})
+	if not use_participants:
+		list_items = [str(index + 1) for index in range(num_participants)]
+
+	bracket = models.Bracket(
+		has_round_robin=has_round_robin,
+		is_double_elimination=True if bracket_type == 'double' else False)
+
+	teams = [models.Team(
+		name=list_items[index],
+		starting_seed=index + 1,
+		bracket=bracket) for index in range(len(list_items))]
+
+	data = {
+		'teams': {team.id.hex: {
+			'name': team.name,
+			'seed': team.starting_seed,
+		} for team in teams},
+		'seeds': {team.starting_seed: team.id.hex for team in teams},
+	}
+
+	if has_round_robin or bracket_type == 'round-robin':
+		data['round_robin'] = bracket.make_round_robin(teams=teams, save=False)[0]
+
+	if bracket_type != 'round-robin':
+		data['winners'] = bracket.make_bracket(teams=teams, group=models.Game.GROUP_WINNER, fill=True, save=False)[0]
+
+	if bracket_type == 'double':
+		data['losers'], games = bracket.make_losers_bracket(data['winners'], save=False)
+		data['winner_loser'], games = bracket.make_winlose_bracket(save=False)
+
+	print('ASDF', data)
+
+	return utils.json_response({'bracket': data})
