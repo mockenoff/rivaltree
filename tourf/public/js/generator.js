@@ -19,6 +19,7 @@ genApp.controller('GenCtrl',
 	$scope.numParticipants = 8;
 	$scope.listInput = '';
 	$scope.listItems = [];
+	$scope.bracket = null;
 
 	$scope.keydown = function(evt) {
 		var keyCode = evt.keyCode || evt.which;
@@ -41,7 +42,7 @@ genApp.controller('GenCtrl',
 	};
 
 	$scope.canSubmit = function() {
-		if (['single', 'double'].indexOf($scope.bracketType) === -1) {
+		if (['single', 'double', 'round-robin'].indexOf($scope.bracketType) === -1) {
 			return false;
 		}
 		if ($scope.hasRoundRobin === undefined) {

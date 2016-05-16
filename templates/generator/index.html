@@ -62,6 +62,19 @@
 
 			<input type="submit" value="Generate" class="btn btn-action" ng-click="generateBracket()" ng-disabled="isDisabled" />
 		</form>
+
+		<div ng-repeat="round in bracket.round_robin track by $index" class="rr-block">
+			<h2>Round [[ $index + 1 ]]</h2>
+			<table>
+				<tbody>
+					<tr ng-repeat="game in round track by $index">
+						<td><h3>Game [[ $index + 1 ]]</h3></td>
+						<td>[[ bracket.teams[game.team1.id].name ]]</td>
+						<td>[[ bracket.teams[game.team2.id].name ]]</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
 </section>
 {% endblock %}
